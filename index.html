@@ -21,6 +21,40 @@
             position: relative;
             padding-bottom: 60px;
         }
+        /* Top Navigation Bar */
+        .top-nav-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 16px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e4e6eb;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .top-nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .top-nav-back {
+            cursor: pointer;
+            font-size: 24px;
+            padding: 0 4px;
+            line-height: 1;
+        }
+        .top-nav-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            color: #050505;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
         /* Cover & Header */
         .cover-photo {
             height: 160px;
@@ -45,7 +79,6 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             cursor: pointer;
         }
-        /* تنسيق الستوري المتوهج حول صورة البروفايل */
         .profile-pic-container.has-story {
             border: 4px solid #e41e3f;
             box-shadow: 0 0 0 3px #ffffff, 0 0 10px rgba(228, 30, 63, 0.6);
@@ -80,7 +113,6 @@
             font-weight: bold;
             margin: 0;
         }
-        
         .verified-icon {
             display: inline-flex;
             align-items: center;
@@ -92,7 +124,6 @@
             background-repeat: no-repeat;
             background-position: center;
         }
-
         .page-stats {
             font-size: 14px;
             color: #65676b;
@@ -109,6 +140,7 @@
             font-size: 13px;
             color: #65676b;
             margin-top: 6px;
+            gap: 6px;
         }
 
         /* Action Buttons */
@@ -128,7 +160,10 @@
             cursor: pointer;
             text-align: center;
             text-decoration: none;
-            display: inline-block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
             box-sizing: border-box;
         }
         .btn-primary {
@@ -178,21 +213,29 @@
             gap: 12px;
             margin-bottom: 12px;
             font-size: 14px;
+            color: #050505;
+        }
+        .info-row svg, .info-row span.icon {
+            font-size: 18px;
+            color: #65676b;
+            min-width: 20px;
+            text-align: center;
         }
 
         /* Facebook Post Design */
         .post-card {
             background: #fff;
             margin-top: 12px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 12px 12px 8px 12px;
+            border-top: 1px solid #e4e6eb;
+            border-bottom: 1px solid #e4e6eb;
+            padding: 12px 0 0 0;
         }
         .fb-post-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 8px;
+            padding: 0 12px;
         }
         .fb-post-user-info {
             display: flex;
@@ -219,9 +262,11 @@
         .fb-post-time {
             font-size: 12px;
             color: #65676b;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
         
-        /* Post Admin Controls */
         .post-admin-actions {
             display: none;
             gap: 8px;
@@ -242,18 +287,19 @@
             font-size: 14px;
             margin-bottom: 12px;
             line-height: 1.4;
-            padding: 0 4px;
+            padding: 0 12px;
         }
         .post-image-container {
-            margin: 0 -12px 12px -12px;
-            max-height: 400px;
+            margin: 0;
+            max-height: 450px;
             overflow: hidden;
             background: #000;
+            position: relative;
         }
         .post-image-container img {
             width: 100%;
             height: auto;
-            max-height: 400px;
+            max-height: 450px;
             object-fit: cover;
             display: block;
         }
@@ -263,14 +309,13 @@
             justify-content: space-between;
             font-size: 13px;
             color: #65676b;
-            padding: 6px 4px;
+            padding: 8px 12px;
             border-bottom: 1px solid #e4e6eb;
-            margin-bottom: 4px;
         }
         .reactions-display {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
         }
         .reaction-icons-group {
             display: inline-flex;
@@ -294,13 +339,17 @@
             padding: 8px 0;
             flex: 1;
             text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
             border-radius: 4px;
         }
         .fb-action-btn:hover {
             background-color: #f0f2f5;
         }
 
-        /* --- Facebook Comments Bottom Sheet Modal --- */
+        /* --- Comments Bottom Sheet Modal --- */
         .comments-modal-overlay {
             display: none;
             position: fixed;
@@ -356,7 +405,7 @@
         
         /* Comment & Reply Items */
         .fb-comment-item {
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }
         .comment-main-row {
             display: flex;
@@ -385,8 +434,9 @@
             padding: 8px 12px;
             border-radius: 16px;
             font-size: 13px;
-            max-width: 260px;
+            max-width: 270px;
             word-break: break-word;
+            position: relative;
         }
         .fb-comment-author {
             font-weight: bold;
@@ -394,12 +444,29 @@
             margin-bottom: 2px;
             display: block;
         }
+        
+        /* Reactions Badge inside Bubble */
+        .comment-like-badge {
+            position: absolute;
+            bottom: -8px;
+            left: 8px;
+            background: #fff;
+            border: 1px solid #e4e6eb;
+            border-radius: 10px;
+            padding: 1px 6px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
         .fb-comment-footer {
             display: flex;
             gap: 12px;
             font-size: 11px;
             color: #65676b;
-            margin-top: 3px;
+            margin-top: 6px;
             margin-right: 8px;
             font-weight: 600;
         }
@@ -409,8 +476,72 @@
         .fb-comment-footer span:hover {
             text-decoration: underline;
         }
+        .liked-text {
+            color: #1877f2 !important;
+        }
 
-        /* Admin Controls for Comment Deleting */
+        /* Replies Container */
+        .toggle-replies-btn {
+            font-size: 11px;
+            color: #65676b;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 4px;
+            margin-right: 8px;
+            display: inline-block;
+        }
+        .toggle-replies-btn:hover {
+            text-decoration: underline;
+        }
+        .replies-container {
+            display: none;
+            margin-top: 8px;
+            margin-right: 20px;
+            flex-direction: column;
+            gap: 8px;
+            border-right: 2px solid #e4e6eb;
+            padding-right: 8px;
+        }
+        .fb-reply-item {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+        .fb-reply-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .fb-reply-bubble {
+            background: #f0f2f5;
+            padding: 6px 10px;
+            border-radius: 14px;
+            font-size: 12px;
+            max-width: 230px;
+            word-break: break-word;
+            position: relative;
+        }
+        .fb-reply-author {
+            font-weight: bold;
+            color: #050505;
+            margin-bottom: 1px;
+            display: block;
+        }
+        .fb-reply-footer {
+            display: flex;
+            gap: 10px;
+            font-size: 10px;
+            color: #65676b;
+            margin-top: 3px;
+            margin-right: 6px;
+            font-weight: 600;
+        }
+        .fb-reply-footer span {
+            cursor: pointer;
+        }
+
         .admin-item-actions {
             display: none;
             gap: 6px;
@@ -427,6 +558,7 @@
         .admin-delete-btn { color: #e41e3f; }
 
         .sheet-footer {
+            display: block;
             padding: 10px 16px;
             border-top: 1px solid #e4e6eb;
             background: #fff;
@@ -477,7 +609,7 @@
         }
         
         .fake-account-config {
-            display: none; 
+            display: none;
             background: #fff;
             padding: 8px;
             border: 1px solid #e4e6eb;
@@ -503,7 +635,6 @@
             background-color: #218838;
         }
 
-        /* Admin Panel & Login Button Styles */
         .admin-login-btn {
             display: none; 
             position: fixed;
@@ -544,7 +675,7 @@
             font-weight: bold;
         }
 
-        /* نافذة خيارات صورة البروفايل المخصصة */
+        /* Profile Menu Modal */
         .profile-menu-modal {
             display: none;
             position: fixed;
@@ -602,31 +733,45 @@
 <body onclick="handleSecretTripleClick()">
 
 <div class="container">
+    <!-- Top Nav Bar -->
+    <div class="top-nav-bar">
+        <div class="top-nav-right">
+            <span class="top-nav-back" onclick="history.back()" title="الرجوع للصفحة السابقة">‹</span>
+            <span> شركه الاستثمار العربيه </span>
+            <span class="verified-icon" style="width: 14px; height: 14px;"></span>
+        </div>
+        <div class="top-nav-left">
+            <span>🔍</span>
+            <span>⋯</span>
+        </div>
+    </div>
+
     <!-- الغلاف -->
     <div id="cover-photo-div" class="cover-photo" style="background-image: url('https://via.placeholder.com/500x160');"></div>
 
     <!-- معلومات الملف الشخصي -->
     <div class="profile-section">
-        <div id="profile-pic-container" class="profile-pic-container" onclick="openProfileMenu(event)">
+        <div id="profile-pic-container" class="profile-pic-container">
             <img id="profile-img" src="" alt="Profile Picture">
-            <div class="live-badge">LIVE</div>
+            <div class="live-badge">.</div>
         </div>
 
         <div class="page-title-row">
-            <h1 class="page-name">شركة الدار للإستثمارات المحدودة</h1>
+            <h1 class="page-name">شركه الاستثمار العربيه</h1>
             <span class="verified-icon"></span>
         </div>
 
         <div class="page-stats">
-            <span id="followers-count">1.6 مليون</span> المتابعين · ٦٣٠ يتابع · ٢٨٨ ألف منشورات
+            <span id="followers-count">١٣ مليون</span> المتابعين · ٧٨ يتابع · ٢٠٥ ألف منشورات
         </div>
 
         <div id="page-bio-text" class="page-bio">
-            موقع رؤيا أخبار تابع للمجموعة الإعلامية.. مصدرك الأول للأحداث المحلية والعربية والعالمية
+            شركه تداول استثمار في وطن العربي
         </div>
 
         <div class="category">
-            <span>📰 صحفي</span>
+            <span>📰</span>
+            <span>شركه استثمار </span>
         </div>
     </div>
 
@@ -661,7 +806,7 @@
         <input type="file" id="new-cover-file" accept="image/*" style="margin-bottom: 8px;">
         <button class="btn btn-primary" onclick="updateCoverPic()" style="margin-bottom: 12px; width: 100%;">تحديث الغلاف</button>
 
-        <label class="file-upload-label">تغيير صورة بروفايل الصفحة من الهاتف:</label>
+        <label class="file-upload-label">تغيير صورة بروفايل الصفحة (محلياً داخل المتصفح):</label>
         <input type="file" id="new-img-file" accept="image/*" style="margin-bottom: 8px;">
         <button class="btn btn-primary" onclick="updateProfilePic()" style="margin-bottom: 12px; width: 100%;">تحديث الصورة الشخصية</button>
         
@@ -679,32 +824,46 @@
         <select id="new-post-reaction" style="margin-bottom: 8px;">
             <option value="👍">إعجاب (👍)</option>
             <option value="❤️">أحببته (❤️)</option>
-            <option value="😆">تضحكني (😆)</option>
         </select>
 
         <label style="font-size: 13px;">عدد التفاعلات:</label>
-        <input type="text" id="new-post-likes" value="15" placeholder="مثال: 15 أو 1.2k">
+        <input type="text" id="new-post-likes" value="86" placeholder="مثال: 86 أو 1.2k">
         <button id="save-post-btn" class="btn btn-primary" onclick="savePost()" style="width: 100%;">نشر المنشور</button>
         <button id="cancel-edit-btn" class="btn btn-secondary" onclick="resetPostForm()" style="width: 100%; margin-top: 6px; display:none;">إلغاء التعديل</button>
-    </div>
-
-    <!-- قسم المنشورات -->
-    <div class="section">
-        <div class="section-title">المنشورات</div>
-        <div id="posts-container">جاري تحميل المنشورات...</div>
     </div>
 
     <!-- التفاصيل -->
     <div class="section">
         <div class="section-title">التفاصيل</div>
         <div class="info-row">
-            <span>⭐ توصية من 58% (38 من الآراء)</span>
+            <span>📍</span>
+            <span>As Sakhra Al Muharrafa, Amman, Amman, Jordan</span>
         </div>
+        <div class="section-title" style="font-size: 16px; margin-top: 16px; margin-bottom: 8px;">الروابط</div>
+        <div class="info-row">
+            <span>🔗</span>
+            <a href="https://roya.tv" target="_blank" style="color: #1877f2; text-decoration: none;">.</a>
+        </div>
+        <div class="section-title" style="font-size: 16px; margin-top: 16px; margin-bottom: 8px;">معلومات الاتصال</div>
+        <div class="info-row">
+            <span>📞</span>
+            <span dir="ltr">+9620600000099</span>
+        </div>
+        <div class="info-row">
+            <span>✉️</span>
+            <span>.</span>
+        </div>
+    </div>
+
+    <!-- قسم المنشورات -->
+    <div class="section" style="padding: 0; border-bottom: none;">
+        <div class="section-title" style="padding: 16px 16px 0 16px; margin-bottom: 0;">كل المنشورات</div>
+        <div id="posts-container">جاري تحميل المنشورات...</div>
     </div>
 
 </div>
 
-<!-- نافذة خيارات الصورة الشخصية والستوري -->
+<!-- نافذة خيارات الصورة الشخصية والستوري (للأدمن فقط) -->
 <div id="profileMenuModal" class="profile-menu-modal" onclick="closeProfileMenu(event)">
     <div class="profile-menu-box" onclick="event.stopPropagation()">
         <div class="profile-menu-title">خيارات الصورة الشخصية</div>
@@ -732,27 +891,26 @@
         <div class="sheet-body comments-list" id="modalCommentsList">
             <!-- التعليقات تظهر هنا -->
         </div>
-        <div class="sheet-footer">
+        <div id="commentsSheetFooter" class="sheet-footer">
             <div id="modalAdminControls" class="admin-controls">
                 <div id="fakeAccountConfigDiv" class="fake-account-config">
                     <label style="font-size: 11px; color: #65676b; display: block; margin-bottom: 2px;">إعدادات الحساب الوهمي:</label>
-                    <input type="text" id="fake-account-name" placeholder="اسم الحساب الوهمي (مثال: أحمد محمد)" style="margin-bottom: 6px;">
+                    <input type="text" id="fake-account-name" placeholder="اسم الحساب (مثال: Ahmad Ali أو سعيد رمضان)" style="margin-bottom: 6px;">
                     <label class="file-upload-label" style="font-size: 11px;">صورة الحساب الوهمي من الهاتف:</label>
                     <input type="file" id="fake-account-file" accept="image/*" style="margin-bottom: 0; font-size: 11px;">
                 </div>
                 <div class="admin-input-row">
-                    <input type="text" class="admin-comment-input" placeholder="اكتب تعليقاً...">
+                    <input type="text" class="admin-comment-input" placeholder="اكتب تعليقاً..." onfocus="checkVisitorInput(this)">
                     <button class="send-btn" onclick="addFakeComment()">إرسال</button>
                 </div>
                 <div class="emoji-bar">
                     <button class="emoji-btn" onclick="addEmoji(this, '👍')">👍</button>
                     <button class="emoji-btn" onclick="addEmoji(this, '❤️')">❤️</button>
-                    <button class="emoji-btn" onclick="addEmoji(this, '😆')">😆</button>
                     <button class="emoji-btn" onclick="addEmoji(this, '🔥')">🔥</button>
                     <button class="emoji-btn" onclick="addEmoji(this, '👏')">👏</button>
                     <button class="emoji-btn" onclick="addEmoji(this, '😊')">😊</button>
                 </div>
-                <button id="joAutoBtn" class="jo-auto-btn" onclick="generateJordanianComments()">🇯🇴 توليد تعليقات أردنية (إيداع وأرباح)</button>
+                <button id="joAutoBtn" class="jo-auto-btn" onclick="generateJordanianComments()">🇯🇴 توليد 100 تعليق أردني واقعي مع الردود</button>
             </div>
         </div>
     </div>
@@ -784,40 +942,666 @@
     const storage = getStorage(app);
 
     const defaultFakeAccounts = [
-        { name: "عمر العبادي", avatar: "https://i.pravatar.cc/150?u=omar" },
-        { name: "أم محمد المجالي", avatar: "https://i.pravatar.cc/150?u=fatima" },
-        { name: "خالد الزعبي", avatar: "https://i.pravatar.cc/150?u=khaled" },
+        { name: "Ahmad Ali", avatar: "https://i.pravatar.cc/150?u=ahmad" },
+        { name: "سعيد رمضان", avatar: "https://i.pravatar.cc/150?u=said" },
+        { name: "Omar Abdullah", avatar: "https://i.pravatar.cc/150?u=omar" },
+        { name: "فاطمة المجالي", avatar: "https://i.pravatar.cc/150?u=fatima" },
+        { name: "Khaled Zoubi", avatar: "https://i.pravatar.cc/150?u=khaled" },
         { name: "صقر الحنيطي", avatar: "https://i.pravatar.cc/150?u=saker" },
-        { name: "نور الطراونة", avatar: "https://i.pravatar.cc/150?u=nour" },
-        { name: "معاذ الحجايا", avatar: "https://i.pravatar.cc/150?u=moath" },
-        { name: "ختام البصول", avatar: "https://i.pravatar.cc/150?u=khetam" },
-        { name: "بسام العمري", avatar: "https://i.pravatar.cc/150?u=bassam" },
+        { name: "Noor Al-Tarawneh", avatar: "https://i.pravatar.cc/150?u=nour" },
+        { name: "معاذ حجاجحة", avatar: "https://i.pravatar.cc/150?u=moath" },
+        { name: "Bassam Omari", avatar: "https://i.pravatar.cc/150?u=bassam" },
         { name: "سلطان الخوالدة", avatar: "https://i.pravatar.cc/150?u=sultan" },
-        { name: "فداء العجارمة", avatar: "https://i.pravatar.cc/150?u=fidaa" },
-        { name: "زيد الدعجة", avatar: "https://i.pravatar.cc/150?u=zaid" },
-        { name: "ابتسام الشرعة", avatar: "https://i.pravatar.cc/150?u=ebtisam" }
+        { name: "Zaid Daajah", avatar: "https://i.pravatar.cc/150?u=zaid" },
+        { name: "ابتسام شراعة", avatar: "https://i.pravatar.cc/150?u=ebtisam" },
+        { name: "جميل العبادي", avatar: "https://i.pravatar.cc/150?u=jamil" },
+        { name: "منى بني هاني", avatar: "https://i.pravatar.cc/150?u=mona" },
+        { name: "حمزة الزعبي", avatar: "https://i.pravatar.cc/150?u=hamza" },
+        { name: "رانية الصلاج", avatar: "https://i.pravatar.cc/150?u=rania" },
+        { name: "مالك الشوبكي", avatar: "https://i.pravatar.cc/150?u=malik" },
+        { name: "هيام العضايلة", avatar: "https://i.pravatar.cc/150?u=heyam" },
+        { name: "قصي المناصير", avatar: "https://i.pravatar.cc/150?u=qusay" },
+        { name: "ديمة الحنيطي", avatar: "https://i.pravatar.cc/150?u=dima" }
     ];
 
-    const jordanianCommentsPool = [
-        "يخوان أنا بلشت بـ 2000 دولار وزي ما وعدتونا الأرباح نزلت بالحساب أول بأول، الله يوفقكم عهيك مصداقية 🇯🇴🔥",
-        "بالبداية كنت متردد وخايف أحط مبلغ بس توكلت على الله وأودعت ألفين، وهس صارلي شهر كل أسبوع بستلم أرباحي منتظمة ومشكوووورين يا نشامى 💯",
-        "أشرف ناس وأصدق شركة تعاملت معها بالأردن، حطيت 2000$ وأموري بالسليم وأرباحي بتوصلني بالدقيقة، الله يكثر من أمثالكم 👑",
-        "والله العظيم إني جربت بنفسي، أودعت الـ 2000 دولار وصار ينزللي أرباح محترمة كل فترة، يعطيهم العافية فريق قد المسؤولية 👍",
-        "الله يجزيكم الخير، الواحد صار يشوف ناس ترفع الرأس، أودعت المبلغ وكل شي تمام ومشي الحال أحسن مما توقعت بكتير 🥇",
-        "يا نشامى الشغل معكو بمشي على السكة الصح، أرباح أسبوعية منتظمة ورزقة وفيرة الله يباركلكو ويزيدكو 🚀",
-        "يا ريتني عرفتكم من زمان، أودعت الألفين وهسا الأرباح بتوصلني عالبنك بدون أي تأخير ولا تعقيد، كفو والله يا ذيبان 💸",
-        "الله يطرحلكو البركة، شركة فخمة والمصداقية عندهم عنوان، الله يرزق الجميع مثل ما رزقنا بفضلكم 🌟",
-        "والله ما قصرتوا يا أصحاب الواجب، التجربة لحالها بتثبت كلامكم، الله يقويكم ويجزاكم كل خير 👏",
-        "صراحة الواحد بالبداية بخاف من هاي القصص بس بعد ما جربت وأودعت طلع كلشي حقيقي وصحيح 100 بالمية، الله يرزقكو 🤲",
-        "يعطيكم العافية عهالجهود الطيبة، الشغل معاكم مريح والأرباح بتنزل أول بأول بدون أي مشاكل تذكر 💯",
-        "أنا أودعت وحطيت ثقتي فيكم وما خيبتوا ظني أبداً، الله يبارك فيكم وفي جهودكم يا رب 🌺"
+    const jordanianThreadsPool = [
+        {
+            comment: "يخوان أنا بلشت بـ 2000 دولار وزي ما وعدتونا الأرباح نزلت بالحساب أول بأول، الله يوفقكم عهيك مصداقية 🇯🇴🔥",
+            replies: [
+                { user: "Khaled Zoubi", text: "صحيح كلامك يا غالي، أنا كمان جربت وطلعت الأمور ممتازة." },
+                { user: "Omar Abdullah", text: "@Khaled Zoubi یعنی سحبت الأرباح بدون مشاكل يا خالد؟" },
+                { user: "Khaled Zoubi", text: "@Omar Abdullah اه والله يا صاحبي تحولت عالبنك خلال ساعات." }
+            ]
+        },
+        {
+            comment: "بالبداية كنت متردد وخايف أحط مبلغ بس توكلت على الله وأودعت ألفين، وهس صارلي شهر كل أسبوع بستلم أرباحي منتظمة ومشكوووورين يا نشامى 💯",
+            replies: [
+                { user: "Noor Al-Tarawneh", text: "الله يباركلك، قديش بتوخذ تقريباً أرباح بالأسبوع؟" },
+                { user: "Khaled Zoubi", text: "@Noor Al-Tarawneh حسب خطة الإيداع بس النسب ممتازة وثابتة." }
+            ]
+        },
+        {
+            comment: "أشرف ناس وأصدق شركة تعاملت معها بالأردن، حطيت 2000$ وأموري بالسليم وأرباحي بتوصلني بالدقيقة، الله يكثر من أمثالكم 👑",
+            replies: [
+                { user: "معاذ حجاجحة", text: "الله يسعدك، هل التسجيل والتوثيق بياخذ وقت طويل؟" },
+                { user: "صقر الحنيطي", text: "@معاذ حجاجحة لا أبداً، ربع ساعة وكل شي بيكون جاهز." }
+            ]
+        },
+        {
+            comment: "والله العظيم إني جربت بنفسي، أودعت الـ 2000 دولار وصار ينزللي أرباح محترمة كل فترة، يعطيهم العافية فريق قد المسؤولية 👍",
+            replies: [
+                { user: "فاطمة المجالي", text: "ممكن تفاصيل أكتر كيف نبدأ؟" },
+                { user: "Omar Abdullah", text: "@فاطمة المجالي ابعثيلهن رسالة عالباب وهمه بوضحوك بكل الخطوات." }
+            ]
+        },
+        {
+            comment: "الله يجزيكم الخير، الواحد صار يشوف ناس ترفع الرأس، أودعت المبلغ وكل شي تمام ومشي الحال أحسن مما توقعت بكتير 🥇",
+            replies: [
+                { user: "ابتسام شراعة", text: "الحمدلله الواحد صاره فترة بدور عشركة مضمونة." }
+            ]
+        },
+        {
+            comment: "يا نشامى الشغل معكو بمشي على السكة الصح، أرباح أسبوعية منتظمة ورزقة وفيرة الله يباركلكو ويزيدكو 🚀",
+            replies: [
+                { user: "Zaid Daajah", text: "كفو والله يا نشامى، تسلم إيدكو عهالخدمة الطيبة." }
+            ]
+        },
+        {
+            comment: "أنا جربت المنصة من اسبوعين، والأمور ماشية تمام التمام والأرباح بتنزل بانتظام، يعطيكم العافية 👏",
+            replies: [
+                { user: "جميل العبادي", text: "الله يطمنك، الواحد كان خايف بالبداية." },
+                { user: "سعيد رمضان", text: "@جميل العبادي توكل على الله الشركة مضمونة 100%" }
+            ]
+        },
+        {
+            comment: "اشكركم من قلبي على المصداقية والسرعة في إنجاز الأرباح، صراحة أفضل شركة استثمار تعاملت معها 🌟",
+            replies: [
+                { user: "منى بني هاني", text: "صحيح والله خدمة العملاء عندهم بشقوا النور." }
+            ]
+        },
+        {
+            comment: "استثمار ناجح بكل بمعنى الكلمة، شكراً لفريق العمل على الجهود المبذولة لخدمة المستثمرين 💙",
+            replies: [
+                { user: "حمزة الزعبي", text: "بالتوفيق للجميع يا رب." }
+            ]
+        },
+        {
+            comment: "ما شاء الله تبارك الله، منصة محترمة جداً وسحب الأرباح سلس جداً، الله يرزقكم 🌺",
+            replies: [
+                { user: "رانية الصلاج", text: "صادقين والله عن تجربتي الشخصية." }
+            ]
+        },
+        {
+            comment: "تجربة ممتازة جداً، أنصح الجميع بالاستثمار معهم بكل اعتمادية ومصداقية 👍",
+            replies: [
+                { user: "مالك الشوبكي", text: "أفضل ناس والله." }
+            ]
+        },
+        {
+            comment: "الخدمة ممتازة والدعم الفني متجاوب طوال الوقت، شكراً لتعاونكم الدائم 💼",
+            replies: [
+                { user: "هيام العضايلة", text: "فعلاً استجابتهم سريعة جداً." }
+            ]
+        },
+        {
+            comment: "ألف شكر لإدارة الشركة على الشفافية العالية والالتزام بالمواعيد المحددة للأرباح 🎯",
+            replies: [
+                { user: "قصي المناصير", text: "نشامى والله ما قصروا." }
+            ]
+        },
+        {
+            comment: "بداية موفقة معهم وأتمنى الاستمرار على هذا المستوى الراقي من التعامل 🤝",
+            replies: [
+                { user: "ديمة الحنيطي", text: "أكيد رح يستمروا لأنهم أهل ثقة." }
+            ]
+        },
+        {
+            comment: "منصة رائعة وفرصة حقيقية لكل شخص حابب يطور دخله المالي، شكراً لكم 💡",
+            replies: [
+                { user: "Bassam Omari", text: "كلام سليم 100%." }
+            ]
+        },
+        {
+            comment: "يعطيكم العافية على المصداقية العالية، الأرباح نزلت بالحساب في وقت قياسي ⚡",
+            replies: [
+                { user: "سلطان الخوالدة", text: "هذا العشم فيكم يا نشامى." }
+            ]
+        },
+        {
+            comment: "تعامل راقٍ وخدمة محترفة، الله يوفقكم لكل خير ويطرح البركة 🤲",
+            replies: [
+                { user: "Ahmad Ali", text: "آمين يا رب العالمين." }
+            ]
+        },
+        {
+            comment: "شركة قوية ومضمونة وأثبتت جدارتها بالسوق العربي والأردني بامتياز 📈",
+            replies: [
+                { user: "Omar Abdullah", text: "من أفضل الشركات بدون منازع." }
+            ]
+        },
+        {
+            comment: "أنا سحبت أرباحي اليوم بكل سهولة، شكراً لكم على الأمانة والوضوح 💳",
+            replies: [
+                { user: "فاطمة المجالي", text: "مبروك أخي وعقبال عندك." }
+            ]
+        },
+        {
+            comment: "بارك الله فيكم وفي جهودكم المستمرة لخدمة العملاء بأفضل صورة ممكنة 🌿",
+            replies: [
+                { user: "Khaled Zoubi", text: "تسلم يا غالي." }
+            ]
+        },
+        {
+            comment: "مبدعين دائماً، وأرباحي تسير بالشكل الصحيح تماماً كما وعدتمونا 📈",
+            replies: [
+                { user: "Noor Al-Tarawneh", text: "شي مرتب ومضمون." }
+            ]
+        },
+        {
+            comment: "أفضل قرار اخذته هو الاستثمار معكم، شكراً لفريق العمل المحترف 💼",
+            replies: [
+                { user: "صقر الحنيطي", text: "خطوة موفقة وصحيحة." }
+            ]
+        },
+        {
+            comment: "صراحة قمة في الاحترام والالتزام بمواعيد الصرف، الله يرزقكم أضعافا 🌟",
+            replies: [
+                { user: "معاذ حجاجحة", text: "ناس بتنحط عالعين والراس." }
+            ]
+        },
+        {
+            comment: "أجمل شي بالشركة هو سرعة الرد والدعم الفني الجاهز دائماً لأي استفسار 📞",
+            replies: [
+                { user: "ابتسام شراعة", text: "صحيح، ما بقصروا ابداً." }
+            ]
+        },
+        {
+            comment: "كل الاحترام والتقدير لإدارة الشركة على هذه المصداقية النادرة 👑",
+            replies: [
+                { user: "Zaid Daajah", text: "كفو والله يا نشامى." }
+            ]
+        },
+        {
+            comment: "تجربة ناجحة بكل المقاييس، أنصح الجميع بخوض التجربة والاستفادة من الفرصة 🚀",
+            replies: [
+                { user: "جميل العبادي", text: "أنا بلشت ونصحت أصحابي كمان." }
+            ]
+        },
+        {
+            comment: "شكراً لكم على الشفافية والوضوح في التعامل المالي من أول يوم 💯",
+            replies: [
+                { user: "منى بني هاني", text: "هذا أهم اشي بالاستثمار." }
+            ]
+        },
+        {
+            comment: "الله يوفقكم، شغل مرتب ومؤسسة محترمة جداً تستحق كل احترام 🏛️",
+            replies: [
+                { user: "حمزة الزعبي", text: "فعلاً مؤسسة محترمة." }
+            ]
+        },
+        {
+            comment: "أرباح منتظمة وثقة متبادلة، شكراً لكم على كل ما تقدمونه للمستثمرين 💎",
+            replies: [
+                { user: "رانية الصلاج", text: "شكراً لإدارة الشركة." }
+            ]
+        },
+        {
+            comment: "منصة استثمارية آمنة وموثوقة، سعدت جداً بالتعامل معكم في هذه الفترة ✨",
+            replies: [
+                { user: "مالك الشوبكي", text: "وأحنا سعدنا بانضمامك." }
+            ]
+        },
+        {
+            comment: "ممتاز جداً، كل شيء واضح وشفاف والأرباح تصل في وقتها المحدد تماماً ⏱️",
+            replies: [
+                { user: "هيام العضايلة", text: "دقة بالمواعيد ما شاء الله." }
+            ]
+        },
+        {
+            comment: "شكراً لجهودكم الرائعة في تسهيل عمليات التداول والإيداع والسحب 🌐",
+            replies: [
+                { user: "قصي المناصير", text: "كل التسهيلات متوفرة." }
+            ]
+        },
+        {
+            comment: "شركة تثبت يوماً بعد يوم أنها الأفضل والأكثر مصداقية في السوق الاردني والعربي 🏆",
+            replies: [
+                { user: "ديمة الحنيطي", text: "بكل جدارة واقتدار." }
+            ]
+        },
+        {
+            comment: "بارك الله فيكم، الدعم الفني متواجد دائماً لحل أي مشكلة أو استفسار 🛠️",
+            replies: [
+                { user: "Bassam Omari", text: "دعم فني ع مستوى عالي." }
+            ]
+        },
+        {
+            comment: "أفضل خدمة استثمارية جربتها بحياتي، شكراً لطاقم العمل المميز والمحترف 👏",
+            replies: [
+                { user: "سلطان الخوالدة", text: "طاقم شغلهم نظيف." }
+            ]
+        },
+        {
+            comment: "خطوات واضحة ومكاسب حقيقية، الله يبارك لكم في رزقكم ويزيدكم فضلاً 🤲",
+            replies: [
+                { user: "Ahmad Ali", text: "آمين يا رب العالمين." }
+            ]
+        },
+        {
+            comment: "شكراً على المصداقية والتعامل الراقي الذي يعكس مدى احترافية الشركة 💼",
+            replies: [
+                { user: "سعيد رمضان", text: "احترافية عالية فعلاً." }
+            ]
+        },
+        {
+            comment: "سعيد جداً بكوني جزء من هذه المنصة الاستثمارية الرائعة والناجحة ⭐",
+            replies: [
+                { user: "فاطمة المجالي", text: "أهلاً بك معنا." }
+            ]
+        },
+        {
+            comment: "كل الاحترام لكم على الالتزام التام بالوعود والشفافية المالية المطلقة 🤝",
+            replies: [
+                { user: "Khaled Zoubi", text: "أهل الثقة والله." }
+            ]
+        },
+        {
+            comment: "أرباح رائعة وخدمة عملاء راقية جداً، شكراً لكم من القلب على كل شيء ❤️",
+            replies: [
+                { user: "Noor Al-Tarawneh", text: "شكراً لكم جميعاً." }
+            ]
+        },
+        {
+            comment: "منصة تستحق الثقة وبجدارة، تجربة ممتازة ولن تكون الأخيرة إن شاء الله 🎯",
+            replies: [
+                { user: "صقر الحنيطي", text: "بالتوفيق دائماً." }
+            ]
+        },
+        {
+            comment: "شكراً لصدقكم وأمانتكم في التعامل المالي، الله يوفقكم ويفتحها بوجهكم 🌺",
+            replies: [
+                { user: "معاذ حجاجحة", text: "آمين يا رب." }
+            ]
+        },
+        {
+            comment: "استثمار امن ونتائج مرضية جداً، أنصح الجميع بالانضمام والبدء معهم 🚀",
+            replies: [
+                { user: "ابتسام شراعة", text: "فعلاً استثمار آمن." }
+            ]
+        },
+        {
+            comment: "تعامل ممتاز وسرعة فائقة في تلبية طلبات السحب والإيداع، بوركتم ⚡",
+            replies: [
+                { user: "Zaid Daajah", text: "سرعة قياسية ما شاء الله." }
+            ]
+        },
+        {
+            comment: "شكراً لكم على الدعم المستمر والمتابعة الدقيقة لكل تفاصيل الاستثمار 📊",
+            replies: [
+                { user: "جميل العبادي", text: "متابعة أول بأول." }
+            ]
+        },
+        {
+            comment: "شركة محترفة بمعنى الكلمة، والأرباح تنزل بانتظام تام دون أي تأخير 💎",
+            replies: [
+                { user: "منى بني هاني", text: "بدون أي تأخير فعلاً." }
+            ]
+        },
+        {
+            comment: "ألف شكر لإدارة الشركة على هذه الفرصة الاستثمارية المميزة والرائعة 🌟",
+            replies: [
+                { user: "حمزة الزعبي", text: "فرصة حقيقية للجميع." }
+            ]
+        },
+        {
+            comment: "كل الدعم لكم، أثبتتم أنكم الأفضل والأكثر التزاماً في السوق المالي 👑",
+            replies: [
+                { user: "رانية الصلاج", text: "الأفضل دائماً." }
+            ]
+        },
+        {
+            comment: "تجربة رائعة بكل المقاييس، شكراً على الشفافية والاحترافية العالية 🏆",
+            replies: [
+                { user: "مالك الشوبكي", text: "احترافية لا غبار عليها." }
+            ]
+        },
+        {
+            comment: "بارك الله في جهودكم، المنصة ممتازة والأرباح تصل في موعدها تماماً ⏱️",
+            replies: [
+                { user: "هيام العضايلة", text: "دقة تامة بالمواعيد." }
+            ]
+        },
+        {
+            comment: "شكراً لكم على حسن التعامل والمصداقية العالية في إنجاز المعاملات 🌐",
+            replies: [
+                { user: "قصي المناصير", text: "خدمة راقية جداً." }
+            ]
+        },
+        {
+            comment: "شركة ممتازة وتستحق كل تقدير واحترام على ما تقدمه للمستثمرين 🏛️",
+            replies: [
+                { user: "ديمة الحنيطي", text: "تستحق التقدير وبجدارة." }
+            ]
+        },
+        {
+            comment: "أرباح ممتازة ودعم فني متجاوب دائماً، شكراً لكم على كل الجهود 🛠️",
+            replies: [
+                { user: "Bassam Omari", text: "جهود مشكورين عليها." }
+            ]
+        },
+        {
+            comment: "سعيد جداً بهذه الشراكة الاستثمارية الناجحة والمباركة بإذن الله 🤝",
+            replies: [
+                { user: "سلطان الخوالدة", text: "شراكة مباركة." }
+            ]
+        },
+        {
+            comment: "كل الشكر والاحترام لطاقم العمل على الأمانة والوضوح التام في المعاملات 📈",
+            replies: [
+                { user: "Ahmad Ali", text: "أمانة عالية جداً." }
+            ]
+        },
+        {
+            comment: "منصة قوية وموثوقة، أنصح كل شخص يرغب بالاستثمار المضمون بالانضمام إليهم 💯",
+            replies: [
+                { user: "سعيد رمضان", text: "نصيحة في محلها." }
+            ]
+        },
+        {
+            comment: "شكراً لكم على الالتزام الدائم وتقديم أفضل الخدمات للمستثمرين 🌟",
+            replies: [
+                { user: "فاطمة المجالي", text: "أفضل الخدمات بلا منازع." }
+            ]
+        },
+        {
+            comment: "تجربة استثمارية ناجحة ومضمونة 100%، شكراً لإدارة الشركة على كل شيء ❤️",
+            replies: [
+                { user: "Khaled Zoubi", text: "مضمونة مليون بالمية." }
+            ]
+        },
+        {
+            comment: "بارك الله فيكم، العمل معكم مكسب حقيقي وثقة متبادلة مستمرة 🎯",
+            replies: [
+                { user: "Noor Al-Tarawneh", text: "مكسب حقيقي للجميع." }
+            ]
+        },
+        {
+            comment: "شكراً على المصداقية والسرعة في تحويل الأرباح، أنصح بالتعامل معهم بشدة 🚀",
+            replies: [
+                { user: "صقر الحنيطي", text: "أنصح بشدة وبدون تردد." }
+            ]
+        },
+        {
+            comment: "خدمة راقية ومصداقية عالية، الله يوفقكم ويزيدكم من فضله الواسع 🤲",
+            replies: [
+                { user: "معاذ حجاجحة", text: "آمين يا رب العالمين." }
+            ]
+        },
+        {
+            comment: "أفضل منصة تداول واستثمار تعاملت معها، كل التوفيق لكم ولطاقم العمل 🌺",
+            replies: [
+                { user: "ابتسام شراعة", text: "كل التوفيق والنجاح." }
+            ]
+        },
+        {
+            comment: "شكراً لكم على الشفافية والوضوح وسرعة إنجاز الأرباح بانتظام تام ⚡",
+            replies: [
+                { user: "Zaid Daajah", text: "التزام تام ووضوح." }
+            ]
+        },
+        {
+            comment: "شركة محترفة وأمينة، سعدت جداً بالتواجد معكم والاستثمار عبر منصتكم 💎",
+            replies: [
+                { user: "جميل العبادي", text: "نورتنا يا غالي." }
+            ]
+        },
+        {
+            comment: "أرباح منتظمة وثقة عالية، شكراً لكل فرد في فريق العمل على جهودهم 📊",
+            replies: [
+                { user: "منى بني هاني", text: "جهودهم واضحة ومباركة." }
+            ]
+        },
+        {
+            comment: "كل التقدير والاحترام لهذه الشركة العريقة والصادقة في تعاملاتها المالية 🏛️",
+            replies: [
+                { user: "حمزة الزعبي", text: "شركة عريقة وصادقة." }
+            ]
+        },
+        {
+            comment: "تجربة ممتازة جداً والأرباح تنزل في حسابي بكل سهولة ويسر، شكراً لكم 🌟",
+            replies: [
+                { user: "رانية الصلاج", text: "بكل سهولة فعلاً." }
+            ]
+        },
+        {
+            comment: "شكراً لكم على الالتزام بالمواعيد وتقديم خدمة استثمارية بهذه الكفاءة العالية ⏱️",
+            replies: [
+                { user: "مالك الشوبكي", text: "كفاءة عالية جداً." }
+            ]
+        },
+        {
+            comment: "منصة استثمارية آمنة وصادقة، أنصح الجميع بالانضمام وبدء الاستثمار 🌐",
+            replies: [
+                { user: "هيام العضايلة", text: "استثمار آمن 100%." }
+            ]
+        },
+        {
+            comment: "بارك الله فيكم وفي جهودكم المستمرة لخدمة المستثمرين بكل أمانة وإخلاص 🤝",
+            replies: [
+                { user: "قصي المناصير", text: "أمانة وإخلاص تام." }
+            ]
+        },
+        {
+            comment: "شكراً على الدعم المستمر والتعامل الراقي الذي يجعلنا نشعر بالأمان التام 💼",
+            replies: [
+                { user: "ديمة الحنيطي", text: "شعور بالراحة والأمان." }
+            ]
+        },
+        {
+            comment: "أفضل شركة استثمارية بالأردن وبجدارة، شكراً لكم على كل ما تقدمونه 👑",
+            replies: [
+                { user: "Bassam Omari", text: "الأفضل بلا منازع بالأردن." }
+            ]
+        },
+        {
+            comment: "أرباح حقيقية ومضمونة، شكراً لإدارة الشركة على المصداقية المطلقة 📈",
+            replies: [
+                { user: "سلطان الخوالدة", text: "مصداقية مطلقـة." }
+            ]
+        },
+        {
+            comment: "كل الاحترام لطاقم العمل على سرعة الرد والتعامل المحترف مع العملاء 🛠️",
+            replies: [
+                { user: "Ahmad Ali", text: "تعامل محترف جداً." }
+            ]
+        },
+        {
+            comment: "سعيد جداً بالنتائج المحققة حتى الآن، شكراً لكم على هذه الفرصة العظيمة ⭐",
+            replies: [
+                { user: "سعيد رمضان", text: "نتائج مفرحة للجميع." }
+            ]
+        },
+        {
+            comment: "شركة تثبت يوماً بعد يوماً التزامها التام بوعودها للمستثمرين، بوركتم 💯",
+            replies: [
+                { user: "فاطمة المجالي", text: "التزام تام بالوعود." }
+            ]
+        },
+        {
+            comment: "شكراً لكم على الشفافية العالية في إدارة الحسابات وصرف الأرباح بانتظام 🎯",
+            replies: [
+                { user: "Khaled Zoubi", text: "إدارة حسابات محترفة." }
+            ]
+        },
+        {
+            comment: "تجربة ناجحة بكل المقاييس ولن تكون الأخيرة بإذن الله، شكراً لكم ❤️",
+            replies: [
+                { user: "Noor Al-Tarawneh", text: "بالتوفيق الدائم." }
+            ]
+        },
+        {
+            comment: "بارك الله فيكم، العمل معكم يبعث على الاطمئنان والثقة الكبيرة 🚀",
+            replies: [
+                { user: "صقر الحنيطي", text: "اطمئنان وثقة كبيرة." }
+            ]
+        },
+        {
+            comment: "شكراً لصدقكم وأمانتكم العالية، الله يوفقكم لكل خير ويزيدكم نجاحاً 🤲",
+            replies: [
+                { user: "معاذ حجاجحة", text: "آمين يا رب العالمين." }
+            ]
+        },
+        {
+            comment: "منصة ممتازة وفرصة ذهبية لكل من يبحث عن استثمار حقيقي وآمن 💡",
+            replies: [
+                { user: "ابتسام شراعة", text: "فرصة ذهبية فعلاً." }
+            ]
+        },
+        {
+            comment: "شكراً لطاقم الإدارة على الدعم المتواصل وحل أي استفسار بكل رحابة صدر ⚡",
+            replies: [
+                { user: "Zaid Daajah", text: "رحابة صدر واضحة." }
+            ]
+        },
+        {
+            comment: "أرباح منتظمة وثقة متبادلة، شكراً لكم على كل ما تقدمونه لخدمة المستثمرين 💎",
+            replies: [
+                { user: "جميل العبادي", text: "خدمة ممتازة ومستمرة." }
+            ]
+        },
+        {
+            comment: "شركة محترفة وصادقة، سعدت جداً بخوض هذه التجربة الاستثمارية الناجحة 📊",
+            replies: [
+                { user: "منى بني هاني", text: "تجربة ناجحة ومباركة." }
+            ]
+        },
+        {
+            comment: "كل الشكر والاحترام لإدارة الشركة على الالتزام الدقيق بمواعيد الأرباح ⏱️",
+            replies: [
+                { user: "حمزة الزعبي", text: "التزام دقيق جداً." }
+            ]
+        },
+        {
+            comment: "تجربة رائعة وأرباح مرضية للغاية، شكراً لكم على الشفافية والوضوح 🌟",
+            replies: [
+                { user: "رانية الصلاج", text: "أرباح مرضية للغاية." }
+            ]
+        },
+        {
+            comment: "بارك الله في جهودكم، المنصة تقدم أفضل الخدمات الاستثمارية بكل أمانة 🏛️",
+            replies: [
+                { user: "مالك الشوبكي", text: "أفضل الخدمات الاستثمارية." }
+            ]
+        },
+        {
+            comment: "شكراً لكم على حسن التعامل وسرعة تلبية طلبات السحب دون أي تعقيد 🌐",
+            replies: [
+                { user: "هيام العضايلة", text: "بدون أي تعقيدات." }
+            ]
+        },
+        {
+            comment: "شركة تستحق التقدير على احترافيتها العالية وصدقها المطلق مع الجميع 🤝",
+            replies: [
+                { user: "قصي المناصير", text: "صدق مطلق مع الجميع." }
+            ]
+        },
+        {
+            comment: "أفضل استثمار قمت به في حياتي، شكراً لكم على هذه الثقة والأمان 💼",
+            replies: [
+                { user: "ديمة الحنيطي", text: "ثقة وأمان متبادل." }
+            ]
+        },
+        {
+            comment: "أرباح حقيقية ومضمونة، شكراً لكل فريق العمل على الجهود الجبارة المبذولة 👑",
+            replies: [
+                { user: "Bassam Omari", text: "جهود جبارة ومباركة." }
+            ]
+        },
+        {
+            comment: "كل التقدير والاحترام لهذه المنصة الرائعة التي أعادت لنا الأمل بالاستثمار الآمن 📈",
+            replies: [
+                { user: "سلطان الخوالدة", text: "منصة رائعة بكل معنا الكلمة." }
+            ]
+        },
+        {
+            comment: "شكراً لكم على الالتزام التام والتعامل الراقي الذي يعكس مدى احترافيتكم 🛠️",
+            replies: [
+                { user: "Ahmad Ali", text: "احترافية عالية جداً." }
+            ]
+        },
+        {
+            comment: "سعيد جداً بانضمامي لكم وتحقيق أرباح ممتازة خلال فترة قصيرة جداً ⭐",
+            replies: [
+                { user: "سعيد رمضان", text: "مبروك أخي وعقبال الأفضل." }
+            ]
+        },
+        {
+            comment: "شركة صادقة ومضمونة، شكراً لإدارة الشركة على المصداقية والشفافية المالية 💯",
+            replies: [
+                { user: "فاطمة المجالي", text: "مصداقية عالية جداً." }
+            ]
+        },
+        {
+            comment: "كل الشكر والاحترام لكم على الوفاء الدائم بالوعود وتقديم الأفضل دائماً 🎯",
+            replies: [
+                { user: "Khaled Zoubi", text: "دائماً عند حسن الظن." }
+            ]
+        },
+        {
+            comment: "تجربة استثمارية ممتازة بكل المقاييس، شكراً لكم على كل ما تقدمونه ❤️",
+            replies: [
+                { user: "Noor Al-Tarawneh", text: "شكراً لكم من القلب." }
+            ]
+        },
+        {
+            comment: "بارك الله فيكم، العمل معكم مكسب حقيقي وثقة مستمرة لا غبار عليها 🚀",
+            replies: [
+                { user: "صقر الحنيطي", text: "اطمئنان وثقة كبيرة." }
+            ]
+        },
+        {
+            comment: "شكراً لصدقكم وأمانتكم العالية في إدارة الاستثمارات وصرف الأرباح بانتظام 🤲",
+            replies: [
+                { user: "معاذ حجاجحة", text: "آمين يا رب العالمين." }
+            ]
+        },
+        {
+            comment: "منصة ممتازة وفرصة حقيقية لكل من يبحث عن الأرباح المضمونة والأمنة 💡",
+            replies: [
+                { user: "ابتسام شراعة", text: "أرباح مضمونة وآمنة." }
+            ]
+        },
+        {
+            comment: "شكراً لطاقم العمل على الدعم المستمر وتوفير كافة التسهيلات للمستثمرين ⚡",
+            replies: [
+                { user: "Zaid Daajah", text: "تسهيلات متكاملة." }
+            ]
+        },
+        {
+            comment: "أرباح منتظمة وثقة عالية، شكراً لكم على كل الجهود المبذولة لخدمتنا 💎",
+            replies: [
+                { user: "جميل العبادي", text: "جهود مباركة ومشكورة." }
+            ]
+        },
+        {
+            comment: "شركة محترفة وصادقة، سعدت جداً بالتواجد معكم والاستثمار عبر منصتكم الرائعة 📊",
+            replies: [
+                { user: "منى بني هاني", text: "منصة رائعة ومضمونة." }
+            ]
+        }
     ];
 
     let isAdminLoggedIn = false;
     let currentActivePostId = null;
 
-    // دوال التعامل مع قائمة النقر على الصورة الشخصية والستوري
+    window.checkVisitorInput = function(inputEl) {
+        if (!isAdminLoggedIn) {
+            inputEl.blur();
+        }
+    };
+
     window.openProfileMenu = function(event) {
+        if (!isAdminLoggedIn) return;
         document.getElementById("profileMenuModal").style.display = "flex";
     };
     window.closeProfileMenu = function(event) {
@@ -826,44 +1610,109 @@
         }
     };
 
-    window.uploadQuickProfile = async function(input) {
+    // --- نظام التخزين المحلي (Local Storage) للصورة الشخصية والستوري ---
+    function saveToLocalStorage(key, value) {
+        localStorage.setItem(key, value);
+    }
+    function getFromLocalStorage(key) {
+        return localStorage.getItem(key);
+    }
+
+    window.uploadQuickProfile = function(input) {
         if (input.files && input.files[0]) {
-            let file = input.files[0];
-            let storageRef = ref(storage, 'profiles/' + Date.now() + '_' + file.name);
-            let snapshot = await uploadBytes(storageRef, file);
-            let downloadUrl = await getDownloadURL(snapshot.ref);
-            await updateDoc(doc(db, "page_settings", "config"), { profileImg: downloadUrl });
-            document.getElementById("profileMenuModal").style.display = "none";
-            alert("تم تحديث الصورة الشخصية سحابياً!");
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let base64Img = e.target.result;
+                saveToLocalStorage('page_profile_img', base64Img);
+                applyProfileImageLocally(base64Img);
+                document.getElementById("profileMenuModal").style.display = "none";
+                alert("تم تحديث وحفظ الصورة الشخصية محلياً!");
+            };
+            reader.readAsDataURL(input.files[0]);
         }
     };
 
-    window.removeProfilePic = async function() {
+    window.removeProfilePic = function() {
         if (confirm("هل تريد إزالة الصورة الشخصية والعودة للافتراضية؟")) {
             let defaultImg = "https://via.placeholder.com/100";
-            await updateDoc(doc(db, "page_settings", "config"), { profileImg: defaultImg });
+            saveToLocalStorage('page_profile_img', defaultImg);
+            applyProfileImageLocally(defaultImg);
             document.getElementById("profileMenuModal").style.display = "none";
             alert("تمت إزالة الصورة الشخصية!");
         }
     };
 
-    window.uploadQuickStory = async function(input) {
+    window.uploadQuickStory = function(input) {
         if (input.files && input.files[0]) {
-            let file = input.files[0];
-            let storageRef = ref(storage, 'stories/' + Date.now() + '_' + file.name);
-            let snapshot = await uploadBytes(storageRef, file);
-            let downloadUrl = await getDownloadURL(snapshot.ref);
-            await updateDoc(doc(db, "page_settings", "config"), { storyImg: downloadUrl, hasStory: true });
-            document.getElementById("profileMenuModal").style.display = "none";
-            alert("تمت إضافة الستوري بنجاح!");
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let base64Story = e.target.result;
+                saveToLocalStorage('page_story_img', base64Story);
+                saveToLocalStorage('page_has_story', 'true');
+                applyStoryLocally(true);
+                document.getElementById("profileMenuModal").style.display = "none";
+                alert("تمت إضافة الستوري بنجاح!");
+            };
+            reader.readAsDataURL(input.files[0]);
         }
     };
 
-    window.removeStory = async function() {
-        await updateDoc(doc(db, "page_settings", "config"), { storyImg: "", hasStory: false });
+    window.removeStory = function() {
+        localStorage.removeItem('page_story_img');
+        saveToLocalStorage('page_has_story', 'false');
+        applyStoryLocally(false);
         document.getElementById("profileMenuModal").style.display = "none";
         alert("تمت إزالة الستوري!");
     };
+
+    function applyProfileImageLocally(imgUrl) {
+        document.getElementById("profile-img").src = imgUrl;
+        document.querySelectorAll('.fb-post-avatar').forEach(img => img.src = imgUrl);
+    }
+
+    function applyStoryLocally(hasStory) {
+        let picContainer = document.getElementById("profile-pic-container");
+        if (hasStory) {
+            picContainer.classList.add("has-story");
+        } else {
+            picContainer.classList.remove("has-story");
+        }
+    }
+
+    // تحميل البيانات المحلية فور فتح الصفحة
+    function loadLocalPageSettings() {
+        let savedProfile = getFromLocalStorage('page_profile_img');
+        if (savedProfile) {
+            applyProfileImageLocally(savedProfile);
+        } else {
+            applyProfileImageLocally("https://via.placeholder.com/100");
+        }
+
+        let hasStory = getFromLocalStorage('page_has_story') === 'true';
+        applyStoryLocally(hasStory);
+
+        let savedBio = getFromLocalStorage('page_bio_text');
+        if(savedBio) document.getElementById("page-bio-text").innerText = savedBio;
+
+        let savedMsgLink = getFromLocalStorage('page_msg_link');
+        if(savedMsgLink) document.getElementById("msg-action-btn").href = savedMsgLink;
+    }
+    loadLocalPageSettings();
+
+    window.updateProfilePic = function() {
+        let fileInput = document.getElementById("new-img-file");
+        if (fileInput.files && fileInput.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let base64Img = e.target.result;
+                saveToLocalStorage('page_profile_img', base64Img);
+                applyProfileImageLocally(base64Img);
+                alert("تم تحديث وحفظ الصورة الشخصية محلياً!");
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+    };
+    // -------------------------------------------------------------
 
     function formatTimeAgo(timestamp) {
         if (!timestamp) return "منذ قليل";
@@ -912,9 +1761,10 @@
         if (password === "ooddaayy") {
             isAdminLoggedIn = true;
             document.getElementById("admin-panel").style.display = "block";
-            document.getElementById("fakeAccountConfigDiv").style.display = "block";
             document.getElementById("joAutoBtn").style.display = "block";
+            document.getElementById("fakeAccountConfigDiv").style.display = "block";
             document.getElementById("adminLoginBtn").style.display = "none";
+            document.getElementById("profile-pic-container").style.cursor = "pointer";
             document.querySelectorAll('.admin-item-actions').forEach(el => el.style.display = 'flex');
             document.querySelectorAll('.post-admin-actions').forEach(el => el.style.display = 'flex');
             alert("تم تسجيل الدخول بنجاح كأدمن!");
@@ -923,27 +1773,27 @@
         }
     };
 
+    document.getElementById("profile-pic-container").addEventListener("click", function(event) {
+        if (isAdminLoggedIn) {
+            openProfileMenu(event);
+        }
+    });
+
     async function loadPageSettings() {
         try {
             const docRef = doc(db, "page_settings", "config");
             onSnapshot(docRef, (docSnap) => {
                 if (docSnap.exists()) {
                     let data = docSnap.data();
-                    if(data.bio) document.getElementById("page-bio-text").innerText = data.bio;
-                    if(data.msgLink) document.getElementById("msg-action-btn").href = data.msgLink;
-                    if(data.profileImg) {
-                        document.getElementById("profile-img").src = data.profileImg;
-                        // تحديث صور بروفايل المنشورات الحالية فوراً
-                        document.querySelectorAll('.fb-post-avatar').forEach(img => img.src = data.profileImg);
+                    if(data.bio) {
+                        document.getElementById("page-bio-text").innerText = data.bio;
+                        saveToLocalStorage('page_bio_text', data.bio);
+                    }
+                    if(data.msgLink) {
+                        document.getElementById("msg-action-btn").href = data.msgLink;
+                        saveToLocalStorage('page_msg_link', data.msgLink);
                     }
                     if(data.coverImg) document.getElementById("cover-photo-div").style.backgroundImage = `url('${data.coverImg}')`;
-                    
-                    let picContainer = document.getElementById("profile-pic-container");
-                    if(data.hasStory) {
-                        picContainer.classList.add("has-story");
-                    } else {
-                        picContainer.classList.remove("has-story");
-                    }
                 }
             });
         } catch(e) { console.error(e); }
@@ -954,6 +1804,7 @@
         let newLink = document.getElementById("new-msg-link").value.trim();
         if (newLink) {
             await updateDoc(doc(db, "page_settings", "config"), { msgLink: newLink });
+            saveToLocalStorage('page_msg_link', newLink);
             document.getElementById("new-msg-link").value = "";
             alert("تم تحديث رابط الرسائل سحابياً!");
         }
@@ -963,6 +1814,7 @@
         let newBio = document.getElementById("new-bio-text").value.trim();
         if (newBio) {
             await updateDoc(doc(db, "page_settings", "config"), { bio: newBio });
+            saveToLocalStorage('page_bio_text', newBio);
             document.getElementById("new-bio-text").value = "";
             alert("تم تحديث البايو سحابياً!");
         }
@@ -980,23 +1832,10 @@
         }
     };
 
-    window.updateProfilePic = async function() {
-        let fileInput = document.getElementById("new-img-file");
-        if (fileInput.files && fileInput.files[0]) {
-            let file = fileInput.files[0];
-            let storageRef = ref(storage, 'profiles/' + Date.now() + '_' + file.name);
-            let snapshot = await uploadBytes(storageRef, file);
-            let downloadUrl = await getDownloadURL(snapshot.ref);
-            await updateDoc(doc(db, "page_settings", "config"), { profileImg: downloadUrl });
-            alert("تم تحديث وتخزين الصورة الشخصية سحابياً!");
-        }
-    };
-
-    // حفظ المنشور (إنشاء جديد أو تعديل منشور حالي)
     window.savePost = async function() {
         let editPostId = document.getElementById("edit-post-id").value;
         let text = document.getElementById("new-post-text").value.trim();
-        let likesCount = document.getElementById("new-post-likes").value.trim() || "15";
+        let likesCount = document.getElementById("new-post-likes").value.trim() || "86";
         let reaction = document.getElementById("new-post-reaction").value;
         let fileInput = document.getElementById("new-post-file");
 
@@ -1014,7 +1853,6 @@
         }
 
         if (editPostId) {
-            // عملية تعديل
             let updateData = {
                 text: text,
                 likes: likesCount,
@@ -1027,7 +1865,6 @@
             alert("تم تعديل المنشور بنجاح!");
             resetPostForm();
         } else {
-            // عملية إنشاء جديد
             await addDoc(collection(db, "posts"), {
                 text: text,
                 imageUrl: imageUrl,
@@ -1048,7 +1885,7 @@
             let post = docSnap.data();
             document.getElementById("edit-post-id").value = postId;
             document.getElementById("new-post-text").value = post.text || "";
-            document.getElementById("new-post-likes").value = post.likes || "15";
+            document.getElementById("new-post-likes").value = post.likes || "86";
             document.getElementById("new-post-reaction").value = post.reaction || "👍";
             
             document.getElementById("post-form-title").innerText = "تعديل المنشور الحالي:";
@@ -1062,7 +1899,7 @@
     window.resetPostForm = function() {
         document.getElementById("edit-post-id").value = "";
         document.getElementById("new-post-text").value = "";
-        document.getElementById("new-post-likes").value = "15";
+        document.getElementById("new-post-likes").value = "86";
         document.getElementById("new-post-reaction").value = "👍";
         document.getElementById("new-post-file").value = "";
         
@@ -1084,11 +1921,10 @@
             let container = document.getElementById("posts-container");
             container.innerHTML = "";
             if(snapshot.empty) {
-                container.innerHTML = "<p style='text-align:center; color:#65676b;'>لا توجد منشورات حالياً.</p>";
+                container.innerHTML = "<p style='text-align:center; color:#65676b; padding:16px;'>لا توجد منشورات حالياً.</p>";
                 return;
             }
 
-            // جلب الصورة الشخصية الحالية المحدثة لضمان عرضها بالمنشورات الجديدة
             let currentAvatar = document.getElementById("profile-img").src;
 
             snapshot.forEach((docSnap) => {
@@ -1108,10 +1944,10 @@
                                 <img class="fb-post-avatar" src="${currentAvatar}" alt="Avatar">
                                 <div class="fb-post-meta">
                                     <div class="fb-post-author-row">
-                                        <span>شركة الدار للإستثمارات المحدودة</span>
+                                        <span>شركه الاستثمار العربيه</span>
                                         <span class="verified-icon" style="width: 14px; height: 14px;"></span>
                                     </div>
-                                    <div class="fb-post-time">${timeAgoText} · 🌐</div>
+                                    <div class="fb-post-time"><span>${timeAgoText}</span> · <span>🌐</span></div>
                                 </div>
                             </div>
                             <div class="post-admin-actions" style="${adminActionsStyle}">
@@ -1131,9 +1967,9 @@
                         </div>
 
                         <div class="fb-post-actions">
-                            <button class="fb-action-btn">${post.reaction} التفاعل</button>
-                            <button class="fb-action-btn" onclick="openCommentsModal('${postId}')">💬 تعليق</button>
-                            <button class="fb-action-btn">مشاركة</button>
+                            <button class="fb-action-btn"><span>👍</span> إعجاب</button>
+                            <button class="fb-action-btn" onclick="openCommentsModal('${postId}')"><span>💬</span> تعليق</button>
+                            <button class="fb-action-btn"><span>↗️</span> مشاركة</button>
                         </div>
                     </div>
                 `;
@@ -1160,9 +1996,54 @@
     };
 
     window.addEmoji = function(btn, emoji) {
+        if (!isAdminLoggedIn) return;
         let inputField = btn.closest('.admin-controls').querySelector('.admin-comment-input');
         inputField.value += emoji;
         inputField.focus();
+    };
+
+    window.toggleReplies = function(btnElement) {
+        let container = btnElement.nextElementSibling;
+        if (container.style.display === "flex") {
+            container.style.display = "none";
+            btnElement.innerText = btnElement.getAttribute("data-show-text");
+        } else {
+            container.style.display = "flex";
+            btnElement.setAttribute("data-show-text", btnElement.innerText);
+            btnElement.innerText = "إخفاء الردود";
+        }
+    };
+
+    window.toggleItemLike = function(spanElement) {
+        let countSpan = spanElement.querySelector('.item-likes-count');
+        let currentLikes = parseInt(countSpan.innerText) || 0;
+        
+        if (spanElement.classList.contains('liked-text')) {
+            spanElement.classList.remove('liked-text');
+            spanElement.style.color = '#65676b';
+            if(currentLikes > 1) {
+                countSpan.innerText = currentLikes - 1;
+            } else {
+                spanElement.querySelector('.comment-like-badge').style.display = 'none';
+                countSpan.innerText = '';
+            }
+        } else {
+            spanElement.classList.add('liked-text');
+            spanElement.style.color = '#1877f2';
+            let badge = spanElement.querySelector('.comment-like-badge');
+            if(!badge) {
+                let bubble = spanElement.closest('.fb-comment-bubble, .fb-reply-bubble');
+                if(bubble) {
+                    let newBadge = document.createElement('div');
+                    newBadge.className = 'comment-like-badge';
+                    newBadge.innerHTML = `👍 <span class="item-likes-count">${currentLikes + 1}</span>`;
+                    bubble.appendChild(newBadge);
+                }
+            } else {
+                badge.style.display = 'flex';
+                countSpan.innerText = currentLikes + 1;
+            }
+        }
     };
 
     function loadComments(postId) {
@@ -1170,12 +2051,21 @@
         onSnapshot(commentsQuery, (snapshot) => {
             let listContainer = document.getElementById("modalCommentsList");
             listContainer.innerHTML = "";
-            let count = snapshot.size;
-            document.querySelector('.modal-comments-count').innerText = count;
+            let totalCommentsCount = 0;
+            
+            snapshot.forEach(docSnap => {
+                totalCommentsCount++;
+                let comData = docSnap.data();
+                if(comData.replies && Array.isArray(comData.replies)) {
+                    totalCommentsCount += comData.replies.length;
+                }
+            });
+
+            document.querySelector('.modal-comments-count').innerText = totalCommentsCount;
 
             let postCard = document.querySelector(`.post-card[data-post-id="${postId}"]`);
             if(postCard) {
-                postCard.querySelector('.post-comments-count-label').innerText = count + " تعليقات";
+                postCard.querySelector('.post-comments-count-label').innerText = totalCommentsCount + " تعليقات";
             }
 
             if(snapshot.empty) {
@@ -1188,6 +2078,44 @@
                 let comId = docSnap.id;
                 let adminStyleDisplay = isAdminLoggedIn ? 'display: flex;' : 'display: none;';
                 let commentTimeAgo = formatTimeAgo(com.createdAt);
+                
+                const reactionTypes = ['👍', '❤️'];
+                let randomReact = reactionTypes[Math.floor(Math.random() * reactionTypes.length)];
+                let randomCommentLikes = Math.floor(Math.random() * 12) + 1;
+
+                let repliesHtml = '';
+                if(com.replies && com.replies.length > 0) {
+                    let repliesItemsHTML = '';
+                    com.replies.forEach(rep => {
+                        let repAcc = defaultFakeAccounts.find(a => a.name === rep.user) || { avatar: "https://i.pravatar.cc/150?u=default" };
+                        let randomRepReact = reactionTypes[Math.floor(Math.random() * reactionTypes.length)];
+                        let randomRepLikes = Math.floor(Math.random() * 6) + 1;
+                        repliesItemsHTML += `
+                            <div class="fb-reply-item">
+                                <img class="fb-reply-avatar" src="${repAcc.avatar}" alt="Reply User">
+                                <div class="fb-reply-bubble-container" style="flex:1;">
+                                    <div class="fb-reply-bubble">
+                                        <span class="fb-reply-author">${rep.user}</span>
+                                        ${rep.text}
+                                        <div class="comment-like-badge">${randomRepReact} <span class="item-likes-count">${randomRepLikes}</span></div>
+                                    </div>
+                                    <div class="fb-reply-footer">
+                                        <span onclick="toggleItemLike(this)">إعجاب <span class="item-likes-count" style="display:none">0</span><span class="comment-like-badge" style="display:none">👍 <span class="item-likes-count">0</span></span></span>
+                                        <span>رد</span>
+                                        <span>منذ قليل</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+
+                    repliesHtml = `
+                        <div class="toggle-replies-btn" onclick="toggleReplies(this)">💬 عرض ${com.replies.length} ردود</div>
+                        <div class="replies-container">
+                            ${repliesItemsHTML}
+                        </div>
+                    `;
+                }
 
                 let commentHTML = `
                     <div class="fb-comment-item" data-com-id="${comId}">
@@ -1198,6 +2126,7 @@
                                     <div class="fb-comment-bubble">
                                         <span class="fb-comment-author">${com.author}</span>
                                         ${com.text}
+                                        <div class="comment-like-badge">${randomReact} <span class="item-likes-count">${randomCommentLikes}</span></div>
                                     </div>
                                     <div class="admin-item-actions" style="${adminStyleDisplay}">
                                         <button class="admin-delete-btn" onclick="deleteComment('${postId}', '${comId}')">حذف</button>
@@ -1205,8 +2134,10 @@
                                 </div>
                                 <div class="fb-comment-footer">
                                     <span>${commentTimeAgo}</span>
-                                    <span>إعجاب</span>
+                                    <span onclick="toggleItemLike(this)">إعجاب <span class="item-likes-count" style="display:none">0</span></span>
+                                    <span>رد</span>
                                 </div>
+                                ${repliesHtml}
                             </div>
                         </div>
                     </div>
@@ -1218,20 +2149,22 @@
 
     function updatePostCommentsCount(postId) {
         const q = query(collection(db, "posts", postId, "comments"));
-        onSnapshot(q, (snap) => {
+        onSnapshot(q, (snapshot) => {
+            let total = 0;
+            snapshot.forEach(docSnap => {
+                total++;
+                let data = docSnap.data();
+                if(data.replies) total += data.replies.length;
+            });
             let postCard = document.querySelector(`.post-card[data-post-id="${postId}"]`);
             if(postCard) {
-                postCard.querySelector('.post-comments-count-label').innerText = snap.size + " تعليقات";
+                postCard.querySelector('.post-comments-count-label').innerText = total + " تعليقات";
             }
         });
     }
 
     window.addFakeComment = async function() {
-        if (!isAdminLoggedIn) {
-            alert("عذراً، التعليقات متاحة للإدارة فقط حالياً.");
-            return;
-        }
-
+        if (!isAdminLoggedIn) return;
         if (!currentActivePostId) return;
         let controlsContainer = document.getElementById("modalAdminControls");
         let inputField = controlsContainer.querySelector('.admin-comment-input');
@@ -1255,6 +2188,7 @@
             author: author,
             avatar: avatar,
             text: text,
+            replies: [],
             createdAt: serverTimestamp()
         });
 
@@ -1266,30 +2200,32 @@
     window.generateJordanianComments = async function() {
         if (!isAdminLoggedIn) return;
         if (!currentActivePostId) return;
-        let countToAdd = prompt(`كم تعليق أردني تريد توليده؟ (الحد الأقصى ${Math.min(jordanianCommentsPool.length, defaultFakeAccounts.length)})`, "3");
+        let countToAdd = prompt(`كم تعليق أردني (مع الردود التفاعلية) تريد توليده؟ (الحد الأقصى ${jordanianThreadsPool.length})`, "100");
         if (!countToAdd || isNaN(countToAdd)) return;
 
         let count = parseInt(countToAdd);
-        let maxLimit = Math.min(count, jordanianCommentsPool.length, defaultFakeAccounts.length);
+        let maxLimit = Math.min(count, jordanianThreadsPool.length);
 
-        let shuffledPool = [...jordanianCommentsPool].sort(() => 0.5 - Math.random());
+        let shuffledThreads = [...jordanianThreadsPool].sort(() => 0.5 - Math.random());
         let shuffledAccounts = [...defaultFakeAccounts].sort(() => 0.5 - Math.random());
 
         for (let i = 0; i < maxLimit; i++) {
-            let acc = shuffledAccounts[i];
-            let txt = shuffledPool[i];
+            let thread = shuffledThreads[i % shuffledThreads.length];
+            let acc = shuffledAccounts[i % shuffledAccounts.length];
 
             await addDoc(collection(db, "posts", currentActivePostId, "comments"), {
                 author: acc.name,
                 avatar: acc.avatar,
-                text: txt,
+                text: thread.comment,
+                replies: thread.replies,
                 createdAt: serverTimestamp()
             });
         }
-        alert("تم توليد وتخزين التعليقات الأردنية المتنوعة سحابياً بنجاح!");
+        alert(`تم توليد وتخزين ${maxLimit} تعليق ورد أردني واقعي بنجاح!`);
     };
 
     window.deleteComment = async function(postId, comId) {
+        if (!isAdminLoggedIn) return;
         if (confirm("هل أنت متأكد من حذف هذا التعليق سحابياً؟")) {
             await deleteDoc(doc(db, "posts", postId, "comments", comId));
         }
