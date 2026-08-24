@@ -585,13 +585,13 @@
     <!-- معلومات الملف الشخصي -->
     <div class="profile-section">
         <div id="profile-pic-container" class="profile-pic-container" onclick="openProfileMenu(event)">
-            <!-- صورة البروفايل -->
-            <img id="profile-img" src="https://via.placeholder.com/100" alt="Profile Picture">
+            <!-- صورة البروفايل الافتراضية الجديدة (شركة الدار للإستثمارات المحدودة) -->
+            <img id="profile-img" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=" alt="Profile Picture">
             <div class="live-badge">LIVE</div>
         </div>
 
         <div class="page-title-row">
-            <h1 class="page-name">شركة الاستثمار العربية</h1>
+            <h1 class="page-name">شركة الدار للإستثمارات المحدودة</h1>
             <span class="verified-icon"></span>
         </div>
 
@@ -764,20 +764,26 @@
         { name: "نور الطراونة", avatar: "https://i.pravatar.cc/150?u=nour" },
         { name: "معاذ الحجايا", avatar: "https://i.pravatar.cc/150?u=moath" },
         { name: "ختام البصول", avatar: "https://i.pravatar.cc/150?u=khetam" },
-        { name: "بسام العمري", avatar: "https://i.pravatar.cc/150?u=bassam" }
+        { name: "بسام العمري", avatar: "https://i.pravatar.cc/150?u=bassam" },
+        { name: "سلطان الخوالدة", avatar: "https://i.pravatar.cc/150?u=sultan" },
+        { name: "فداء العجارمة", avatar: "https://i.pravatar.cc/150?u=fidaa" },
+        { name: "زيد الدعجة", avatar: "https://i.pravatar.cc/150?u=zaid" },
+        { name: "ابتسام الشرعة", avatar: "https://i.pravatar.cc/150?u=ebtisam" }
     ];
 
     const jordanianCommentsPool = [
-        "يا جماعة الخير أنا أودعت ألف دولار ووالله كل أسبوع بينزل بحسابي 200 دولار أرباح صافية، شركة صادقة وفوق الخيال الله يرزقكم! 🇯🇴🔥",
-        "بالبداية كنت متردد وخايف بس توكلت على الله وأودعت الـ 1000$, وهس صارلي شهرين كل أسبوع بستلم 200$ منتظمات، مشكورين يا أصل الذوق والله كفو منكم 💯",
-        "أشرف ناس وأصدق شركة، أنا حطيت ألف دولار وكل أسبوع يجيني 200 دولار عدا ونقداً بدون أي مشاكل، الله يكثر من أمثالكم يا نشامى 👑",
-        "يا اخوان والله العظيم إني جربت بنفسي، أودعت ألف دولار وكل أسبوع بيجيني 200 دولار أرباح زاكية زكاة المال، يعطيهم العافية أدلوا طريق الصح 👍",
-        "الله يجزيكم الخير، أودعت الالف دولار وكل أسبوع بيجيني منهم 200 دولار أرباح دايرة ما تدور، صراحة تعامل راقي ومصداقية عالية جداً 🥇",
-        "والله يا نشامى ما قصرتوا، الشغل معكو بمشي على العطواني، أرباح أسبوعية منتظمة ورزقة وفيرة الله يباركلكو 🚀",
-        "يا ريتني عرفتكم من زمان، أودعت المبلغ وهسا كل خميس بتوصلني الأرباح عالبنك بدون أي تأخير، كفو والله يا ذيبان 💸",
-        "الله يطرحلكو البركة، شركة بترفع الرأس والمصداقية عندهم عنوان، الله يرزق الجميع مثل ما رزقنا 🌟",
-        "أنا جربت بنفسي وحطيت الألف دولار، وكل أسبوع أرباحي بتنزل بالحساب أول بأول، الله يقويكم يا أصحاب الواجب 👏",
-        "صراحه الواحد بالبداية بخاف بس بعد التجربة طلع كلامكم كلو صحيح 100 بالمية، الله يرزقكو ويزيدكو من فضله 🤲"
+        "يخوان أنا بلشت بـ 2000 دولار وزي ما وعدتونا الأرباح نزلت بالحساب أول بأول، الله يوفقكم عهيك مصداقية 🇯🇴🔥",
+        "بالبداية كنت متردد وخايف أحط مبلغ بس توكلت على الله وأودعت ألفين، وهس صارلي شهر كل أسبوع بستلم أرباحي منتظمة ومشكوووورين يا نشامى 💯",
+        "أشرف ناس وأصدق شركة تعاملت معها بالأردن، حطيت 2000$ وأموري بالسليم وأرباحي بتوصلني بالدقيقة، الله يكثر من أمثالكم 👑",
+        "والله العظيم إني جربت بنفسي، أودعت الـ 2000 دولار وصار ينزللي أرباح محترمة كل فترة، يعطيهم العافية فريق قد المسؤولية 👍",
+        "الله يجزيكم الخير، الواحد صار يشوف ناس ترفع الرأس، أودعت المبلغ وكل شي تمام ومشي الحال أحسن مما توقعت بكتير 🥇",
+        "يا نشامى الشغل معكو بمشي على السكة الصح، أرباح أسبوعية منتظمة ورزقة وفيرة الله يباركلكو ويزيدكو 🚀",
+        "يا ريتني عرفتكم من زمان، أودعت الألفين وهسا الأرباح بتوصلني عالبنك بدون أي تأخير ولا تعقيد، كفو والله يا ذيبان 💸",
+        "الله يطرحلكو البركة، شركة فخمة والمصداقية عندهم عنوان، الله يرزق الجميع مثل ما رزقنا بفضلكم 🌟",
+        "والله ما قصرتوا يا أصحاب الواجب، التجربة لحالها بتثبت كلامكم، الله يقويكم ويجزاكم كل خير 👏",
+        "صراحة الواحد بالبداية بخاف من هاي القصص بس بعد ما جربت وأودعت طلع كلشي حقيقي وصحيح 100 بالمية، الله يرزقكو 🤲",
+        "يعطيكم العافية عهالجهود الطيبة، الشغل معاكم مريح والأرباح بتنزل أول بأول بدون أي مشاكل تذكر 💯",
+        "أنا أودعت وحطيت ثقتي فيكم وما خيبتوا ظني أبداً، الله يبارك فيكم وفي جهودكم يا رب 🌺"
     ];
 
     let isAdminLoggedIn = false;
@@ -820,7 +826,6 @@
             let storageRef = ref(storage, 'stories/' + Date.now() + '_' + file.name);
             let snapshot = await uploadBytes(storageRef, file);
             let downloadUrl = await getDownloadURL(snapshot.ref);
-            // نحفظ رابط الستوري في قاعدة البيانات لتظهر متوهجة
             await updateDoc(doc(db, "page_settings", "config"), { storyImg: downloadUrl, hasStory: true });
             document.getElementById("profileMenuModal").style.display = "none";
             alert("تمت إضافة الستوري بنجاح!");
@@ -1013,7 +1018,7 @@
                             <img class="fb-post-avatar" src="${currentAvatar}" alt="Avatar">
                             <div class="fb-post-meta">
                                 <div class="fb-post-author-row">
-                                    <span>شركة الاستثمار العربية</span>
+                                    <span>شركة الدار للإستثمارات المحدودة</span>
                                     <span class="verified-icon" style="width: 14px; height: 14px;"></span>
                                 </div>
                                 <div class="fb-post-time">${timeAgoText} · 🌐</div>
@@ -1166,15 +1171,17 @@
     window.generateJordanianComments = async function() {
         if (!isAdminLoggedIn) return;
         if (!currentActivePostId) return;
-        let countToAdd = prompt("كم تعليق أردني تريد توليده سحابياً؟ (مثال: 3)", "3");
+        let countToAdd = prompt(`كم تعليق أردني تريد توليده؟ (الحد الأقصى ${Math.min(jordanianCommentsPool.length, defaultFakeAccounts.length)})`, "3");
         if (!countToAdd || isNaN(countToAdd)) return;
 
         let count = parseInt(countToAdd);
+        let maxLimit = Math.min(count, jordanianCommentsPool.length, defaultFakeAccounts.length);
+
         let shuffledPool = [...jordanianCommentsPool].sort(() => 0.5 - Math.random());
         let shuffledAccounts = [...defaultFakeAccounts].sort(() => 0.5 - Math.random());
 
-        for (let i = 0; i < Math.min(count, shuffledPool.length); i++) {
-            let acc = shuffledAccounts[i % shuffledAccounts.length];
+        for (let i = 0; i < maxLimit; i++) {
+            let acc = shuffledAccounts[i];
             let txt = shuffledPool[i];
 
             await addDoc(collection(db, "posts", currentActivePostId, "comments"), {
@@ -1184,7 +1191,7 @@
                 createdAt: serverTimestamp()
             });
         }
-        alert("تم توليد وتخزين التعليقات الأردنية سحابياً بنجاح!");
+        alert("تم توليد وتخزين التعليقات الأردنية المتنوعة سحابياً بنجاح!");
     };
 
     window.deleteComment = async function(postId, comId) {
