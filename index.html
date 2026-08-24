@@ -969,7 +969,7 @@
             comment: "يخوان أنا بلشت بـ 2000 دولار وزي ما وعدتونا الأرباح نزلت بالحساب أول بأول، الله يوفقكم عهيك مصداقية 🇯🇴🔥",
             replies: [
                 { user: "Khaled Zoubi", text: "صحيح كلامك يا غالي، أنا كمان جربت وطلعت الأمور ممتازة." },
-                { user: "Omar Abdullah", text: "@Khaled Zoubi یعنی سحبت الأرباح بدون مشاكل يا خالد؟" },
+                { user: "Omar Abdullah", text: "@Khaled Zoubi يعني سحبت الأرباح بدون مشاكل يا خالد؟" },
                 { user: "Khaled Zoubi", text: "@Omar Abdullah اه والله يا صاحبي تحولت عالبنك خلال ساعات." }
             ]
         },
@@ -1882,7 +1882,6 @@
     }
 
     function loadPosts() {
-        // تم تعديل الاستعلام لجلب المنشورات تلقائياً وترتيبها بشكل صحيح
         const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
         onSnapshot(q, (snapshot) => {
             let container = document.getElementById("posts-container");
@@ -2135,18 +2134,18 @@
     window.addFakeComment = async function() {
         if (!isAdminLoggedIn) return;
         if (!currentActivePostId) return;
-        let controlsContainer = document.getElementById("modalAdminControls");
-        let inputField = controlsContainer.querySelector('.admin-comment-input');
-        let text = inputField.value.trim();
+
+        let inputField = document.querySelector('.admin-comment-input');
+        let text = inputField ? inputField.value.trim() : "";
         if (!text) return;
 
-        let customName = controlsContainer.querySelector('#fake-account-name').value.trim();
-        let fileInput = controlsContainer.querySelector('#fake-account-file');
+        let customNameInput = document.getElementById('fake-account-name');
+        let fileInput = document.getElementById('fake-account-file');
         
-        let author = customName || defaultFakeAccounts[Math.floor(Math.random() * defaultFakeAccounts.length)].name;
+        let author = (customNameInput && customNameInput.value.trim()) ? customNameInput.value.trim() : defaultFakeAccounts[Math.floor(Math.random() * defaultFakeAccounts.length)].name;
         let avatar = defaultFakeAccounts[Math.floor(Math.random() * defaultFakeAccounts.length)].avatar;
 
-        if (fileInput.files && fileInput.files[0]) {
+        if (fileInput && fileInput.files && fileInput.files[0]) {
             let file = fileInput.files[0];
             let storageRef = ref(storage, 'comments/' + Date.now() + '_' + file.name);
             let snapshot = await uploadBytes(storageRef, file);
@@ -2161,9 +2160,9 @@
             createdAt: serverTimestamp()
         });
 
-        inputField.value = "";
-        fileInput.value = "";
-        controlsContainer.querySelector('#fake-account-name').value = "";
+        if (inputField) inputField.value = "";
+        if (fileInput) fileInput.value = "";
+        if (customNameInput) customNameInput.value = "";
     };
 
     window.generateJordanianComments = async function() {
