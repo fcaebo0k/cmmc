@@ -191,8 +191,13 @@
         .fb-post-header {
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: space-between;
             margin-bottom: 8px;
+        }
+        .fb-post-user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .fb-post-avatar {
             width: 40px;
@@ -215,6 +220,24 @@
             font-size: 12px;
             color: #65676b;
         }
+        
+        /* Post Admin Controls */
+        .post-admin-actions {
+            display: none;
+            gap: 8px;
+        }
+        .post-admin-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 4px 6px;
+            border-radius: 4px;
+        }
+        .post-edit-btn { background: #e7f3ff; color: #1877f2; }
+        .post-delete-btn { background: #ffebee; color: #e41e3f; }
+
         .post-content {
             font-size: 14px;
             margin-bottom: 12px;
@@ -585,8 +608,7 @@
     <!-- معلومات الملف الشخصي -->
     <div class="profile-section">
         <div id="profile-pic-container" class="profile-pic-container" onclick="openProfileMenu(event)">
-            <!-- صورة البروفايل الافتراضية الجديدة (شركة الدار للإستثمارات المحدودة) -->
-            <img id="profile-img" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=" alt="Profile Picture">
+            <img id="profile-img" src="" alt="Profile Picture">
             <div class="live-badge">LIVE</div>
         </div>
 
@@ -643,7 +665,11 @@
         <input type="file" id="new-img-file" accept="image/*" style="margin-bottom: 8px;">
         <button class="btn btn-primary" onclick="updateProfilePic()" style="margin-bottom: 12px; width: 100%;">تحديث الصورة الشخصية</button>
         
-        <label style="font-size: 13px;">إنشاء منشور جديد:</label>
+        <hr style="border:0; border-top:1px solid #ddd; margin:12px 0;">
+
+        <!-- قسم إضافة / تعديل منشور -->
+        <input type="hidden" id="edit-post-id" value="">
+        <label style="font-size: 13px;" id="post-form-title">إنشاء منشور جديد:</label>
         <textarea id="new-post-text" placeholder="ما الذي تفكر فيه؟" rows="3"></textarea>
         
         <label class="file-upload-label">صورة المنشور من الهاتف (اختياري):</label>
@@ -658,7 +684,8 @@
 
         <label style="font-size: 13px;">عدد التفاعلات:</label>
         <input type="text" id="new-post-likes" value="15" placeholder="مثال: 15 أو 1.2k">
-        <button class="btn btn-primary" onclick="createPost()" style="width: 100%;">نشر المنشور</button>
+        <button id="save-post-btn" class="btn btn-primary" onclick="savePost()" style="width: 100%;">نشر المنشور</button>
+        <button id="cancel-edit-btn" class="btn btn-secondary" onclick="resetPostForm()" style="width: 100%; margin-top: 6px; display:none;">إلغاء التعديل</button>
     </div>
 
     <!-- قسم المنشورات -->
@@ -738,7 +765,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
     const firebaseConfig = {
@@ -889,6 +916,7 @@
             document.getElementById("joAutoBtn").style.display = "block";
             document.getElementById("adminLoginBtn").style.display = "none";
             document.querySelectorAll('.admin-item-actions').forEach(el => el.style.display = 'flex');
+            document.querySelectorAll('.post-admin-actions').forEach(el => el.style.display = 'flex');
             alert("تم تسجيل الدخول بنجاح كأدمن!");
         } else if (password !== null) {
             alert("كلمة المرور غير صحيحة!");
@@ -903,7 +931,11 @@
                     let data = docSnap.data();
                     if(data.bio) document.getElementById("page-bio-text").innerText = data.bio;
                     if(data.msgLink) document.getElementById("msg-action-btn").href = data.msgLink;
-                    if(data.profileImg) document.getElementById("profile-img").src = data.profileImg;
+                    if(data.profileImg) {
+                        document.getElementById("profile-img").src = data.profileImg;
+                        // تحديث صور بروفايل المنشورات الحالية فوراً
+                        document.querySelectorAll('.fb-post-avatar').forEach(img => img.src = data.profileImg);
+                    }
                     if(data.coverImg) document.getElementById("cover-photo-div").style.backgroundImage = `url('${data.coverImg}')`;
                     
                     let picContainer = document.getElementById("profile-pic-container");
@@ -960,13 +992,15 @@
         }
     };
 
-    window.createPost = async function() {
+    // حفظ المنشور (إنشاء جديد أو تعديل منشور حالي)
+    window.savePost = async function() {
+        let editPostId = document.getElementById("edit-post-id").value;
         let text = document.getElementById("new-post-text").value.trim();
         let likesCount = document.getElementById("new-post-likes").value.trim() || "15";
         let reaction = document.getElementById("new-post-reaction").value;
         let fileInput = document.getElementById("new-post-file");
 
-        if (!text && (!fileInput.files || !fileInput.files[0])) {
+        if (!text && (!fileInput.files || !fileInput.files[0]) && !editPostId) {
             alert("الرجاء كتابة نص المنشور أو اختيار صورة.");
             return;
         }
@@ -979,17 +1013,69 @@
             imageUrl = await getDownloadURL(snapshot.ref);
         }
 
-        await addDoc(collection(db, "posts"), {
-            text: text,
-            imageUrl: imageUrl,
-            likes: likesCount,
-            reaction: reaction,
-            createdAt: serverTimestamp()
-        });
+        if (editPostId) {
+            // عملية تعديل
+            let updateData = {
+                text: text,
+                likes: likesCount,
+                reaction: reaction
+            };
+            if (imageUrl) {
+                updateData.imageUrl = imageUrl;
+            }
+            await updateDoc(doc(db, "posts", editPostId), updateData);
+            alert("تم تعديل المنشور بنجاح!");
+            resetPostForm();
+        } else {
+            // عملية إنشاء جديد
+            await addDoc(collection(db, "posts"), {
+                text: text,
+                imageUrl: imageUrl,
+                likes: likesCount,
+                reaction: reaction,
+                createdAt: serverTimestamp()
+            });
+            document.getElementById("new-post-text").value = "";
+            fileInput.value = "";
+            alert("تم نشر المنشور سحابياً بنجاح!");
+        }
+    };
 
+    window.editPost = async function(postId) {
+        let docRef = doc(db, "posts", postId);
+        let docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            let post = docSnap.data();
+            document.getElementById("edit-post-id").value = postId;
+            document.getElementById("new-post-text").value = post.text || "";
+            document.getElementById("new-post-likes").value = post.likes || "15";
+            document.getElementById("new-post-reaction").value = post.reaction || "👍";
+            
+            document.getElementById("post-form-title").innerText = "تعديل المنشور الحالي:";
+            document.getElementById("save-post-btn").innerText = "حفظ التعديلات";
+            document.getElementById("cancel-edit-btn").style.display = "block";
+            
+            window.scrollTo({ top: document.getElementById("admin-panel").offsetTop, behavior: 'smooth' });
+        }
+    };
+
+    window.resetPostForm = function() {
+        document.getElementById("edit-post-id").value = "";
         document.getElementById("new-post-text").value = "";
-        fileInput.value = "";
-        alert("تم نشر المنشور سحابياً بنجاح!");
+        document.getElementById("new-post-likes").value = "15";
+        document.getElementById("new-post-reaction").value = "👍";
+        document.getElementById("new-post-file").value = "";
+        
+        document.getElementById("post-form-title").innerText = "إنشاء منشور جديد:";
+        document.getElementById("save-post-btn").innerText = "نشر المنشور";
+        document.getElementById("cancel-edit-btn").style.display = "none";
+    };
+
+    window.deletePost = async function(postId) {
+        if (confirm("هل أنت متأكد من حذف هذا المنشور نهائياً؟")) {
+            await deleteDoc(doc(db, "posts", postId));
+            alert("تم حذف المنشور بنجاح!");
+        }
     };
 
     function loadPosts() {
@@ -1002,11 +1088,14 @@
                 return;
             }
 
+            // جلب الصورة الشخصية الحالية المحدثة لضمان عرضها بالمنشورات الجديدة
+            let currentAvatar = document.getElementById("profile-img").src;
+
             snapshot.forEach((docSnap) => {
                 let post = docSnap.data();
                 let postId = docSnap.id;
-                let currentAvatar = document.getElementById("profile-img").src;
                 let timeAgoText = formatTimeAgo(post.createdAt);
+                let adminActionsStyle = isAdminLoggedIn ? 'display: flex;' : 'display: none;';
 
                 let iconsHtml = `<span style="background:#1877f2; color:#fff; border-radius:50%; width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; font-size:10px;">${post.reaction}</span>`;
                 if(post.reaction !== '👍') iconsHtml += `<span style="background:#1877f2; color:#fff; border-radius:50%; width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; font-size:10px; margin-right:-4px;">👍</span>`;
@@ -1015,13 +1104,19 @@
                 let postHTML = `
                     <div class="post-card" data-post-id="${postId}">
                         <div class="fb-post-header">
-                            <img class="fb-post-avatar" src="${currentAvatar}" alt="Avatar">
-                            <div class="fb-post-meta">
-                                <div class="fb-post-author-row">
-                                    <span>شركة الدار للإستثمارات المحدودة</span>
-                                    <span class="verified-icon" style="width: 14px; height: 14px;"></span>
+                            <div class="fb-post-user-info">
+                                <img class="fb-post-avatar" src="${currentAvatar}" alt="Avatar">
+                                <div class="fb-post-meta">
+                                    <div class="fb-post-author-row">
+                                        <span>شركة الدار للإستثمارات المحدودة</span>
+                                        <span class="verified-icon" style="width: 14px; height: 14px;"></span>
+                                    </div>
+                                    <div class="fb-post-time">${timeAgoText} · 🌐</div>
                                 </div>
-                                <div class="fb-post-time">${timeAgoText} · 🌐</div>
+                            </div>
+                            <div class="post-admin-actions" style="${adminActionsStyle}">
+                                <button class="post-edit-btn" onclick="editPost('${postId}')">✏️ تعديل</button>
+                                <button class="post-delete-btn" onclick="deletePost('${postId}')">🗑️ حذف</button>
                             </div>
                         </div>
                         ${post.text ? `<div class="post-content">${post.text}</div>` : ''}
