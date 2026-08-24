@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Page Profile</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 0;
+            color: #050505;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            min-height: 100vh;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+            padding-bottom: 60px;
+        }
+        /* Cover & Header */
+        .cover-photo {
+            height: 160px;
+            background: linear-gradient(135deg, #1877f2, #2e89ff);
+            position: relative;
+            background-size: cover;
+            background-position: center;
+        }
+        .profile-section {
+            padding: 0 16px;
+            position: relative;
+            margin-top: -50px;
+        }
+        .profile-pic-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid #ffffff;
+            background-color: #ffffff;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .profile-pic-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .live-badge {
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #e41e3f;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            padding: 1px 6px;
+            border-radius: 4px;
+        }
+        
+        /* Page Info */
+        .page-title-row {
+            display: flex;
+            align-items: center;
+            margin-top: 8px;
+            gap: 6px;
+        }
+        .page-name {
+            font-size: 22px;
+            font-weight: bold;
+            margin: 0;
+        }
+        
+        .verified-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="%231877f2" d="M12 2C12.33 2 12.65 2.13 12.89 2.36L14.43 3.9C14.78 4.25 15.28 4.41 15.77 4.33L17.9 3.99C18.61 3.87 19.3 4.28 19.55 4.95L20.35 6.99C20.55 7.48 20.9 7.89 21.36 8.13L23.23 9.15C23.85 9.49 24.12 10.24 23.9 10.92L23.23 12.94C23.05 13.48 23.05 14.07 23.23 14.61L23.9 16.63C24.12 17.31 23.85 18.06 23.23 18.4L21.36 19.42C20.9 19.66 20.55 20.07 20.35 20.56L19.55 22.6C19.3 23.27 18.61 23.68 17.9 23.56L15.77 23.22C15.28 23.14 14.78 23.3 14.43 23.65L12.89 25.19C12.39 25.69 11.61 25.69 11.11 25.19L9.57 23.65C9.22 23.3 8.72 23.14 8.23 23.22L6.1 23.56C5.39 23.68 4.7 23.27 4.45 22.6L3.65 20.56C3.45 20.07 3.1 19.66 2.64 19.42L0.77 18.4C0.15 18.06 -0.12 17.31 0.1 16.63L0.77 14.61C0.95 14.07 0.95 13.48 0.77 12.94L0.1 10.92C-0.12 10.24 0.15 9.49 0.77 9.15L2.64 8.13C3.1 7.89 3.45 7.48 3.65 6.99L4.45 4.95C4.7 4.28 5.39 3.87 6.1 3.99L8.23 4.33C8.72 4.41 9.22 4.25 9.57 3.9L11.11 2.36C11.35 2.13 11.67 2 12 2Z" transform="translate(0 -1)"/><path fill="%23ffffff" d="M10 15.585L6.707 12.293L8.121 10.879L10 12.758L15.879 6.879L17.293 8.293L10 15.585Z"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .page-stats {
+            font-size: 14px;
+            color: #65676b;
+            margin-top: 4px;
+        }
+        .page-bio {
+            font-size: 14px;
+            margin-top: 8px;
+            line-height: 1.4;
+        }
+        .category {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            color: #65676b;
+            margin-top: 6px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 0 16px;
+        }
+        .btn {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            box-sizing: border-box;
+        }
+        .btn-primary {
+            background-color: #1877f2;
+            color: white;
+        }
+        .btn-secondary {
+            background-color: #e4e6eb;
+            color: #050505;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-top: 16px;
+            padding: 0 16px;
+            gap: 20px;
+            overflow-x: auto;
+        }
+        .tab {
+            padding: 10px 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: #65676b;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .tab.active {
+            color: #1877f2;
+            border-bottom: 3px solid #1877f2;
+        }
+
+        /* Details Section */
+        .section {
+            padding: 16px;
+            border-bottom: 8px solid #f0f2f5;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+        .info-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        /* Facebook Post Design */
+        .post-card {
+            background: #fff;
+            margin-top: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px 12px 8px 12px;
+        }
+        .fb-post-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .fb-post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .fb-post-meta {
+            display: flex;
+            flex-direction: column;
+        }
+        .fb-post-author-row {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .fb-post-time {
+            font-size: 12px;
+            color: #65676b;
+        }
+        .post-content {
+            font-size: 14px;
+            margin-bottom: 12px;
+            line-height: 1.4;
+            padding: 0 4px;
+        }
+        .post-image-container {
+            margin: 0 -12px 12px -12px;
+            max-height: 400px;
+            overflow: hidden;
+            background: #000;
+        }
+        .post-image-container img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .fb-post-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #65676b;
+            padding: 6px 4px;
+            border-bottom: 1px solid #e4e6eb;
+            margin-bottom: 4px;
+        }
+        .reactions-display {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .reaction-icons-group {
+            display: inline-flex;
+            gap: 2px;
+        }
+
+        .fb-post-actions {
+            display: flex;
+            justify-content: space-around;
+            padding: 2px 0;
+            font-size: 14px;
+            color: #65676b;
+            font-weight: 600;
+        }
+        .fb-action-btn {
+            background: none;
+            border: none;
+            color: #65676b;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 8px 0;
+            flex: 1;
+            text-align: center;
+            border-radius: 4px;
+        }
+        .fb-action-btn:hover {
+            background-color: #f0f2f5;
+        }
+
+        /* --- Facebook Comments Bottom Sheet Modal --- */
+        .comments-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            justify-content: center;
+            align-items: flex-end;
+        }
+        .comments-bottom-sheet {
+            background: #ffffff;
+            width: 100%;
+            max-width: 500px;
+            height: 75vh;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.15);
+            animation: slideUp 0.3s ease-out;
+            position: relative;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        .sheet-handle-bar {
+            width: 40px;
+            height: 4px;
+            background-color: #ccc;
+            border-radius: 2px;
+            margin: 8px auto;
+            cursor: pointer;
+        }
+        .sheet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 16px 8px 16px;
+            border-bottom: 1px solid #e4e6eb;
+            font-size: 14px;
+            font-weight: bold;
+            color: #65676b;
+        }
+        .sheet-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 16px;
+        }
+        
+        /* Comment & Reply Items */
+        .fb-comment-item {
+            margin-bottom: 16px;
+        }
+        .comment-main-row {
+            display: flex;
+            gap: 10px;
+            position: relative;
+        }
+        .fb-comment-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .fb-comment-bubble-container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+        .bubble-and-menu {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+        .fb-comment-bubble {
+            background: #f0f2f5;
+            padding: 8px 12px;
+            border-radius: 16px;
+            font-size: 13px;
+            max-width: 260px;
+            word-break: break-word;
+        }
+        .fb-comment-author {
+            font-weight: bold;
+            color: #050505;
+            margin-bottom: 2px;
+            display: block;
+        }
+        .fb-comment-footer {
+            display: flex;
+            gap: 12px;
+            font-size: 11px;
+            color: #65676b;
+            margin-top: 3px;
+            margin-right: 8px;
+            font-weight: 600;
+        }
+        .fb-comment-footer span {
+            cursor: pointer;
+        }
+        .fb-comment-footer span:hover {
+            text-decoration: underline;
+        }
+
+        /* Admin Controls for Comment/Reply Editing & Deleting */
+        .admin-item-actions {
+            display: none;
+            gap: 6px;
+            font-size: 11px;
+            margin-top: 2px;
+        }
+        .admin-item-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            padding: 0;
+        }
+        .admin-edit-btn { color: #1877f2; }
+        .admin-delete-btn { color: #e41e3f; }
+
+        /* Replies Section */
+        .replies-section {
+            margin-right: 46px;
+            margin-top: 8px;
+            display: none;
+        }
+        .toggle-replies-btn {
+            font-size: 12px;
+            color: #65676b;
+            font-weight: bold;
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-right: 46px;
+            margin-top: 4px;
+            padding: 0;
+        }
+        .toggle-replies-btn:hover {
+            text-decoration: underline;
+        }
+        .fb-reply-item {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .fb-reply-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+        .fb-reply-bubble {
+            background: #f0f2f5;
+            padding: 6px 10px;
+            border-radius: 14px;
+            font-size: 12px;
+            max-width: 220px;
+            word-break: break-word;
+        }
+
+        /* Reply Input Container */
+        .reply-input-container {
+            display: none;
+            margin-right: 46px;
+            margin-top: 6px;
+            gap: 6px;
+            align-items: center;
+        }
+        .reply-input-container input {
+            flex: 1;
+            padding: 6px 10px;
+            font-size: 12px;
+            border: 1px solid #ccd0d5;
+            border-radius: 16px;
+            background: #f0f2f5;
+            outline: none;
+        }
+        .reply-send-btn {
+            padding: 4px 10px;
+            font-size: 11px;
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .sheet-footer {
+            padding: 10px 16px;
+            border-top: 1px solid #e4e6eb;
+            background: #fff;
+        }
+        .admin-controls {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .admin-input-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .admin-controls input[type="text"] {
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 13px;
+            border: 1px solid #ccd0d5;
+            border-radius: 20px;
+            background: #f0f2f5;
+            outline: none;
+        }
+        .emoji-bar {
+            display: flex;
+            gap: 4px;
+        }
+        .emoji-btn {
+            background: #e4e6eb;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .emoji-btn:hover {
+            background: #d8dadf;
+        }
+        .send-btn {
+            padding: 6px 14px;
+            font-size: 13px;
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .visitor-comment-msg {
+            font-size: 12px;
+            color: #65676b;
+            text-align: center;
+            padding: 6px;
+        }
+
+        /* زر التوليد الأردني الجديد */
+        .jo-auto-btn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 4px;
+            text-align: center;
+        }
+        .jo-auto-btn:hover {
+            background-color: #218838;
+        }
+
+        /* Admin Panel & Login Button Styles */
+        .admin-login-btn {
+            display: none; 
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+            background-color: #65676b;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 9999;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .admin-panel {
+            display: none;
+            background: #fff3cd;
+            border: 1px solid #ffeeba;
+            padding: 12px;
+            margin: 16px;
+            border-radius: 8px;
+        }
+        .admin-panel input, .admin-panel textarea, .admin-panel select {
+            width: 100%;
+            padding: 6px;
+            margin-bottom: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+        .fake-account-config {
+            background: #fff;
+            padding: 8px;
+            border: 1px solid #e4e6eb;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        .file-upload-label {
+            display: block;
+            font-size: 12px;
+            color: #333;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body onclick="handleSecretTripleClick()">
+
+<div class="container">
+    <!-- الغلاف -->
+    <div id="cover-photo-div" class="cover-photo" style="background-image: url('https://via.placeholder.com/500x160');"></div>
+
+    <!-- معلومات الملف الشخصي -->
+    <div class="profile-section">
+        <div class="profile-pic-container">
+            <!-- صورة البروفايل -->
+            <img id="profile-img" src="https://via.placeholder.com/100" alt="Profile Picture">
+            <div class="live-badge">LIVE</div>
+        </div>
+
+        <div class="page-title-row">
+            <h1 class="page-name">شركة الاستثمار العربية</h1>
+            <span class="verified-icon"></span>
+        </div>
+
+        <div class="page-stats">
+            <span id="followers-count">1.6 مليون</span> المتابعين · ٦٣٠ يتابع · ٢٨٨ ألف منشورات
+        </div>
+
+        <div id="page-bio-text" class="page-bio">
+            موقع رؤيا أخبار تابع للمجموعة الإعلامية.. مصدرك الأول للأحداث المحلية والعربية والعالمية
+        </div>
+
+        <div class="category">
+            <span>📰 صحفي</span>
+        </div>
+    </div>
+
+    <!-- الأزرار -->
+    <div class="action-buttons">
+        <button class="btn btn-primary">➕ متابعة</button>
+        <a id="msg-action-btn" href="#" target="_blank" class="btn btn-secondary" style="text-align: center; line-height: normal;">💬 إرسال رسالة</a>
+    </div>
+
+    <!-- التبويبات -->
+    <div class="tabs">
+        <div class="tab active">الكل</div>
+        <div class="tab">الصور</div>
+        <div class="tab">ريلز</div>
+        <div class="tab">المناسبات</div>
+        <div class="tab">عمليات الذكر</div>
+    </div>
+
+    <!-- لوحة تحكم الأدمن -->
+    <div id="admin-panel" class="admin-panel">
+        <h3 style="margin-top: 0; font-size: 16px;">لوحة تحكم الأدمن (سحابي)</h3>
+        
+        <label class="file-upload-label">تعديل رابط زر إرسال رسالة:</label>
+        <input type="text" id="new-msg-link" placeholder="أدخل الرابط هنا..." style="margin-bottom: 8px;">
+        <button class="btn btn-primary" onclick="updateMsgLink()" style="margin-bottom: 12px; width: 100%;">تحديث رابط الرسائل</button>
+
+        <label class="file-upload-label">تعديل البايو (النبذة التعريفية):</label>
+        <textarea id="new-bio-text" placeholder="أدخل النبذة التعريفية الجديدة..." rows="2" style="margin-bottom: 8px;"></textarea>
+        <button class="btn btn-primary" onclick="updateBio()" style="margin-bottom: 12px; width: 100%;">تحديث البايو</button>
+
+        <label class="file-upload-label">تغيير صورة الغلاف (Cover Photo):</label>
+        <input type="file" id="new-cover-file" accept="image/*" style="margin-bottom: 8px;">
+        <button class="btn btn-primary" onclick="updateCoverPic()" style="margin-bottom: 12px; width: 100%;">تحديث الغلاف</button>
+
+        <label class="file-upload-label">تغيير صورة بروفايل الصفحة من الهاتف:</label>
+        <input type="file" id="new-img-file" accept="image/*" style="margin-bottom: 8px;">
+        <button class="btn btn-primary" onclick="updateProfilePic()" style="margin-bottom: 12px; width: 100%;">تحديث الصورة الشخصية</button>
+        
+        <label style="font-size: 13px;">إنشاء منشور جديد:</label>
+        <textarea id="new-post-text" placeholder="ما الذي تفكر فيه؟" rows="3"></textarea>
+        
+        <label class="file-upload-label">صورة المنشور من الهاتف (اختياري):</label>
+        <input type="file" id="new-post-file" accept="image/*" style="margin-bottom: 8px;">
+
+        <label style="font-size: 13px;">اختر التفاعل الرئيسي للمنشور:</label>
+        <select id="new-post-reaction" style="margin-bottom: 8px;">
+            <option value="👍">إعجاب (👍)</option>
+            <option value="❤️">أحببته (❤️)</option>
+            <option value="😆">تضحكني (😆)</option>
+        </select>
+
+        <label style="font-size: 13px;">عدد التفاعلات:</label>
+        <input type="text" id="new-post-likes" value="15" placeholder="مثال: 15 أو 1.2k">
+        <button class="btn btn-primary" onclick="createPost()" style="width: 100%;">نشر المنشور</button>
+    </div>
+
+    <!-- قسم المنشورات -->
+    <div class="section">
+        <div class="section-title">المنشورات</div>
+        <div id="posts-container">جاري تحميل المنشورات...</div>
+    </div>
+
+    <!-- التفاصيل -->
+    <div class="section">
+        <div class="section-title">التفاصيل</div>
+        <div class="info-row">
+            <span>⭐ توصية من 58% (38 من الآراء)</span>
+        </div>
+    </div>
+
+</div>
+
+<!-- نافذة التعليقات المنبثقة (BottomSheet) -->
+<div id="commentsModal" class="comments-modal-overlay" onclick="closeCommentsModal(event)">
+    <div class="comments-bottom-sheet" onclick="event.stopPropagation()">
+        <div class="sheet-handle-bar" onclick="closeCommentsModalBtn()"></div>
+        <div class="sheet-header">
+            <span>الأكثر ملائمة ⌄</span>
+            <span>💬 <span class="modal-comments-count">0</span></span>
+        </div>
+        <div class="sheet-body comments-list" id="modalCommentsList">
+            <!-- التعليقات تظهر هنا -->
+        </div>
+        <div class="sheet-footer">
+            <div id="modalAdminControls" class="admin-controls">
+                <div class="fake-account-config">
+                    <label style="font-size: 11px; color: #65676b; display: block; margin-bottom: 2px;">إعدادات الحساب الوهمي:</label>
+                    <input type="text" id="fake-account-name" placeholder="اسم الحساب الوهمي (مثال: أحمد محمد)" style="margin-bottom: 6px;">
+                    <label class="file-upload-label" style="font-size: 11px;">صورة الحساب الوهمي من الهاتف:</label>
+                    <input type="file" id="fake-account-file" accept="image/*" style="margin-bottom: 0; font-size: 11px;">
+                </div>
+                <div class="admin-input-row">
+                    <input type="text" class="admin-comment-input" placeholder="اكتب تعليقاً...">
+                    <button class="send-btn" onclick="addFakeComment()">إرسال</button>
+                </div>
+                <div class="emoji-bar">
+                    <button class="emoji-btn" onclick="addEmoji(this, '👍')">👍</button>
+                    <button class="emoji-btn" onclick="addEmoji(this, '❤️')">❤️</button>
+                    <button class="emoji-btn" onclick="addEmoji(this, '😆')">😆</button>
+                    <button class="emoji-btn" onclick="addEmoji(this, '🔥')">🔥</button>
+                    <button class="emoji-btn" onclick="addEmoji(this, '👏')">👏</button>
+                    <button class="emoji-btn" onclick="addEmoji(this, '😊')">😊</button>
+                </div>
+                <button class="jo-auto-btn" onclick="generateJordanianComments()">🇯🇴 توليد تعليقات أردنية (إيداع وأرباح)</button>
+            </div>
+            <div id="modalVisitorMsg" class="visitor-comment-msg">التعليقات متاحة للإدارة فقط</div>
+        </div>
+    </div>
+</div>
+
+<!-- زر دخول الأدمن المخفي -->
+<button id="adminLoginBtn" class="admin-login-btn" onclick="loginAdmin()">تسجيل دخول أدمن</button>
+
+<!-- سكربتات فايربيز (Modular SDKs CDN) -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDMMJ5MrggJkNMUCsjXsNvS6aTKZd3QzFM",
+      authDomain: "aseel-aeccd.firebaseapp.com",
+      projectId: "aseel-aeccd",
+      storageBucket: "aseel-aeccd.firebasestorage.app",
+      messagingSenderId: "1061891334093",
+      appId: "1:1061891334093:web:2a6027bf9a11ea8682ae84",
+      measurementId: "G-JENFWTFCES"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    const defaultFakeAccounts = [
+        { name: "عمر العبادي", avatar: "https://i.pravatar.cc/150?u=omar" },
+        { name: "أم محمد المجالي", avatar: "https://i.pravatar.cc/150?u=fatima" },
+        { name: "خالد الزعبي", avatar: "https://i.pravatar.cc/150?u=khaled" },
+        { name: "صقر الحنيطي", avatar: "https://i.pravatar.cc/150?u=saker" },
+        { name: "نور الطراونة", avatar: "https://i.pravatar.cc/150?u=nour" },
+        { name: "معاذ الحجايا", avatar: "https://i.pravatar.cc/150?u=moath" },
+        { name: "ختام البصول", avatar: "https://i.pravatar.cc/150?u=khetam" },
+        { name: "بسام العمري", avatar: "https://i.pravatar.cc/150?u=bassam" }
+    ];
+
+    const jordanianCommentsPool = [
+        "يا جماعة الخير أنا أودعت ألف دولار ووالله كل أسبوع بينزل بحسابي 200 دولار أرباح صافية، شركة صادقة وفوق الخيال الله يرزقكم! 🇯🇴🔥",
+        "بالبداية كنت متردد وخايف بس توكلت على الله وأودعت الـ 1000$, وهس صارلي شهرين كل أسبوع بستلم 200$ منتظمات، مشكورين يا أصل الذوق والله كفو منكم 💯",
+        "أشرف ناس وأصدق شركة، أنا حطيت ألف دولار وكل أسبوع يجيني 200 دولار عدا ونقداً بدون أي مشاكل، الله يكثر من أمثالكم يا نشامى 👑",
+        "يا اخوان والله العظيم إني جربت بنفسي، أودعت ألف دولار وكل أسبوع بيجيني 200 دولار أرباح زاكية زكاة المال، يعطيهم العافية أدلوا طريق الصح 👍",
+        "الله يجزيكم الخير، أودعت الالف دولار وكل أسبوع بيجيني منهم 200 دولار أرباح دايرة ما تدور، صراحة تعامل راقي ومصداقية عالية جداً 🥇",
+        "والله يا نشامى ما قصرتوا، الشغل معكو بمشي على العطواني، أرباح أسبوعية منتظمة ورزقة وفيرة الله يباركلكو 🚀",
+        "يا ريتني عرفتكم من زمان، أودعت المبلغ وهسا كل خميس بتوصلني الأرباح عالبنك بدون أي تأخير، كفو والله يا ذيبان 💸",
+        "الله يطرحلكو البركة، شركة بترفع الرأس والمصداقية عندهم عنوان، الله يرزق الجميع مثل ما رزقنا 🌟",
+        "أنا جربت بنفسي وحطيت الألف دولار، وكل أسبوع أرباحي بتنزل بالحساب أول بأول، الله يقويكم يا أصحاب الواجب 👏",
+        "صراحه الواحد بالبداية بخاف بس بعد التجربة طلع كلامكم كلو صحيح 100 بالمية، الله يرزقكو ويزيدكو من فضله 🤲"
+    ];
+
+    let isAdminLoggedIn = false;
+    let currentActivePostId = null;
+
+    // تفعيل الكليك الثلاثي المخفي
+    let clickCount = 0;
+    let clickTimer = null;
+    window.handleSecretTripleClick = function() {
+        if (isAdminLoggedIn) return;
+        clickCount++;
+        clearTimeout(clickTimer);
+        clickTimer = setTimeout(() => { clickCount = 0; }, 600);
+        if (clickCount >= 3) {
+            clickCount = 0;
+            document.getElementById("adminLoginBtn").style.display = "block";
+            alert("تم إظهار زر تسجيل دخول الأدمن أسفل الشاشة!");
+        }
+    };
+
+    window.loginAdmin = function() {
+        let password = prompt("أدخل كلمة المرور:");
+        if (password === "ooddaayy") {
+            isAdminLoggedIn = true;
+            document.getElementById("admin-panel").style.display = "block";
+            document.getElementById("modalAdminControls").style.display = "flex";
+            document.getElementById("modalVisitorMsg").style.display = "none";
+            document.getElementById("adminLoginBtn").style.display = "none";
+            // تحديث عناصر التحكم في التعليقات الموجودة حالياً
+            document.querySelectorAll('.admin-item-actions').forEach(el => el.style.display = 'flex');
+            alert("تم تسجيل الدخول بنجاح كأدمن!");
+        } else if (password !== null) {
+            alert("كلمة المرور غير صحيحة!");
+        }
+    };
+
+    // جلب وحفظ إعدادات الصفحة العامة (Bio, Link, Images) في Firestore تحت وثيقة باسم page_settings/config
+    async function loadPageSettings() {
+        try {
+            const docRef = doc(db, "page_settings", "config");
+            onSnapshot(docRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    let data = docSnap.data();
+                    if(data.bio) document.getElementById("page-bio-text").innerText = data.bio;
+                    if(data.msgLink) document.getElementById("msg-action-btn").href = data.msgLink;
+                    if(data.profileImg) document.getElementById("profile-img").src = data.profileImg;
+                    if(data.coverImg) document.getElementById("cover-photo-div").style.backgroundImage = `url('${data.coverImg}')`;
+                }
+            });
+        } catch(e) { console.error(e); }
+    }
+    loadPageSettings();
+
+    window.updateMsgLink = async function() {
+        let newLink = document.getElementById("new-msg-link").value.trim();
+        if (newLink) {
+            await updateDoc(doc(db, "page_settings", "config"), { msgLink: newLink });
+            document.getElementById("new-msg-link").value = "";
+            alert("تم تحديث رابط الرسائل سحابياً!");
+        }
+    };
+
+    window.updateBio = async function() {
+        let newBio = document.getElementById("new-bio-text").value.trim();
+        if (newBio) {
+            await updateDoc(doc(db, "page_settings", "config"), { bio: newBio });
+            document.getElementById("new-bio-text").value = "";
+            alert("تم تحديث البايو سحابياً!");
+        }
+    };
+
+    window.updateCoverPic = async function() {
+        let fileInput = document.getElementById("new-cover-file");
+        if (fileInput.files && fileInput.files[0]) {
+            let file = fileInput.files[0];
+            let storageRef = ref(storage, 'covers/' + Date.now() + '_' + file.name);
+            let snapshot = await uploadBytes(storageRef, file);
+            let downloadUrl = await getDownloadURL(snapshot.ref);
+            await updateDoc(doc(db, "page_settings", "config"), { coverImg: downloadUrl });
+            alert("تم تحديث وتخزين الغلاف سحابياً!");
+        }
+    };
+
+    window.updateProfilePic = async function() {
+        let fileInput = document.getElementById("new-img-file");
+        if (fileInput.files && fileInput.files[0]) {
+            let file = fileInput.files[0];
+            let storageRef = ref(storage, 'profiles/' + Date.now() + '_' + file.name);
+            let snapshot = await uploadBytes(storageRef, file);
+            let downloadUrl = await getDownloadURL(snapshot.ref);
+            await updateDoc(doc(db, "page_settings", "config"), { profileImg: downloadUrl });
+            alert("تم تحديث وتخزين الصورة الشخصية سحابياً!");
+        }
+    };
+
+    // إنشاء منشور جديد
+    window.createPost = async function() {
+        let text = document.getElementById("new-post-text").value.trim();
+        let likesCount = document.getElementById("new-post-likes").value.trim() || "15";
+        let reaction = document.getElementById("new-post-reaction").value;
+        let fileInput = document.getElementById("new-post-file");
+
+        if (!text && (!fileInput.files || !fileInput.files[0])) {
+            alert("الرجاء كتابة نص المنشور أو اختيار صورة.");
+            return;
+        }
+
+        let imageUrl = "";
+        if (fileInput.files && fileInput.files[0]) {
+            let file = fileInput.files[0];
+            let storageRef = ref(storage, 'posts/' + Date.now() + '_' + file.name);
+            let snapshot = await uploadBytes(storageRef, file);
+            imageUrl = await getDownloadURL(snapshot.ref);
+        }
+
+        await addDoc(collection(db, "posts"), {
+            text: text,
+            imageUrl: imageUrl,
+            likes: likesCount,
+            reaction: reaction,
+            createdAt: Date.now()
+        });
+
+        document.getElementById("new-post-text").value = "";
+        fileInput.value = "";
+        alert("تم نشر المنشور سحابياً بنجاح!");
+    };
+
+    // استماع للمنشورات سحابياً بالوقت الحقيقي
+    function loadPosts() {
+        const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+        onSnapshot(q, (snapshot) => {
+            let container = document.getElementById("posts-container");
+            container.innerHTML = "";
+            if(snapshot.empty) {
+                container.innerHTML = "<p style='text-align:center; color:#65676b;'>لا توجد منشورات حالياً.</p>";
+                return;
+            }
+
+            snapshot.forEach((docSnap) => {
+                let post = docSnap.data();
+                let postId = docSnap.id;
+                let currentAvatar = document.getElementById("profile-img").src;
+
+                let iconsHtml = `<span style="background:#1877f2; color:#fff; border-radius:50%; width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; font-size:10px;">${post.reaction}</span>`;
+                if(post.reaction !== '👍') iconsHtml += `<span style="background:#1877f2; color:#fff; border-radius:50%; width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; font-size:10px; margin-right:-4px;">👍</span>`;
+                if(post.reaction !== '❤️') iconsHtml += `<span style="background:#e41e3f; color:#fff; border-radius:50%; width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; font-size:10px; margin-right:-4px;">❤️</span>`;
+
+                let postHTML = `
+                    <div class="post-card" data-post-id="${postId}">
+                        <div class="fb-post-header">
+                            <img class="fb-post-avatar" src="${currentAvatar}" alt="Avatar">
+                            <div class="fb-post-meta">
+                                <div class="fb-post-author-row">
+                                    <span>شركة الاستثمار العربية</span>
+                                    <span class="verified-icon" style="width: 14px; height: 14px;"></span>
+                                </div>
+                                <div class="fb-post-time">منذ قليل · 🌐</div>
+                            </div>
+                        </div>
+                        ${post.text ? `<div class="post-content">${post.text}</div>` : ''}
+                        ${post.imageUrl ? `<div class="post-image-container"><img src="${post.imageUrl}" alt="Post Image"></div>` : ''}
+                        
+                        <div class="fb-post-stats">
+                            <div class="reactions-display">
+                                <div class="reaction-icons-group">${iconsHtml}</div>
+                                <span>${post.likes}</span>
+                            </div>
+                            <span class="post-comments-count-label" style="cursor: pointer;" onclick="openCommentsModal('${postId}')">0 تعليقات</span>
+                        </div>
+
+                        <div class="fb-post-actions">
+                            <button class="fb-action-btn">${post.reaction} التفاعل</button>
+                            <button class="fb-action-btn" onclick="openCommentsModal('${postId}')">💬 تعليق</button>
+                            <button class="fb-action-btn">مشاركة</button>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', postHTML);
+                updatePostCommentsCount(postId);
+            });
+        });
+    }
+    loadPosts();
+
+    // فتح نافذة التعليقات لمنشور معين
+    window.openCommentsModal = function(postId) {
+        currentActivePostId = postId;
+        document.getElementById("commentsModal").style.display = "flex";
+        
+        if (isAdminLoggedIn) {
+            document.getElementById("modalAdminControls").style.display = "flex";
+            document.getElementById("modalVisitorMsg").style.display = "none";
+        } else {
+            document.getElementById("modalAdminControls").style.display = "none";
+            document.getElementById("modalVisitorMsg").style.display = "block";
+        }
+        loadComments(postId);
+    };
+
+    window.closeCommentsModal = function(event) {
+        if (event.target.id === 'commentsModal') {
+            document.getElementById("commentsModal").style.display = "none";
+        }
+    };
+    window.closeCommentsModalBtn = function() {
+        document.getElementById("commentsModal").style.display = "none";
+    };
+
+    window.addEmoji = function(btn, emoji) {
+        let inputField = btn.closest('.admin-controls').querySelector('.admin-comment-input');
+        inputField.value += emoji;
+        inputField.focus();
+    };
+
+    // جلب وعرض تعليقات المنشور سحابياً
+    function loadComments(postId) {
+        const commentsQuery = query(collection(db, "posts", postId, "comments"), orderBy("createdAt", "asc"));
+        onSnapshot(commentsQuery, (snapshot) => {
+            let listContainer = document.getElementById("modalCommentsList");
+            listContainer.innerHTML = "";
+            let count = snapshot.size;
+            document.querySelector('.modal-comments-count').innerText = count;
+
+            // تحديث العدد في كارت المنشور الخارجي
+            let postCard = document.querySelector(`.post-card[data-post-id="${postId}"]`);
+            if(postCard) {
+                postCard.querySelector('.post-comments-count-label').innerText = count + " تعليقات";
+            }
+
+            if(snapshot.empty) {
+                listContainer.innerHTML = "<p style='text-align:center; color:#65676b; font-size:13px;'>لا توجد تعليقات بعد.</p>";
+                return;
+            }
+
+            snapshot.forEach((docSnap) => {
+                let com = docSnap.data();
+                let comId = docSnap.id;
+                let adminStyleDisplay = isAdminLoggedIn ? 'display: flex;' : 'display: none;';
+
+                let commentHTML = `
+                    <div class="fb-comment-item" data-com-id="${comId}">
+                        <div class="comment-main-row">
+                            <img class="fb-comment-avatar" src="${com.avatar}" alt="User">
+                            <div class="fb-comment-bubble-container">
+                                <div class="bubble-and-menu">
+                                    <div class="fb-comment-bubble">
+                                        <span class="fb-comment-author">${com.author}</span>
+                                        ${com.text}
+                                    </div>
+                                    <div class="admin-item-actions" style="${adminStyleDisplay}">
+                                        <button class="admin-delete-btn" onclick="deleteComment('${postId}', '${comId}')">حذف</button>
+                                    </div>
+                                </div>
+                                <div class="fb-comment-footer">
+                                    <span>الآن</span>
+                                    <span>إعجاب</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                listContainer.insertAdjacentHTML('beforeend', commentHTML);
+            });
+        });
+    }
+
+    function updatePostCommentsCount(postId) {
+        const q = query(collection(db, "posts", postId, "comments"));
+        onSnapshot(q, (snap) => {
+            let postCard = document.querySelector(`.post-card[data-post-id="${postId}"]`);
+            if(postCard) {
+                postCard.querySelector('.post-comments-count-label').innerText = snap.size + " تعليقات";
+            }
+        });
+    }
+
+    // إضافة تعليق وهمي أو إداري وتخزينه سحابياً
+    window.addFakeComment = async function() {
+        if (!currentActivePostId) return;
+        let controlsContainer = document.getElementById("modalAdminControls");
+        let inputField = controlsContainer.querySelector('.admin-comment-input');
+        let text = inputField.value.trim();
+        if (!text) return;
+
+        let customName = controlsContainer.querySelector('#fake-account-name').value.trim();
+        let fileInput = controlsContainer.querySelector('#fake-account-file');
+        
+        let author = customName || defaultFakeAccounts[Math.floor(Math.random() * defaultFakeAccounts.length)].name;
+        let avatar = defaultFakeAccounts[Math.floor(Math.random() * defaultFakeAccounts.length)].avatar;
+
+        if (fileInput.files && fileInput.files[0]) {
+            let file = fileInput.files[0];
+            let storageRef = ref(storage, 'comments/' + Date.now() + '_' + file.name);
+            let snapshot = await uploadBytes(storageRef, file);
+            avatar = await getDownloadURL(snapshot.ref);
+        }
+
+        await addDoc(collection(db, "posts", currentActivePostId, "comments"), {
+            author: author,
+            avatar: avatar,
+            text: text,
+            createdAt: Date.now()
+        });
+
+        inputField.value = "";
+        fileInput.value = "";
+        controlsContainer.querySelector('#fake-account-name').value = "";
+    };
+
+    // توليد تعليقات أردنية سحابياً
+    window.generateJordanianComments = async function() {
+        if (!currentActivePostId) return;
+        let countToAdd = prompt("كم تعليق أردني تريد توليده سحابياً؟ (مثال: 3)", "3");
+        if (!countToAdd || isNaN(countToAdd)) return;
+
+        let count = parseInt(countToAdd);
+        let shuffledPool = [...jordanianCommentsPool].sort(() => 0.5 - Math.random());
+        let shuffledAccounts = [...defaultFakeAccounts].sort(() => 0.5 - Math.random());
+
+        for (let i = 0; i < Math.min(count, shuffledPool.length); i++) {
+            let acc = shuffledAccounts[i % shuffledAccounts.length];
+            let txt = shuffledPool[i];
+
+            await addDoc(collection(db, "posts", currentActivePostId, "comments"), {
+                author: acc.name,
+                avatar: acc.avatar,
+                text: txt,
+                createdAt: Date.now() + i
+            });
+        }
+        alert("تم توليد وتخزين التعليقات الأردنية سحابياً بنجاح!");
+    };
+
+    // حذف تعليق سحابياً
+    window.deleteComment = async function(postId, comId) {
+        if (confirm("هل أنت متأكد من حذف هذا التعليق سحابياً؟")) {
+            await deleteDoc(doc(db, "posts", postId, "comments", comId));
+        }
+    };
+</script>
+
+</body>
+</html>
