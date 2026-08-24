@@ -806,9 +806,9 @@
         <input type="file" id="new-cover-file" accept="image/*" style="margin-bottom: 8px;">
         <button class="btn btn-primary" onclick="updateCoverPic()" style="margin-bottom: 12px; width: 100%;">تحديث الغلاف</button>
 
-        <label class="file-upload-label">تغيير صورة بروفايل الصفحة (محلياً داخل المتصفح):</label>
+        <label class="file-upload-label">تغيير صورة بروفايل الصفحة (سحابياً):</label>
         <input type="file" id="new-img-file" accept="image/*" style="margin-bottom: 8px;">
-        <button class="btn btn-primary" onclick="updateProfilePic()" style="margin-bottom: 12px; width: 100%;">تحديث الصورة الشخصية</button>
+        <button class="btn btn-primary" onclick="updateProfilePic()" style="margin-bottom: 12px; width: 100%;">تحديث الصورة الشخصية سحابياً</button>
         
         <hr style="border:0; border-top:1px solid #ddd; margin:12px 0;">
 
@@ -869,7 +869,7 @@
         <div class="profile-menu-title">خيارات الصورة الشخصية</div>
         
         <input type="file" id="quick-profile-file" accept="image/*" style="display:none;" onchange="uploadQuickProfile(this)">
-        <button class="profile-menu-btn" onclick="document.getElementById('quick-profile-file').click()">📷 تغيير الصورة الشخصية</button>
+        <button class="profile-menu-btn" onclick="document.getElementById('quick-profile-file').click()">📷 تغيير الصورة الشخصية سحابياً</button>
         <button class="profile-menu-btn danger" onclick="removeProfilePic()">🗑️ إزالة الصورة الشخصية</button>
 
         <input type="file" id="quick-story-file" accept="image/*" style="display:none;" onchange="uploadQuickStory(this)">
@@ -1476,7 +1476,7 @@
             ]
         },
         {
-            comment: "كل الشكر والاحترام لإدارة الشركة على الالتزام الدقيق بمواعيد الأرباح ⏱️",
+            comment: "كل الشكر والاحترام لإدارة الشركة على اللتزام الدقيق بمواعيد الأرباح ⏱️",
             replies: [
                 { user: "حمزة الزعبي", text: "التزام دقيق جداً." }
             ]
@@ -1610,64 +1610,11 @@
         }
     };
 
-    // --- نظام التخزين المحلي (Local Storage) للصورة الشخصية والستوري ---
-    function saveToLocalStorage(key, value) {
-        localStorage.setItem(key, value);
-    }
-    function getFromLocalStorage(key) {
-        return localStorage.getItem(key);
-    }
-
-    window.uploadQuickProfile = function(input) {
-        if (input.files && input.files[0]) {
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                let base64Img = e.target.result;
-                saveToLocalStorage('page_profile_img', base64Img);
-                applyProfileImageLocally(base64Img);
-                document.getElementById("profileMenuModal").style.display = "none";
-                alert("تم تحديث وحفظ الصورة الشخصية محلياً!");
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    };
-
-    window.removeProfilePic = function() {
-        if (confirm("هل تريد إزالة الصورة الشخصية والعودة للافتراضية؟")) {
-            let defaultImg = "https://via.placeholder.com/100";
-            saveToLocalStorage('page_profile_img', defaultImg);
-            applyProfileImageLocally(defaultImg);
-            document.getElementById("profileMenuModal").style.display = "none";
-            alert("تمت إزالة الصورة الشخصية!");
-        }
-    };
-
-    window.uploadQuickStory = function(input) {
-        if (input.files && input.files[0]) {
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                let base64Story = e.target.result;
-                saveToLocalStorage('page_story_img', base64Story);
-                saveToLocalStorage('page_has_story', 'true');
-                applyStoryLocally(true);
-                document.getElementById("profileMenuModal").style.display = "none";
-                alert("تمت إضافة الستوري بنجاح!");
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    };
-
-    window.removeStory = function() {
-        localStorage.removeItem('page_story_img');
-        saveToLocalStorage('page_has_story', 'false');
-        applyStoryLocally(false);
-        document.getElementById("profileMenuModal").style.display = "none";
-        alert("تمت إزالة الستوري!");
-    };
-
     function applyProfileImageLocally(imgUrl) {
-        document.getElementById("profile-img").src = imgUrl;
-        document.querySelectorAll('.fb-post-avatar').forEach(img => img.src = imgUrl);
+        document.getElementById("profile-img").src = imgUrl || "https://via.placeholder.com/100";
+        document.querySelectorAll('.fb-post-avatar').forEach(img => {
+            if(imgUrl) img.src = imgUrl;
+        });
     }
 
     function applyStoryLocally(hasStory) {
@@ -1679,68 +1626,64 @@
         }
     }
 
-    // تحميل البيانات المحلية فور فتح الصفحة
-    function loadLocalPageSettings() {
-        let savedProfile = getFromLocalStorage('page_profile_img');
-        if (savedProfile) {
-            applyProfileImageLocally(savedProfile);
-        } else {
-            applyProfileImageLocally("https://via.placeholder.com/100");
-        }
+    window.uploadQuickProfile = async function(input) {
+        if (input.files && input.files[0]) {
+            let file = input.files[0];
+            let storageRef = ref(storage, 'profile/' + Date.now() + '_' + file.name);
+            let snapshot = await uploadBytes(storageRef, file);
+            let downloadUrl = await getDownloadURL(snapshot.ref);
 
-        let hasStory = getFromLocalStorage('page_has_story') === 'true';
-        applyStoryLocally(hasStory);
-
-        let savedBio = getFromLocalStorage('page_bio_text');
-        if(savedBio) document.getElementById("page-bio-text").innerText = savedBio;
-
-        let savedMsgLink = getFromLocalStorage('page_msg_link');
-        if(savedMsgLink) document.getElementById("msg-action-btn").href = savedMsgLink;
-    }
-    loadLocalPageSettings();
-
-    window.updateProfilePic = function() {
-        let fileInput = document.getElementById("new-img-file");
-        if (fileInput.files && fileInput.files[0]) {
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                let base64Img = e.target.result;
-                saveToLocalStorage('page_profile_img', base64Img);
-                applyProfileImageLocally(base64Img);
-                alert("تم تحديث وحفظ الصورة الشخصية محلياً!");
-            };
-            reader.readAsDataURL(fileInput.files[0]);
+            await updateDoc(doc(db, "page_settings", "config"), { profileImg: downloadUrl });
+            applyProfileImageLocally(downloadUrl);
+            document.getElementById("profileMenuModal").style.display = "none";
+            alert("تم رفع وتحديث الصورة الشخصية سحابياً بنجاح!");
         }
     };
-    // -------------------------------------------------------------
 
-    function formatTimeAgo(timestamp) {
-        if (!timestamp) return "منذ قليل";
-        let date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-        let seconds = Math.floor((new Date() - date) / 1000);
+    window.updateProfilePic = async function() {
+        let fileInput = document.getElementById("new-img-file");
+        if (fileInput.files && fileInput.files[0]) {
+            let file = fileInput.files[0];
+            let storageRef = ref(storage, 'profile/' + Date.now() + '_' + file.name);
+            let snapshot = await uploadBytes(storageRef, file);
+            let downloadUrl = await getDownloadURL(snapshot.ref);
 
-        if (seconds < 60) return "منذ قليل";
-        let intervals = {
-            سنة: 31536000,
-            شهر: 2592000,
-            أسبوع: 604800,
-            يوم: 86400,
-            ساعة: 3600,
-            دقيقة: 60
-        };
-        for (let i in intervals) {
-            let counter = Math.floor(seconds / intervals[i]);
-            if (counter > 0) {
-                if (i === 'دقيقة') return `منذ ${counter} دقيقة`;
-                if (i === 'ساعة') return `منذ ${counter} ساعة`;
-                if (i === 'يوم') return `منذ ${counter} يوم`;
-                if (i === 'أسبوع') return `منذ ${counter} أسبوع`;
-                if (i === 'شهر') return `منذ ${counter} شهر`;
-                if (i === 'سنة') return `منذ ${counter} سنة`;
-            }
+            await updateDoc(doc(db, "page_settings", "config"), { profileImg: downloadUrl });
+            applyProfileImageLocally(downloadUrl);
+            alert("تم تحديث وتخزين الصورة الشخصية سحابياً بنجاح!");
         }
-        return "منذ قليل";
-    }
+    };
+
+    window.removeProfilePic = async function() {
+        if (confirm("هل تريد إزالة الصورة الشخصية والعودة للافتراضية سحابياً؟")) {
+            let defaultImg = "https://via.placeholder.com/100";
+            await updateDoc(doc(db, "page_settings", "config"), { profileImg: defaultImg });
+            applyProfileImageLocally(defaultImg);
+            document.getElementById("profileMenuModal").style.display = "none";
+            alert("تمت إزالة الصورة الشخصية سحابياً!");
+        }
+    };
+
+    window.uploadQuickStory = function(input) {
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+            reader.onload = async function(e) {
+                let base64Story = e.target.result;
+                await updateDoc(doc(db, "page_settings", "config"), { storyImg: base64Story, hasStory: true });
+                applyStoryLocally(true);
+                document.getElementById("profileMenuModal").style.display = "none";
+                alert("تمت إضافة الستوري سحابياً!");
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    };
+
+    window.removeStory = async function() {
+        await updateDoc(doc(db, "page_settings", "config"), { storyImg: "", hasStory: false });
+        applyStoryLocally(false);
+        document.getElementById("profileMenuModal").style.display = "none";
+        alert("تمت إزالة الستوري سحابياً!");
+    };
 
     let clickCount = 0;
     let clickTimer = null;
@@ -1787,13 +1730,21 @@
                     let data = docSnap.data();
                     if(data.bio) {
                         document.getElementById("page-bio-text").innerText = data.bio;
-                        saveToLocalStorage('page_bio_text', data.bio);
                     }
                     if(data.msgLink) {
                         document.getElementById("msg-action-btn").href = data.msgLink;
-                        saveToLocalStorage('page_msg_link', data.msgLink);
                     }
-                    if(data.coverImg) document.getElementById("cover-photo-div").style.backgroundImage = `url('${data.coverImg}')`;
+                    if(data.coverImg) {
+                        document.getElementById("cover-photo-div").style.backgroundImage = `url('${data.coverImg}')`;
+                    }
+                    if(data.profileImg) {
+                        applyProfileImageLocally(data.profileImg);
+                    } else {
+                        applyProfileImageLocally("https://via.placeholder.com/100");
+                    }
+                    if(data.hasStory !== undefined) {
+                        applyStoryLocally(data.hasStory);
+                    }
                 }
             });
         } catch(e) { console.error(e); }
@@ -1804,7 +1755,6 @@
         let newLink = document.getElementById("new-msg-link").value.trim();
         if (newLink) {
             await updateDoc(doc(db, "page_settings", "config"), { msgLink: newLink });
-            saveToLocalStorage('page_msg_link', newLink);
             document.getElementById("new-msg-link").value = "";
             alert("تم تحديث رابط الرسائل سحابياً!");
         }
@@ -1814,7 +1764,6 @@
         let newBio = document.getElementById("new-bio-text").value.trim();
         if (newBio) {
             await updateDoc(doc(db, "page_settings", "config"), { bio: newBio });
-            saveToLocalStorage('page_bio_text', newBio);
             document.getElementById("new-bio-text").value = "";
             alert("تم تحديث البايو سحابياً!");
         }
