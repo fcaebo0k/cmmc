@@ -43,6 +43,12 @@
             background-color: #ffffff;
             overflow: hidden;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            cursor: pointer;
+        }
+        /* تنسيق الستوري المتوهج حول صورة البروفايل */
+        .profile-pic-container.has-story {
+            border: 4px solid #e41e3f;
+            box-shadow: 0 0 0 3px #ffffff, 0 0 10px rgba(228, 30, 63, 0.6);
         }
         .profile-pic-container img {
             width: 100%;
@@ -381,7 +387,7 @@
             text-decoration: underline;
         }
 
-        /* Admin Controls for Comment/Reply Editing & Deleting */
+        /* Admin Controls for Comment Deleting */
         .admin-item-actions {
             display: none;
             gap: 6px;
@@ -395,77 +401,7 @@
             font-weight: bold;
             padding: 0;
         }
-        .admin-edit-btn { color: #1877f2; }
         .admin-delete-btn { color: #e41e3f; }
-
-        /* Replies Section */
-        .replies-section {
-            margin-right: 46px;
-            margin-top: 8px;
-            display: none;
-        }
-        .toggle-replies-btn {
-            font-size: 12px;
-            color: #65676b;
-            font-weight: bold;
-            background: none;
-            border: none;
-            cursor: pointer;
-            margin-right: 46px;
-            margin-top: 4px;
-            padding: 0;
-        }
-        .toggle-replies-btn:hover {
-            text-decoration: underline;
-        }
-        .fb-reply-item {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-        }
-        .fb-reply-avatar {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            object-fit: cover;
-            flex-shrink: 0;
-        }
-        .fb-reply-bubble {
-            background: #f0f2f5;
-            padding: 6px 10px;
-            border-radius: 14px;
-            font-size: 12px;
-            max-width: 220px;
-            word-break: break-word;
-        }
-
-        /* Reply Input Container */
-        .reply-input-container {
-            display: none;
-            margin-right: 46px;
-            margin-top: 6px;
-            gap: 6px;
-            align-items: center;
-        }
-        .reply-input-container input {
-            flex: 1;
-            padding: 6px 10px;
-            font-size: 12px;
-            border: 1px solid #ccd0d5;
-            border-radius: 16px;
-            background: #f0f2f5;
-            outline: none;
-        }
-        .reply-send-btn {
-            padding: 4px 10px;
-            font-size: 11px;
-            background-color: #1877f2;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: 600;
-        }
 
         .sheet-footer {
             padding: 10px 16px;
@@ -473,7 +409,7 @@
             background: #fff;
         }
         .admin-controls {
-            display: none;
+            display: flex;
             flex-direction: column;
             gap: 6px;
         }
@@ -516,15 +452,18 @@
             cursor: pointer;
             font-weight: 600;
         }
-        .visitor-comment-msg {
-            font-size: 12px;
-            color: #65676b;
-            text-align: center;
-            padding: 6px;
+        
+        .fake-account-config {
+            display: none; 
+            background: #fff;
+            padding: 8px;
+            border: 1px solid #e4e6eb;
+            border-radius: 6px;
+            margin-bottom: 8px;
         }
 
-        /* زر التوليد الأردني الجديد */
         .jo-auto-btn {
+            display: none;
             background-color: #28a745;
             color: white;
             border: none;
@@ -574,19 +513,66 @@
             box-sizing: border-box;
             font-family: inherit;
         }
-        .fake-account-config {
-            background: #fff;
-            padding: 8px;
-            border: 1px solid #e4e6eb;
-            border-radius: 6px;
-            margin-bottom: 8px;
-        }
         .file-upload-label {
             display: block;
             font-size: 12px;
             color: #333;
             margin-bottom: 4px;
             font-weight: bold;
+        }
+
+        /* نافذة خيارات صورة البروفايل المخصصة */
+        .profile-menu-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 10001;
+            justify-content: center;
+            align-items: center;
+        }
+        .profile-menu-box {
+            background: #ffffff;
+            width: 90%;
+            max-width: 320px;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .profile-menu-title {
+            font-weight: bold;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #e4e6eb;
+            padding-bottom: 8px;
+        }
+        .profile-menu-btn {
+            background: #f0f2f5;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+            color: #050505;
+        }
+        .profile-menu-btn:hover {
+            background: #e4e6eb;
+        }
+        .profile-menu-btn.danger {
+            background: #ffebee;
+            color: #e41e3f;
+        }
+        .profile-menu-btn.danger:hover {
+            background: #ffcdd2;
         }
     </style>
 </head>
@@ -598,7 +584,7 @@
 
     <!-- معلومات الملف الشخصي -->
     <div class="profile-section">
-        <div class="profile-pic-container">
+        <div id="profile-pic-container" class="profile-pic-container" onclick="openProfileMenu(event)">
             <!-- صورة البروفايل -->
             <img id="profile-img" src="https://via.placeholder.com/100" alt="Profile Picture">
             <div class="live-badge">LIVE</div>
@@ -691,6 +677,23 @@
 
 </div>
 
+<!-- نافذة خيارات الصورة الشخصية والستوري -->
+<div id="profileMenuModal" class="profile-menu-modal" onclick="closeProfileMenu(event)">
+    <div class="profile-menu-box" onclick="event.stopPropagation()">
+        <div class="profile-menu-title">خيارات الصورة الشخصية</div>
+        
+        <input type="file" id="quick-profile-file" accept="image/*" style="display:none;" onchange="uploadQuickProfile(this)">
+        <button class="profile-menu-btn" onclick="document.getElementById('quick-profile-file').click()">📷 تغيير الصورة الشخصية</button>
+        <button class="profile-menu-btn danger" onclick="removeProfilePic()">🗑️ إزالة الصورة الشخصية</button>
+
+        <input type="file" id="quick-story-file" accept="image/*" style="display:none;" onchange="uploadQuickStory(this)">
+        <button class="profile-menu-btn" onclick="document.getElementById('quick-story-file').click()">✨ إضافة ستوري (قصة)</button>
+        <button class="profile-menu-btn danger" onclick="removeStory()">❌ إزالة الستوري</button>
+        
+        <button class="profile-menu-btn" style="background:#ddd; margin-top:4px;" onclick="document.getElementById('profileMenuModal').style.display='none'">إلغاء</button>
+    </div>
+</div>
+
 <!-- نافذة التعليقات المنبثقة (BottomSheet) -->
 <div id="commentsModal" class="comments-modal-overlay" onclick="closeCommentsModal(event)">
     <div class="comments-bottom-sheet" onclick="event.stopPropagation()">
@@ -704,7 +707,7 @@
         </div>
         <div class="sheet-footer">
             <div id="modalAdminControls" class="admin-controls">
-                <div class="fake-account-config">
+                <div id="fakeAccountConfigDiv" class="fake-account-config">
                     <label style="font-size: 11px; color: #65676b; display: block; margin-bottom: 2px;">إعدادات الحساب الوهمي:</label>
                     <input type="text" id="fake-account-name" placeholder="اسم الحساب الوهمي (مثال: أحمد محمد)" style="margin-bottom: 6px;">
                     <label class="file-upload-label" style="font-size: 11px;">صورة الحساب الوهمي من الهاتف:</label>
@@ -722,9 +725,8 @@
                     <button class="emoji-btn" onclick="addEmoji(this, '👏')">👏</button>
                     <button class="emoji-btn" onclick="addEmoji(this, '😊')">😊</button>
                 </div>
-                <button class="jo-auto-btn" onclick="generateJordanianComments()">🇯🇴 توليد تعليقات أردنية (إيداع وأرباح)</button>
+                <button id="joAutoBtn" class="jo-auto-btn" onclick="generateJordanianComments()">🇯🇴 توليد تعليقات أردنية (إيداع وأرباح)</button>
             </div>
-            <div id="modalVisitorMsg" class="visitor-comment-msg">التعليقات متاحة للإدارة فقط</div>
         </div>
     </div>
 </div>
@@ -736,7 +738,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
     const firebaseConfig = {
@@ -781,7 +783,84 @@
     let isAdminLoggedIn = false;
     let currentActivePostId = null;
 
-    // تفعيل الكليك الثلاثي المخفي
+    // دوال التعامل مع قائمة النقر على الصورة الشخصية والستوري
+    window.openProfileMenu = function(event) {
+        document.getElementById("profileMenuModal").style.display = "flex";
+    };
+    window.closeProfileMenu = function(event) {
+        if (event.target.id === 'profileMenuModal') {
+            document.getElementById("profileMenuModal").style.display = "none";
+        }
+    };
+
+    window.uploadQuickProfile = async function(input) {
+        if (input.files && input.files[0]) {
+            let file = input.files[0];
+            let storageRef = ref(storage, 'profiles/' + Date.now() + '_' + file.name);
+            let snapshot = await uploadBytes(storageRef, file);
+            let downloadUrl = await getDownloadURL(snapshot.ref);
+            await updateDoc(doc(db, "page_settings", "config"), { profileImg: downloadUrl });
+            document.getElementById("profileMenuModal").style.display = "none";
+            alert("تم تحديث الصورة الشخصية سحابياً!");
+        }
+    };
+
+    window.removeProfilePic = async function() {
+        if (confirm("هل تريد إزالة الصورة الشخصية والعودة للافتراضية؟")) {
+            let defaultImg = "https://via.placeholder.com/100";
+            await updateDoc(doc(db, "page_settings", "config"), { profileImg: defaultImg });
+            document.getElementById("profileMenuModal").style.display = "none";
+            alert("تمت إزالة الصورة الشخصية!");
+        }
+    };
+
+    window.uploadQuickStory = async function(input) {
+        if (input.files && input.files[0]) {
+            let file = input.files[0];
+            let storageRef = ref(storage, 'stories/' + Date.now() + '_' + file.name);
+            let snapshot = await uploadBytes(storageRef, file);
+            let downloadUrl = await getDownloadURL(snapshot.ref);
+            // نحفظ رابط الستوري في قاعدة البيانات لتظهر متوهجة
+            await updateDoc(doc(db, "page_settings", "config"), { storyImg: downloadUrl, hasStory: true });
+            document.getElementById("profileMenuModal").style.display = "none";
+            alert("تمت إضافة الستوري بنجاح!");
+        }
+    };
+
+    window.removeStory = async function() {
+        await updateDoc(doc(db, "page_settings", "config"), { storyImg: "", hasStory: false });
+        document.getElementById("profileMenuModal").style.display = "none";
+        alert("تمت إزالة الستوري!");
+    };
+
+    function formatTimeAgo(timestamp) {
+        if (!timestamp) return "منذ قليل";
+        let date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+        let seconds = Math.floor((new Date() - date) / 1000);
+
+        if (seconds < 60) return "منذ قليل";
+        let intervals = {
+            سنة: 31536000,
+            شهر: 2592000,
+            أسبوع: 604800,
+            يوم: 86400,
+            ساعة: 3600,
+            دقيقة: 60
+        };
+        for (let i in intervals) {
+            let counter = Math.floor(seconds / intervals[i]);
+            if (counter > 0) {
+                if (i === 'دقيقة') return `منذ ${counter} دقيقة`;
+                if (i === 'ساعة') return `منذ ${counter} ساعة`;
+                if (i === 'يوم') return `منذ ${counter} يوم`;
+                if (i === 'أسبوع') return `منذ ${counter} أسبوع`;
+                if (i === 'شهر') return `منذ ${counter} شهر`;
+                if (i === 'سنة') return `منذ ${counter} سنة`;
+            }
+        }
+        return "منذ قليل";
+    }
+
     let clickCount = 0;
     let clickTimer = null;
     window.handleSecretTripleClick = function() {
@@ -801,10 +880,9 @@
         if (password === "ooddaayy") {
             isAdminLoggedIn = true;
             document.getElementById("admin-panel").style.display = "block";
-            document.getElementById("modalAdminControls").style.display = "flex";
-            document.getElementById("modalVisitorMsg").style.display = "none";
+            document.getElementById("fakeAccountConfigDiv").style.display = "block";
+            document.getElementById("joAutoBtn").style.display = "block";
             document.getElementById("adminLoginBtn").style.display = "none";
-            // تحديث عناصر التحكم في التعليقات الموجودة حالياً
             document.querySelectorAll('.admin-item-actions').forEach(el => el.style.display = 'flex');
             alert("تم تسجيل الدخول بنجاح كأدمن!");
         } else if (password !== null) {
@@ -812,7 +890,6 @@
         }
     };
 
-    // جلب وحفظ إعدادات الصفحة العامة (Bio, Link, Images) في Firestore تحت وثيقة باسم page_settings/config
     async function loadPageSettings() {
         try {
             const docRef = doc(db, "page_settings", "config");
@@ -823,6 +900,13 @@
                     if(data.msgLink) document.getElementById("msg-action-btn").href = data.msgLink;
                     if(data.profileImg) document.getElementById("profile-img").src = data.profileImg;
                     if(data.coverImg) document.getElementById("cover-photo-div").style.backgroundImage = `url('${data.coverImg}')`;
+                    
+                    let picContainer = document.getElementById("profile-pic-container");
+                    if(data.hasStory) {
+                        picContainer.classList.add("has-story");
+                    } else {
+                        picContainer.classList.remove("has-story");
+                    }
                 }
             });
         } catch(e) { console.error(e); }
@@ -871,7 +955,6 @@
         }
     };
 
-    // إنشاء منشور جديد
     window.createPost = async function() {
         let text = document.getElementById("new-post-text").value.trim();
         let likesCount = document.getElementById("new-post-likes").value.trim() || "15";
@@ -896,7 +979,7 @@
             imageUrl: imageUrl,
             likes: likesCount,
             reaction: reaction,
-            createdAt: Date.now()
+            createdAt: serverTimestamp()
         });
 
         document.getElementById("new-post-text").value = "";
@@ -904,7 +987,6 @@
         alert("تم نشر المنشور سحابياً بنجاح!");
     };
 
-    // استماع للمنشورات سحابياً بالوقت الحقيقي
     function loadPosts() {
         const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
         onSnapshot(q, (snapshot) => {
@@ -919,6 +1001,7 @@
                 let post = docSnap.data();
                 let postId = docSnap.id;
                 let currentAvatar = document.getElementById("profile-img").src;
+                let timeAgoText = formatTimeAgo(post.createdAt);
 
                 let iconsHtml = `<span style="background:#1877f2; color:#fff; border-radius:50%; width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; font-size:10px;">${post.reaction}</span>`;
                 if(post.reaction !== '👍') iconsHtml += `<span style="background:#1877f2; color:#fff; border-radius:50%; width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; font-size:10px; margin-right:-4px;">👍</span>`;
@@ -933,7 +1016,7 @@
                                     <span>شركة الاستثمار العربية</span>
                                     <span class="verified-icon" style="width: 14px; height: 14px;"></span>
                                 </div>
-                                <div class="fb-post-time">منذ قليل · 🌐</div>
+                                <div class="fb-post-time">${timeAgoText} · 🌐</div>
                             </div>
                         </div>
                         ${post.text ? `<div class="post-content">${post.text}</div>` : ''}
@@ -961,18 +1044,9 @@
     }
     loadPosts();
 
-    // فتح نافذة التعليقات لمنشور معين
     window.openCommentsModal = function(postId) {
         currentActivePostId = postId;
         document.getElementById("commentsModal").style.display = "flex";
-        
-        if (isAdminLoggedIn) {
-            document.getElementById("modalAdminControls").style.display = "flex";
-            document.getElementById("modalVisitorMsg").style.display = "none";
-        } else {
-            document.getElementById("modalAdminControls").style.display = "none";
-            document.getElementById("modalVisitorMsg").style.display = "block";
-        }
         loadComments(postId);
     };
 
@@ -991,7 +1065,6 @@
         inputField.focus();
     };
 
-    // جلب وعرض تعليقات المنشور سحابياً
     function loadComments(postId) {
         const commentsQuery = query(collection(db, "posts", postId, "comments"), orderBy("createdAt", "asc"));
         onSnapshot(commentsQuery, (snapshot) => {
@@ -1000,7 +1073,6 @@
             let count = snapshot.size;
             document.querySelector('.modal-comments-count').innerText = count;
 
-            // تحديث العدد في كارت المنشور الخارجي
             let postCard = document.querySelector(`.post-card[data-post-id="${postId}"]`);
             if(postCard) {
                 postCard.querySelector('.post-comments-count-label').innerText = count + " تعليقات";
@@ -1015,6 +1087,7 @@
                 let com = docSnap.data();
                 let comId = docSnap.id;
                 let adminStyleDisplay = isAdminLoggedIn ? 'display: flex;' : 'display: none;';
+                let commentTimeAgo = formatTimeAgo(com.createdAt);
 
                 let commentHTML = `
                     <div class="fb-comment-item" data-com-id="${comId}">
@@ -1031,7 +1104,7 @@
                                     </div>
                                 </div>
                                 <div class="fb-comment-footer">
-                                    <span>الآن</span>
+                                    <span>${commentTimeAgo}</span>
                                     <span>إعجاب</span>
                                 </div>
                             </div>
@@ -1053,8 +1126,12 @@
         });
     }
 
-    // إضافة تعليق وهمي أو إداري وتخزينه سحابياً
     window.addFakeComment = async function() {
+        if (!isAdminLoggedIn) {
+            alert("عذراً، التعليقات متاحة للإدارة فقط حالياً.");
+            return;
+        }
+
         if (!currentActivePostId) return;
         let controlsContainer = document.getElementById("modalAdminControls");
         let inputField = controlsContainer.querySelector('.admin-comment-input');
@@ -1078,7 +1155,7 @@
             author: author,
             avatar: avatar,
             text: text,
-            createdAt: Date.now()
+            createdAt: serverTimestamp()
         });
 
         inputField.value = "";
@@ -1086,8 +1163,8 @@
         controlsContainer.querySelector('#fake-account-name').value = "";
     };
 
-    // توليد تعليقات أردنية سحابياً
     window.generateJordanianComments = async function() {
+        if (!isAdminLoggedIn) return;
         if (!currentActivePostId) return;
         let countToAdd = prompt("كم تعليق أردني تريد توليده سحابياً؟ (مثال: 3)", "3");
         if (!countToAdd || isNaN(countToAdd)) return;
@@ -1104,13 +1181,12 @@
                 author: acc.name,
                 avatar: acc.avatar,
                 text: txt,
-                createdAt: Date.now() + i
+                createdAt: serverTimestamp()
             });
         }
         alert("تم توليد وتخزين التعليقات الأردنية سحابياً بنجاح!");
     };
 
-    // حذف تعليق سحابياً
     window.deleteComment = async function(postId, comId) {
         if (confirm("هل أنت متأكد من حذف هذا التعليق سحابياً؟")) {
             await deleteDoc(doc(db, "posts", postId, "comments", comId));
