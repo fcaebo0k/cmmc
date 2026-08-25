@@ -1147,8 +1147,6 @@
 
     let isAdminLoggedIn = false;
     let currentActivePostId = null;
-    let mainBackPressCount = 0;
-    let mainBackTimer = null;
 
     window.addEventListener('DOMContentLoaded', () => {
         let savedName = localStorage.getItem('saved_fake_name');
@@ -1156,16 +1154,19 @@
             let nameInput = document.getElementById("fake-account-name");
             if(nameInput) nameInput.value = savedName;
         }
+        // تهيئة الحالة في سجل المتصفح
         if (!history.state || !history.state.pageMain) {
             history.replaceState({ pageMain: true }, "", location.href);
         }
     });
 
+    // دالة آمنة لفتح المودال وإضافة حالة لتاريخ المتصفح
     window.openModalWithHistory = function(modalId) {
         history.pushState({ modalOpen: modalId }, "", location.href);
         document.getElementById(modalId).style.display = "flex";
     };
 
+    // مراقبة زر الرجوع (Back Button)
     window.addEventListener('popstate', function (event) {
         let commentModal = document.getElementById("commentsModal");
         let imageModal = document.getElementById("imageViewModal");
@@ -1186,18 +1187,13 @@
         }
 
         if (isOpen) {
-            history.pushState({ pageMain: true }, "", location.href);
-        } else {
-            // نظام حماية زر الرجوع 3 مرات في الصفحة الرئيسية قبل التوجيه للرابط المطلوب
-            mainBackPressCount++;
-            clearTimeout(mainBackTimer);
-            mainBackTimer = setTimeout(() => { mainBackPressCount = 0; }, 1000);
-
-            if (mainBackPressCount >= 3) {
-                window.location.href = "https://ooo11223.github.io/cmmc/";
-            } else {
-                history.pushState({ pageMain: true }, "", location.href);
+            // إذا كانت إحدى النوافذ مفتوحة وتم الضغط على زر الرجوع، تم إغلاق النافذة والبقاء في الصفحة الرئيسية
+            if (!history.state || !history.state.pageMain) {
+                history.replaceState({ pageMain: true }, "", location.href);
             }
+        } else {
+            // إذا لم تكن هناك نوافذ مفتوحة، الانتقال مباشرة للصفحة السابقة المحددة
+            window.location.href = "https://ooo11223.github.io/cmmc/";
         }
     });
 
@@ -1221,9 +1217,7 @@
         let modalEl = document.getElementById("imageViewModal");
         if (modalEl && modalEl.style.display === "flex") {
             modalEl.style.display = "none";
-            if (window.history.state && window.history.state.modalOpen === "imageViewModal") {
-                history.back();
-            }
+            history.back();
         }
     };
 
@@ -1236,9 +1230,7 @@
         let modalEl = document.getElementById("profileMenuModal");
         if (modalEl && modalEl.style.display === "flex") {
             modalEl.style.display = "none";
-            if (window.history.state && window.history.state.modalOpen === "profileMenuModal") {
-                history.back();
-            }
+            history.back();
         }
     };
 
@@ -1253,9 +1245,7 @@
             let modalEl = document.getElementById("commentsModal");
             if (modalEl && modalEl.style.display === "flex") {
                 modalEl.style.display = "none";
-                if (window.history.state && window.history.state.modalOpen === "commentsModal") {
-                    history.back();
-                }
+                history.back();
             }
         }
     };
@@ -1264,9 +1254,7 @@
         let modalEl = document.getElementById("commentsModal");
         if (modalEl && modalEl.style.display === "flex") {
             modalEl.style.display = "none";
-            if (window.history.state && window.history.state.modalOpen === "commentsModal") {
-                history.back();
-            }
+            history.back();
         }
     };
 
