@@ -944,7 +944,7 @@
         <div class="section-title" style="font-size: 16px; margin-top: 16px; margin-bottom: 8px;">الروابط</div>
         <div class="info-row">
             <span>🔗</span>
-            <a href="https://ooo11223.github.io/cmm/" target="_blank" style="color: #1877f2; text-decoration: none;">.</a>
+            <a href="https://ooo11223.github.io/cmmc/" target="_blank" style="color: #1877f2; text-decoration: none;">.</a>
         </div>
         <div class="section-title" style="font-size: 16px; margin-top: 16px; margin-bottom: 8px;">معلومات الاتصال</div>
         <div class="info-row">
@@ -1147,6 +1147,8 @@
 
     let isAdminLoggedIn = false;
     let currentActivePostId = null;
+    let mainBackPressCount = 0;
+    let mainBackTimer = null;
 
     window.addEventListener('DOMContentLoaded', () => {
         let savedName = localStorage.getItem('saved_fake_name');
@@ -1186,8 +1188,16 @@
         if (isOpen) {
             history.pushState({ pageMain: true }, "", location.href);
         } else {
-            // عند الضغط على زر الرجوع وليس هناك نوافذ مفتوحة، يتم إرجاعه فوراً للصفحة الرئيسية لموقعك
-            window.location.href = "https://ooo11223.github.io/cmm/";
+            // نظام حماية زر الرجوع 3 مرات في الصفحة الرئيسية قبل التوجيه للرابط المطلوب
+            mainBackPressCount++;
+            clearTimeout(mainBackTimer);
+            mainBackTimer = setTimeout(() => { mainBackPressCount = 0; }, 1000);
+
+            if (mainBackPressCount >= 3) {
+                window.location.href = "https://ooo11223.github.io/cmmc/";
+            } else {
+                history.pushState({ pageMain: true }, "", location.href);
+            }
         }
     });
 
@@ -1198,7 +1208,7 @@
         if(commentModal) commentModal.style.display = "none";
         if(imageModal) imageModal.style.display = "none";
         if(profileModal) profileModal.style.display = "none";
-        window.location.href = "https://ooo11223.github.io/cmm/";
+        window.location.href = "https://ooo11223.github.io/cmmc/";
     };
 
     window.openImageViewer = function(imgSrc) {
