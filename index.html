@@ -919,6 +919,9 @@
         <label class="file-upload-label">📹 أو فيديو المنشور من الهاتف (اختياري):</label>
         <input type="file" id="new-post-video-file" accept="video/*" style="margin-bottom: 8px;">
 
+        <label class="file-upload-label">🔗 أو أدخل رابط فيديو مباشر (MP4 / رابط فيديو):</label>
+        <input type="text" id="new-post-video-url" placeholder="https://example.com/video.mp4" style="margin-bottom: 8px;">
+
         <label style="font-size: 13px;">اختر التفاعل الرئيسي للمنشور:</label>
         <select id="new-post-reaction" style="margin-bottom: 8px;">
             <option value="👍">إعجاب (👍)</option>
@@ -1151,19 +1154,16 @@
             let nameInput = document.getElementById("fake-account-name");
             if(nameInput) nameInput.value = savedName;
         }
-        // ضبط سجل المتصفح الأساسي عند فتح الموقع
         if (!history.state || !history.state.pageMain) {
             history.replaceState({ pageMain: true }, "", location.href);
         }
     });
 
-    // دالة فتح النوافذ مع إضافة حالة جديدة في سجل المتصفح لمنع الخروج
     window.openModalWithHistory = function(modalId) {
         history.pushState({ modalOpen: modalId }, "", location.href);
         document.getElementById(modalId).style.display = "flex";
     };
 
-    // منع خروج المستخدم عند ضغط زر الرجوع، وإغلاق أي نافذة مفتوحة بدلاً من الخروج
     window.addEventListener('popstate', function (event) {
         let commentModal = document.getElementById("commentsModal");
         let imageModal = document.getElementById("imageViewModal");
@@ -1184,12 +1184,10 @@
         }
 
         if (isOpen) {
-            // ضمان بقاء حالة السجل نظيفة في المنتصف
             history.pushState({ pageMain: true }, "", location.href);
         } else {
-            // إذا لم تكن هناك نافذة مفتوحة، نمنع الخروج من الموقع ونعيد التوجيه بسلاسة لأعلى الصفحة الرئيسية
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            history.pushState({ pageMain: true }, "", location.href);
+            // عند الضغط على زر الرجوع وليس هناك نوافذ مفتوحة، يتم إرجاعه فوراً للصفحة الرئيسية لموقعك
+            window.location.href = "https://ooo11223.github.io/cmm/";
         }
     });
 
@@ -1200,7 +1198,7 @@
         if(commentModal) commentModal.style.display = "none";
         if(imageModal) imageModal.style.display = "none";
         if(profileModal) profileModal.style.display = "none";
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.location.href = "https://ooo11223.github.io/cmm/";
     };
 
     window.openImageViewer = function(imgSrc) {
@@ -1213,7 +1211,6 @@
         let modalEl = document.getElementById("imageViewModal");
         if (modalEl && modalEl.style.display === "flex") {
             modalEl.style.display = "none";
-            // إزالة الحالة الخاصة بالنافذة من الهيستوري دون التأثير على الموقع الرئيسي
             if (window.history.state && window.history.state.modalOpen === "imageViewModal") {
                 history.back();
             }
@@ -1481,10 +1478,13 @@
         let fileInput2 = document.getElementById("new-post-file-2");
         let fileInput3 = document.getElementById("new-post-file-3");
         let videoInput = document.getElementById("new-post-video-file");
+        let videoUrlInput = document.getElementById("new-post-video-url").value.trim();
 
         let hasImages = (fileInput1.files[0] || fileInput2.files[0] || fileInput3.files[0]);
-        if (!text && !hasImages && (!videoInput.files || !videoInput.files[0]) && !editPostId) {
-            alert("الرجاء كتابة نص المنشور أو اختيار صورة أو فيديو.");
+        let hasVideoFile = (videoInput.files && videoInput.files[0]);
+
+        if (!text && !hasImages && !hasVideoFile && !videoUrlInput && !editPostId) {
+            alert("الرجاء كتابة نص المنشور أو اختيار صورة أو فيديو أو إدخال رابط فيديو.");
             return;
         }
 
@@ -1498,12 +1498,14 @@
         }
 
         let videoUrl = "";
-        if (videoInput.files && videoInput.files[0]) {
+        if (hasVideoFile) {
             let reader = new FileReader();
             videoUrl = await new Promise((res) => {
                 reader.onload = () => res(reader.result);
                 reader.readAsDataURL(videoInput.files[0]);
             });
+        } else if (videoUrlInput) {
+            videoUrl = videoUrlInput;
         }
 
         if (editPostId) {
@@ -1540,6 +1542,7 @@
             fileInput2.value = "";
             fileInput3.value = "";
             videoInput.value = "";
+            document.getElementById("new-post-video-url").value = "";
             alert("تم نشر المنشور بنجاح!");
         }
     };
@@ -1553,6 +1556,9 @@
             document.getElementById("new-post-text").value = post.text || "";
             document.getElementById("new-post-likes").value = post.likes || "86";
             document.getElementById("new-post-reaction").value = post.reaction || "👍";
+            if(post.videoUrl && post.videoUrl.startsWith('http')) {
+                document.getElementById("new-post-video-url").value = post.videoUrl;
+            }
             
             document.getElementById("post-form-title").innerText = "تعديل المنشور الحالي:";
             document.getElementById("save-post-btn").innerText = "حفظ التعديلات";
@@ -1571,6 +1577,7 @@
         document.getElementById("new-post-file-2").value = "";
         document.getElementById("new-post-file-3").value = "";
         document.getElementById("new-post-video-file").value = "";
+        document.getElementById("new-post-video-url").value = "";
         
         document.getElementById("post-form-title").innerText = "إنشاء منشور جديد:";
         document.getElementById("save-post-btn").innerText = "نشر المنشور";
