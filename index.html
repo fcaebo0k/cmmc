@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اسيل العلي</title>
+    <title>Facebook Page Profile</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -473,7 +473,7 @@
             display: block;
         }
         
-        /* Comment Image Style */
+        /* Comment Media Styles (Image & Video) */
         .comment-attached-image {
             margin-top: 6px;
             max-width: 100%;
@@ -486,6 +486,14 @@
         }
         .comment-attached-image:hover {
             opacity: 0.9;
+        }
+        .comment-attached-video {
+            margin-top: 6px;
+            max-width: 100%;
+            max-height: 220px;
+            border-radius: 8px;
+            display: block;
+            background: #000;
         }
 
         /* --- Fullscreen Image Viewer Modal --- */
@@ -819,7 +827,7 @@
     <!-- Top Nav Bar -->
     <div class="top-nav-bar">
         <div class="top-nav-right">
-            <span class="top-nav-back" onclick="goBackSafely()" title="الرجوع للصفحة السابقة">‹</span>
+            <span class="top-nav-back" onclick="goBackSafely()" title="الرجوع للرئيسية">‹</span>
             <span class="page-name-header">......</span>
             <span class="verified-icon" style="width: 14px; height: 14px;"></span>
         </div>
@@ -997,7 +1005,10 @@
                     <input type="file" id="fake-account-file" accept="image/*" style="margin-bottom: 6px; font-size: 11px;">
                     
                     <label class="file-upload-label" style="font-size: 11px;">📷 إرفاق صورة مع التعليق (اختياري):</label>
-                    <input type="file" id="fake-comment-image-file" accept="image/*" style="margin-bottom: 0; font-size: 11px;">
+                    <input type="file" id="fake-comment-image-file" accept="image/*" style="margin-bottom: 6px; font-size: 11px;">
+
+                    <label class="file-upload-label" style="font-size: 11px;">📹 أو إرفاق فيديو مع التعليق (اختياري):</label>
+                    <input type="file" id="fake-comment-video-file" accept="video/*" style="margin-bottom: 0; font-size: 11px;">
                 </div>
                 <div class="admin-input-row">
                     <input type="text" class="admin-comment-input" placeholder="اكتب تعليقاً...">
@@ -1140,48 +1151,58 @@
             let nameInput = document.getElementById("fake-account-name");
             if(nameInput) nameInput.value = savedName;
         }
+        // إضافة حالة أساسية لتثبيت الموقع داخل تاريخ المتصفح
+        history.replaceState({ pageMain: true }, "", location.href);
     });
 
-    // نظام إدارة زر الرجوع لمنع الخروج من الموقع وإغلاق النوافذ المنبثقة أولاً
-    let activeModalId = null;
-
     window.openModalWithHistory = function(modalId) {
-        activeModalId = modalId;
         history.pushState({ modalOpen: modalId }, "", location.href);
         document.getElementById(modalId).style.display = "flex";
     };
 
     window.closeModalWithHistory = function(modalId) {
-        document.getElementById(modalId).style.display = "none";
-        if (activeModalId === modalId) {
-            activeModalId = null;
-            // إرجاع خطوة للوراء في الهيستوري إذا تم الإغلاق يدوياً عبر زر الإغلاق
-            if (window.history.state && window.history.state.modalOpen) {
-                history.back();
-            }
+        let modalEl = document.getElementById(modalId);
+        if (modalEl && modalEl.style.display === "flex") {
+            modalEl.style.display = "none";
+            history.back();
         }
     };
 
+    // التحكم بالرجوع لكي يعيد المستخدم دائماً لصفحة الموقع الرئيسية بدلاً من الخروج منه
     window.addEventListener('popstate', function (event) {
-        if (activeModalId) {
-            // إذا كانت إحدى النوافذ مفتوحة وزر الرجوع تم ضغطه، قم بإغلاق النافذة فقط ولا تخرج من الصفحة
-            let modalEl = document.getElementById(activeModalId);
-            if (modalEl) {
-                modalEl.style.display = "none";
-            }
-            activeModalId = null;
-        } else {
-            // إذا لم تكن هناك نافذة مفتوحة وتم ضغط رجوع، نفذ الرجوع الآمن
-            goBackSafely();
+        let commentModal = document.getElementById("commentsModal");
+        let imageModal = document.getElementById("imageViewModal");
+        let profileModal = document.getElementById("profileMenuModal");
+
+        let isOpen = false;
+        if (commentModal && commentModal.style.display === "flex") {
+            commentModal.style.display = "none";
+            isOpen = true;
+        }
+        if (imageModal && imageModal.style.display === "flex") {
+            imageModal.style.display = "none";
+            isOpen = true;
+        }
+        if (profileModal && profileModal.style.display === "flex") {
+            profileModal.style.display = "none";
+            isOpen = true;
+        }
+
+        if (!isOpen) {
+            // إذا لم تكن أي نافذة مفتوحة وتم ضغط زر الرجوع، نثبت المستخدم في الصفحة الرئيسية ونمنع خروجه من الموقع
+            history.pushState({ pageMain: true }, "", location.href);
         }
     });
 
     window.goBackSafely = function() {
-        if (window.history.length > 2) {
-            window.history.go(-1);
-        } else {
-            window.location.href = "https://www.facebook.com";
-        }
+        // زر الرجوع العلوي يقوم بإغلاق أي نوافذ مفتوحة والعودة لأعلى الصفحة الرئيسية للموقع
+        let commentModal = document.getElementById("commentsModal");
+        let imageModal = document.getElementById("imageViewModal");
+        let profileModal = document.getElementById("profileMenuModal");
+        if(commentModal) commentModal.style.display = "none";
+        if(imageModal) imageModal.style.display = "none";
+        if(profileModal) profileModal.style.display = "none";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     window.openImageViewer = function(imgSrc) {
@@ -1201,12 +1222,6 @@
     
     window.closeProfileMenuBtn = function() {
         closeModalWithHistory("profileMenuModal");
-    };
-
-    window.closeProfileMenu = function(event) {
-        if (event.target.id === 'profileMenuModal') {
-            closeModalWithHistory("profileMenuModal");
-        }
     };
 
     window.openCommentsModal = function(postId) {
@@ -1816,6 +1831,7 @@
                                         <span class="fb-comment-author">${com.author}</span>
                                         ${com.text ? `<div>${com.text}</div>` : ''}
                                         ${com.imageUrl ? `<img src="${com.imageUrl}" class="comment-attached-image" alt="Comment Image" onclick="openImageViewer('${com.imageUrl}')">` : ''}
+                                        ${com.videoUrl ? `<video controls controlsList="nodownload" class="comment-attached-video" preload="metadata"><source src="${com.videoUrl}" type="video/mp4"></video>` : ''}
                                         <div class="comment-like-badge">${randomReact} <span class="item-likes-count">${randomCommentLikes}</span></div>
                                     </div>
                                     <div class="admin-item-actions" style="${adminStyleDisplay}">
@@ -1864,9 +1880,10 @@
         let inputField = controlsContainer.querySelector('.admin-comment-input');
         let text = inputField.value.trim();
         let commentImageFile = controlsContainer.querySelector('#fake-comment-image-file');
+        let commentVideoFile = controlsContainer.querySelector('#fake-comment-video-file');
         
-        if (!text && (!commentImageFile.files || !commentImageFile.files[0])) {
-            alert("الرجاء كتابة نص التعليق أو اختيار صورة.");
+        if (!text && (!commentImageFile.files || !commentImageFile.files[0]) && (!commentVideoFile.files || !commentVideoFile.files[0])) {
+            alert("الرجاء كتابة نص التعليق أو اختيار صورة أو فيديو.");
             return;
         }
 
@@ -1897,18 +1914,29 @@
             commentImageUrl = await resizeAndCompressImage(commentImageFile.files[0], 600, 0.75);
         }
 
+        let commentVideoUrl = "";
+        if (commentVideoFile.files && commentVideoFile.files[0]) {
+            let reader = new FileReader();
+            commentVideoUrl = await new Promise((res) => {
+                reader.onload = () => res(reader.result);
+                reader.readAsDataURL(commentVideoFile.files[0]);
+            });
+        }
+
         try {
             await addDoc(collection(db, "posts", currentActivePostId, "comments"), {
                 author: author,
                 avatar: avatar,
                 text: text,
                 imageUrl: commentImageUrl,
+                videoUrl: commentVideoUrl,
                 replies: [],
                 createdAt: serverTimestamp()
             });
 
             inputField.value = "";
             commentImageFile.value = "";
+            commentVideoFile.value = "";
             alert("تم إرسال التعليق بنجاح!");
         } catch (error) {
             console.error("Error adding comment: ", error);
@@ -1937,6 +1965,7 @@
                 avatar: acc.avatar,
                 text: thread.comment,
                 imageUrl: "",
+                videoUrl: "",
                 replies: thread.replies,
                 createdAt: serverTimestamp()
             });
