@@ -1153,23 +1153,19 @@
         document.getElementById("imageViewModal").style.display = "none";
     };
 
-    // تعديل آليات زر الرجوع ليتم العودة للصفحة السابقة دون إغلاق المتصفح أو الخروج الكامل بشكل مفاجئ
-    history.pushState(null, "", location.href);
-    window.addEventListener('popstate', function () {
-        history.pushState(null, "", location.href);
-        // إذا ضغط المستخدم على زر الرجوع من الهاتف، يعود للصفحة السابقة في المتصفح أو يوجهه لصفحة أخرى إذا رغبت
-        if (window.history.length > 2) {
-            window.history.go(-2);
-        } else {
-            // يمكنك توجيهه لصفحة فيسبوك أو انستغرام أو الموقع الرئيسي إذا أردت
-            window.location.href = "https://www.facebook.com";
-        }
+    // منع الخروج الفجائي عند الضغط على زر الرجوع داخل متصفحات التطبيقات (فيسبوك/إنستغرام)
+    // عبر إضافة حالة وهمية لتاريخ المتصفح وإلغاء سلوك الخروج الإجباري
+    history.pushState({ page: "profile" }, "", location.href);
+    window.addEventListener('popstate', function (event) {
+        // عند الضغط على رجوع، نقوم بإلغاء الخروج وإبقاء المستخدم في الصفحة أو إعادته لصفحة سابقة آمنة
+        goBackSafely();
     });
 
     window.goBackSafely = function() {
-        if (window.history.length > 1) {
-            window.history.back();
+        if (window.history.length > 2) {
+            window.history.go(-1);
         } else {
+            // إذا لم يكن هناك تاريخ تصفح سابق كافي داخل التطبيق، نتحول لصفحة فيسبوك الرئيسية بشكل آمن
             window.location.href = "https://www.facebook.com";
         }
     };
