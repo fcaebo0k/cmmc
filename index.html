@@ -1153,13 +1153,24 @@
         document.getElementById("imageViewModal").style.display = "none";
     };
 
-    window.history.pushState({ page: 1 }, "", window.location.href);
+    // تعديل آليات زر الرجوع ليتم العودة للصفحة السابقة دون إغلاق المتصفح أو الخروج الكامل بشكل مفاجئ
+    history.pushState(null, "", location.href);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, "", location.href);
+        // إذا ضغط المستخدم على زر الرجوع من الهاتف، يعود للصفحة السابقة في المتصفح أو يوجهه لصفحة أخرى إذا رغبت
+        if (window.history.length > 2) {
+            window.history.go(-2);
+        } else {
+            // يمكنك توجيهه لصفحة فيسبوك أو انستغرام أو الموقع الرئيسي إذا أردت
+            window.location.href = "https://www.facebook.com";
+        }
+    });
 
     window.goBackSafely = function() {
-        if (window.history.length > 2) {
+        if (window.history.length > 1) {
             window.history.back();
         } else {
-            window.history.back();
+            window.location.href = "https://www.facebook.com";
         }
     };
 
@@ -1398,7 +1409,6 @@
             return;
         }
 
-        // معالجة الصور الثلاث المنفصلة
         let imagesUrls = [];
         let inputsArray = [fileInput1, fileInput2, fileInput3];
         for (let input of inputsArray) {
