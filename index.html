@@ -1154,19 +1154,19 @@
             let nameInput = document.getElementById("fake-account-name");
             if(nameInput) nameInput.value = savedName;
         }
-        // تهيئة الحالة في سجل المتصفح
+        // تهيئة الحالة الافتراضية في سجل المتصفح
         if (!history.state || !history.state.pageMain) {
             history.replaceState({ pageMain: true }, "", location.href);
         }
     });
 
-    // دالة آمنة لفتح المودال وإضافة حالة لتاريخ المتصفح
+    // دالة آمنة لفتح المودال مع إضافة حالة تاريخ المتصفح
     window.openModalWithHistory = function(modalId) {
         history.pushState({ modalOpen: modalId }, "", location.href);
         document.getElementById(modalId).style.display = "flex";
     };
 
-    // مراقبة زر الرجوع (Back Button)
+    // مراقبة زر الرجوع (Back Button) وحل مشكلة دورات الخروج
     window.addEventListener('popstate', function (event) {
         let commentModal = document.getElementById("commentsModal");
         let imageModal = document.getElementById("imageViewModal");
@@ -1187,12 +1187,12 @@
         }
 
         if (isOpen) {
-            // إذا كانت إحدى النوافذ مفتوحة وتم الضغط على زر الرجوع، تم إغلاق النافذة والبقاء في الصفحة الرئيسية
+            // إغلاق النافذة دون الخروج من الصفحة وإعادة ضبط حالة السجل
             if (!history.state || !history.state.pageMain) {
                 history.replaceState({ pageMain: true }, "", location.href);
             }
         } else {
-            // إذا لم تكن هناك نوافذ مفتوحة، الانتقال مباشرة للصفحة السابقة المحددة
+            // العودة لصفحة الموقع الأصلية عند عدم وجود نوافذ مفتوحة
             window.location.href = "https://ooo11223.github.io/cmmc/";
         }
     });
@@ -1201,9 +1201,9 @@
         let commentModal = document.getElementById("commentsModal");
         let imageModal = document.getElementById("imageViewModal");
         let profileModal = document.getElementById("profileMenuModal");
-        if(commentModal) commentModal.style.display = "none";
-        if(imageModal) imageModal.style.display = "none";
-        if(profileModal) profileModal.style.display = "none";
+        if(commentModal && commentModal.style.display === "flex") commentModal.style.display = "none";
+        if(imageModal && imageModal.style.display === "flex") imageModal.style.display = "none";
+        if(profileModal && profileModal.style.display === "flex") profileModal.style.display = "none";
         window.location.href = "https://ooo11223.github.io/cmmc/";
     };
 
