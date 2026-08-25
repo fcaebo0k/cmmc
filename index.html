@@ -1151,17 +1151,19 @@
             let nameInput = document.getElementById("fake-account-name");
             if(nameInput) nameInput.value = savedName;
         }
-        // تسجيل الحالة الأولية للموقع في سجل المتصفح
-        history.replaceState({ pageMain: true }, "", location.href);
+        // ضبط سجل المتصفح الأساسي عند فتح الموقع
+        if (!history.state || !history.state.pageMain) {
+            history.replaceState({ pageMain: true }, "", location.href);
+        }
     });
 
-    // دالة فتح النوافذ مع إضافة حالة جديدة في سجل المتصفح
+    // دالة فتح النوافذ مع إضافة حالة جديدة في سجل المتصفح لمنع الخروج
     window.openModalWithHistory = function(modalId) {
         history.pushState({ modalOpen: modalId }, "", location.href);
         document.getElementById(modalId).style.display = "flex";
     };
 
-    // التحكم بالرجوع لكي يعيد المستخدم دائماً لصفحة الموقع الرئيسية بدلاً من خروجه منه
+    // منع خروج المستخدم عند ضغط زر الرجوع، وإغلاق أي نافذة مفتوحة بدلاً من الخروج
     window.addEventListener('popstate', function (event) {
         let commentModal = document.getElementById("commentsModal");
         let imageModal = document.getElementById("imageViewModal");
@@ -1181,8 +1183,12 @@
             isOpen = true;
         }
 
-        if (!isOpen) {
-            // إذا لم تكن أي نافذة مفتوحة وتم ضغط زر الرجوع، نثبت المستخدم في الصفحة الرئيسية ونمنع خروجه
+        if (isOpen) {
+            // ضمان بقاء حالة السجل نظيفة في المنتصف
+            history.pushState({ pageMain: true }, "", location.href);
+        } else {
+            // إذا لم تكن هناك نافذة مفتوحة، نمنع الخروج من الموقع ونعيد التوجيه بسلاسة لأعلى الصفحة الرئيسية
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             history.pushState({ pageMain: true }, "", location.href);
         }
     });
@@ -1207,7 +1213,10 @@
         let modalEl = document.getElementById("imageViewModal");
         if (modalEl && modalEl.style.display === "flex") {
             modalEl.style.display = "none";
-            history.back();
+            // إزالة الحالة الخاصة بالنافذة من الهيستوري دون التأثير على الموقع الرئيسي
+            if (window.history.state && window.history.state.modalOpen === "imageViewModal") {
+                history.back();
+            }
         }
     };
 
@@ -1220,7 +1229,9 @@
         let modalEl = document.getElementById("profileMenuModal");
         if (modalEl && modalEl.style.display === "flex") {
             modalEl.style.display = "none";
-            history.back();
+            if (window.history.state && window.history.state.modalOpen === "profileMenuModal") {
+                history.back();
+            }
         }
     };
 
@@ -1235,7 +1246,9 @@
             let modalEl = document.getElementById("commentsModal");
             if (modalEl && modalEl.style.display === "flex") {
                 modalEl.style.display = "none";
-                history.back();
+                if (window.history.state && window.history.state.modalOpen === "commentsModal") {
+                    history.back();
+                }
             }
         }
     };
@@ -1244,7 +1257,9 @@
         let modalEl = document.getElementById("commentsModal");
         if (modalEl && modalEl.style.display === "flex") {
             modalEl.style.display = "none";
-            history.back();
+            if (window.history.state && window.history.state.modalOpen === "commentsModal") {
+                history.back();
+            }
         }
     };
 
