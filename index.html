@@ -88,18 +88,6 @@
             height: 100%;
             object-fit: cover;
         }
-        .live-badge {
-            position: absolute;
-            bottom: 2px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #e41e3f;
-            color: white;
-            font-size: 10px;
-            font-weight: bold;
-            padding: 1px 6px;
-            border-radius: 4px;
-        }
         
         /* Page Info */
         .page-title-row {
@@ -753,7 +741,6 @@
     <div class="profile-section">
         <div id="profile-pic-container" class="profile-pic-container">
             <img id="profile-img" src="" alt="Profile Picture">
-            <div class="live-badge">.</div>
         </div>
 
         <div class="page-title-row">
@@ -806,9 +793,9 @@
         <input type="file" id="new-cover-file" accept="image/*" style="margin-bottom: 8px;">
         <button class="btn btn-primary" onclick="updateCoverPic()" style="margin-bottom: 12px; width: 100%;">تحديث الغلاف</button>
 
-        <label class="file-upload-label">تغيير صورة بروفايل الصفحة (سحابياً):</label>
+        <label class="file-upload-label">تغيير صورة بروفايل الصفحة:</label>
         <input type="file" id="new-img-file" accept="image/*" style="margin-bottom: 8px;">
-        <button class="btn btn-primary" onclick="updateProfilePic()" style="margin-bottom: 12px; width: 100%;">تحديث الصورة الشخصية سحابياً</button>
+        <button class="btn btn-primary" onclick="updateProfilePic()" style="margin-bottom: 12px; width: 100%;">تحديث الصورة الشخصية</button>
         
         <hr style="border:0; border-top:1px solid #ddd; margin:12px 0;">
 
@@ -869,7 +856,7 @@
         <div class="profile-menu-title">خيارات الصورة الشخصية</div>
         
         <input type="file" id="quick-profile-file" accept="image/*" style="display:none;" onchange="uploadQuickProfile(this)">
-        <button class="profile-menu-btn" onclick="document.getElementById('quick-profile-file').click()">📷 تغيير الصورة الشخصية سحابياً</button>
+        <button class="profile-menu-btn" onclick="document.getElementById('quick-profile-file').click()">📷 تغيير الصورة الشخصية</button>
         <button class="profile-menu-btn danger" onclick="removeProfilePic()">🗑️ إزالة الصورة الشخصية</button>
 
         <input type="file" id="quick-story-file" accept="image/*" style="display:none;" onchange="uploadQuickStory(this)">
@@ -924,7 +911,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
     import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-    import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDMMJ5MrggJkNMUCsjXsNvS6aTKZd3QzFM",
@@ -939,7 +925,6 @@
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     const db = getFirestore(app);
-    const storage = getStorage(app);
 
     const defaultFakeAccounts = [
         { name: "Ahmad Ali", avatar: "https://i.pravatar.cc/150?u=ahmad" },
@@ -969,7 +954,7 @@
             comment: "يخوان أنا بلشت بـ 2000 دولار وزي ما وعدتونا الأرباح نزلت بالحساب أول بأول، الله يوفقكم عهيك مصداقية 🇯🇴🔥",
             replies: [
                 { user: "Khaled Zoubi", text: "صحيح كلامك يا غالي، أنا كمان جربت وطلعت الأمور ممتازة." },
-                { user: "Omar Abdullah", text: "@Khaled Zoubi يعني سحبت الأرباح بدون مشاكل يا خالد؟" },
+                { user: "Omar Abdullah", text: "@Khaled Zoubi یعنی سحبت الأرباح بدون مشاكل يا خالد؟" },
                 { user: "Khaled Zoubi", text: "@Omar Abdullah اه والله يا صاحبي تحولت عالبنك خلال ساعات." }
             ]
         },
@@ -1030,564 +1015,6 @@
             replies: [
                 { user: "رانية الصلاج", text: "صادقين والله عن تجربتي الشخصية." }
             ]
-        },
-        {
-            comment: "تجربة ممتازة جداً، أنصح الجميع بالاستثمار معهم بكل اعتمادية ومصداقية 👍",
-            replies: [
-                { user: "مالك الشوبكي", text: "أفضل ناس والله." }
-            ]
-        },
-        {
-            comment: "الخدمة ممتازة والدعم الفني متجاوب طوال الوقت، شكراً لتعاونكم الدائم 💼",
-            replies: [
-                { user: "هيام العضايلة", text: "فعلاً استجابتهم سريعة جداً." }
-            ]
-        },
-        {
-            comment: "ألف شكر لإدارة الشركة على الشفافية العالية والالتزام بالمواعيد المحددة للأرباح 🎯",
-            replies: [
-                { user: "قصي المناصير", text: "نشامى والله ما قصروا." }
-            ]
-        },
-        {
-            comment: "بداية موفقة معهم وأتمنى الاستمرار على هذا المستوى الراقي من التعامل 🤝",
-            replies: [
-                { user: "ديمة الحنيطي", text: "أكيد رح يستمروا لأنهم أهل ثقة." }
-            ]
-        },
-        {
-            comment: "منصة رائعة وفرصة حقيقية لكل شخص حابب يطور دخله المالي، شكراً لكم 💡",
-            replies: [
-                { user: "Bassam Omari", text: "كلام سليم 100%." }
-            ]
-        },
-        {
-            comment: "يعطيكم العافية على المصداقية العالية، الأرباح نزلت بالحساب في وقت قياسي ⚡",
-            replies: [
-                { user: "سلطان الخوالدة", text: "هذا العشم فيكم يا نشامى." }
-            ]
-        },
-        {
-            comment: "تعامل راقٍ وخدمة محترفة، الله يوفقكم لكل خير ويطرح البركة 🤲",
-            replies: [
-                { user: "Ahmad Ali", text: "آمين يا رب العالمين." }
-            ]
-        },
-        {
-            comment: "شركة قوية ومضمونة وأثبتت جدارتها بالسوق العربي والأردني بامتياز 📈",
-            replies: [
-                { user: "Omar Abdullah", text: "من أفضل الشركات بدون منازع." }
-            ]
-        },
-        {
-            comment: "أنا سحبت أرباحي اليوم بكل سهولة، شكراً لكم على الأمانة والوضوح 💳",
-            replies: [
-                { user: "فاطمة المجالي", text: "مبروك أخي وعقبال عندك." }
-            ]
-        },
-        {
-            comment: "بارك الله فيكم وفي جهودكم المستمرة لخدمة العملاء بأفضل صورة ممكنة 🌿",
-            replies: [
-                { user: "Khaled Zoubi", text: "تسلم يا غالي." }
-            ]
-        },
-        {
-            comment: "مبدعين دائماً، وأرباحي تسير بالشكل الصحيح تماماً كما وعدتمونا 📈",
-            replies: [
-                { user: "Noor Al-Tarawneh", text: "شي مرتب ومضمون." }
-            ]
-        },
-        {
-            comment: "أفضل قرار اخذته هو الاستثمار معكم، شكراً لفريق العمل المحترف 💼",
-            replies: [
-                { user: "صقر الحنيطي", text: "خطوة موفقة وصحيحة." }
-            ]
-        },
-        {
-            comment: "صراحة قمة في الاحترام والالتزام بمواعيد الصرف، الله يرزقكم أضعافا 🌟",
-            replies: [
-                { user: "معاذ حجاجحة", text: "ناس بتنحط عالعين والراس." }
-            ]
-        },
-        {
-            comment: "أجمل شي بالشركة هو سرعة الرد والدعم الفني الجاهز دائماً لأي استفسار 📞",
-            replies: [
-                { user: "ابتسام شراعة", text: "صحيح، ما بقصروا ابداً." }
-            ]
-        },
-        {
-            comment: "كل الاحترام والتقدير لإدارة الشركة على هذه المصداقية النادرة 👑",
-            replies: [
-                { user: "Zaid Daajah", text: "كفو والله يا نشامى." }
-            ]
-        },
-        {
-            comment: "تجربة ناجحة بكل المقاييس، أنصح الجميع بخوض التجربة والاستفادة من الفرصة 🚀",
-            replies: [
-                { user: "جميل العبادي", text: "أنا بلشت ونصحت أصحابي كمان." }
-            ]
-        },
-        {
-            comment: "شكراً لكم على الشفافية والوضوح في التعامل المالي من أول يوم 💯",
-            replies: [
-                { user: "منى بني هاني", text: "هذا أهم اشي بالاستثمار." }
-            ]
-        },
-        {
-            comment: "الله يوفقكم، شغل مرتب ومؤسسة محترمة جداً تستحق كل احترام 🏛️",
-            replies: [
-                { user: "حمزة الزعبي", text: "فعلاً مؤسسة محترمة." }
-            ]
-        },
-        {
-            comment: "أرباح منتظمة وثقة متبادلة، شكراً لكم على كل ما تقدمونه للمستثمرين 💎",
-            replies: [
-                { user: "رانية الصلاج", text: "شكراً لإدارة الشركة." }
-            ]
-        },
-        {
-            comment: "منصة استثمارية آمنة وموثوقة، سعدت جداً بالتعامل معكم في هذه الفترة ✨",
-            replies: [
-                { user: "مالك الشوبكي", text: "وأحنا سعدنا بانضمامك." }
-            ]
-        },
-        {
-            comment: "ممتاز جداً، كل شيء واضح وشفاف والأرباح تصل في وقتها المحدد تماماً ⏱️",
-            replies: [
-                { user: "هيام العضايلة", text: "دقة بالمواعيد ما شاء الله." }
-            ]
-        },
-        {
-            comment: "شكراً لجهودكم الرائعة في تسهيل عمليات التداول والإيداع والسحب 🌐",
-            replies: [
-                { user: "قصي المناصير", text: "كل التسهيلات متوفرة." }
-            ]
-        },
-        {
-            comment: "شركة تثبت يوماً بعد يوم أنها الأفضل والأكثر مصداقية في السوق الاردني والعربي 🏆",
-            replies: [
-                { user: "ديمة الحنيطي", text: "بكل جدارة واقتدار." }
-            ]
-        },
-        {
-            comment: "بارك الله فيكم، الدعم الفني متواجد دائماً لحل أي مشكلة أو استفسار 🛠️",
-            replies: [
-                { user: "Bassam Omari", text: "دعم فني ع مستوى عالي." }
-            ]
-        },
-        {
-            comment: "أفضل خدمة استثمارية جربتها بحياتي، شكراً لطاقم العمل المميز والمحترف 👏",
-            replies: [
-                { user: "سلطان الخوالدة", text: "طاقم شغلهم نظيف." }
-            ]
-        },
-        {
-            comment: "خطوات واضحة ومكاسب حقيقية، الله يبارك لكم في رزقكم ويزيدكم فضلاً 🤲",
-            replies: [
-                { user: "Ahmad Ali", text: "آمين يا رب العالمين." }
-            ]
-        },
-        {
-            comment: "شكراً على المصداقية والتعامل الراقي الذي يعكس مدى احترافية الشركة 💼",
-            replies: [
-                { user: "سعيد رمضان", text: "احترافية عالية فعلاً." }
-            ]
-        },
-        {
-            comment: "سعيد جداً بكوني جزء من هذه المنصة الاستثمارية الرائعة والناجحة ⭐",
-            replies: [
-                { user: "فاطمة المجالي", text: "أهلاً بك معنا." }
-            ]
-        },
-        {
-            comment: "كل الاحترام لكم على الالتزام التام بالوعود والشفافية المالية المطلقة 🤝",
-            replies: [
-                { user: "Khaled Zoubi", text: "أهل الثقة والله." }
-            ]
-        },
-        {
-            comment: "أرباح رائعة وخدمة عملاء راقية جداً، شكراً لكم من القلب على كل شيء ❤️",
-            replies: [
-                { user: "Noor Al-Tarawneh", text: "شكراً لكم جميعاً." }
-            ]
-        },
-        {
-            comment: "منصة تستحق الثقة وبجدارة، تجربة ممتازة ولن تكون الأخيرة إن شاء الله 🎯",
-            replies: [
-                { user: "صقر الحنيطي", text: "بالتوفيق دائماً." }
-            ]
-        },
-        {
-            comment: "شكراً لصدقكم وأمانتكم في التعامل المالي، الله يوفقكم ويفتحها بوجهكم 🌺",
-            replies: [
-                { user: "معاذ حجاجحة", text: "آمين يا رب." }
-            ]
-        },
-        {
-            comment: "استثمار امن ونتائج مرضية جداً، أنصح الجميع بالانضمام والبدء معهم 🚀",
-            replies: [
-                { user: "ابتسام شراعة", text: "فعلاً استثمار آمن." }
-            ]
-        },
-        {
-            comment: "تعامل ممتاز وسرعة فائقة في تلبية طلبات السحب والإيداع، بوركتم ⚡",
-            replies: [
-                { user: "Zaid Daajah", text: "سرعة قياسية ما شاء الله." }
-            ]
-        },
-        {
-            comment: "شكراً لكم على الدعم المستمر والمتابعة الدقيقة لكل تفاصيل الاستثمار 📊",
-            replies: [
-                { user: "جميل العبادي", text: "متابعة أول بأول." }
-            ]
-        },
-        {
-            comment: "شركة محترفة بمعنى الكلمة، والأرباح تنزل بانتظام تام دون أي تأخير 💎",
-            replies: [
-                { user: "منى بني هاني", text: "بدون أي تأخير فعلاً." }
-            ]
-        },
-        {
-            comment: "ألف شكر لإدارة الشركة على هذه الفرصة الاستثمارية المميزة والرائعة 🌟",
-            replies: [
-                { user: "حمزة الزعبي", text: "فرصة حقيقية للجميع." }
-            ]
-        },
-        {
-            comment: "كل الدعم لكم، أثبتتم أنكم الأفضل والأكثر التزاماً في السوق المالي 👑",
-            replies: [
-                { user: "رانية الصلاج", text: "الأفضل دائماً." }
-            ]
-        },
-        {
-            comment: "تجربة رائعة بكل المقاييس، شكراً على الشفافية والاحترافية العالية 🏆",
-            replies: [
-                { user: "مالك الشوبكي", text: "احترافية لا غبار عليها." }
-            ]
-        },
-        {
-            comment: "بارك الله في جهودكم، المنصة ممتازة والأرباح تصل في موعدها تماماً ⏱️",
-            replies: [
-                { user: "هيام العضايلة", text: "دقة تامة بالمواعيد." }
-            ]
-        },
-        {
-            comment: "شكراً لكم على حسن التعامل والمصداقية العالية في إنجاز المعاملات 🌐",
-            replies: [
-                { user: "قصي المناصير", text: "خدمة راقية جداً." }
-            ]
-        },
-        {
-            comment: "شركة ممتازة وتستحق كل تقدير واحترام على ما تقدمه للمستثمرين 🏛️",
-            replies: [
-                { user: "ديمة الحنيطي", text: "تستحق التقدير وبجدارة." }
-            ]
-        },
-        {
-            comment: "أرباح ممتازة ودعم فني متجاوب دائماً، شكراً لكم على كل الجهود 🛠️",
-            replies: [
-                { user: "Bassam Omari", text: "جهود مشكورين عليها." }
-            ]
-        },
-        {
-            comment: "سعيد جداً بهذه الشراكة الاستثمارية الناجحة والمباركة بإذن الله 🤝",
-            replies: [
-                { user: "سلطان الخوالدة", text: "شراكة مباركة." }
-            ]
-        },
-        {
-            comment: "كل الشكر والاحترام لطاقم العمل على الأمانة والوضوح التام في المعاملات 📈",
-            replies: [
-                { user: "Ahmad Ali", text: "أمانة عالية جداً." }
-            ]
-        },
-        {
-            comment: "منصة قوية وموثوقة، أنصح كل شخص يرغب بالاستثمار المضمون بالانضمام إليهم 💯",
-            replies: [
-                { user: "سعيد رمضان", text: "نصيحة في محلها." }
-            ]
-        },
-        {
-            comment: "شكراً لكم على الالتزام الدائم وتقديم أفضل الخدمات للمستثمرين 🌟",
-            replies: [
-                { user: "فاطمة المجالي", text: "أفضل الخدمات بلا منازع." }
-            ]
-        },
-        {
-            comment: "تجربة استثمارية ناجحة ومضمونة 100%، شكراً لإدارة الشركة على كل شيء ❤️",
-            replies: [
-                { user: "Khaled Zoubi", text: "مضمونة مليون بالمية." }
-            ]
-        },
-        {
-            comment: "بارك الله فيكم، العمل معكم مكسب حقيقي وثقة متبادلة مستمرة 🎯",
-            replies: [
-                { user: "Noor Al-Tarawneh", text: "مكسب حقيقي للجميع." }
-            ]
-        },
-        {
-            comment: "شكراً على المصداقية والسرعة في تحويل الأرباح، أنصح بالتعامل معهم بشدة 🚀",
-            replies: [
-                { user: "صقر الحنيطي", text: "أنصح بشدة وبدون تردد." }
-            ]
-        },
-        {
-            comment: "خدمة راقية ومصداقية عالية، الله يوفقكم ويزيدكم من فضله الواسع 🤲",
-            replies: [
-                { user: "معاذ حجاجحة", text: "آمين يا رب العالمين." }
-            ]
-        },
-        {
-            comment: "أفضل منصة تداول واستثمار تعاملت معها، كل التوفيق لكم ولطاقم العمل 🌺",
-            replies: [
-                { user: "ابتسام شراعة", text: "كل التوفيق والنجاح." }
-            ]
-        },
-        {
-            comment: "شكراً لكم على الشفافية والوضوح وسرعة إنجاز الأرباح بانتظام تام ⚡",
-            replies: [
-                { user: "Zaid Daajah", text: "التزام تام ووضوح." }
-            ]
-        },
-        {
-            comment: "شركة محترفة وأمينة، سعدت جداً بالتواجد معكم والاستثمار عبر منصتكم 💎",
-            replies: [
-                { user: "جميل العبادي", text: "نورتنا يا غالي." }
-            ]
-        },
-        {
-            comment: "أرباح منتظمة وثقة عالية، شكراً لكل فرد في فريق العمل على جهودهم 📊",
-            replies: [
-                { user: "منى بني هاني", text: "جهودهم واضحة ومباركة." }
-            ]
-        },
-        {
-            comment: "كل التقدير والاحترام لهذه الشركة العريقة والصادقة في تعاملاتها المالية 🏛️",
-            replies: [
-                { user: "حمزة الزعبي", text: "شركة عريقة وصادقة." }
-            ]
-        },
-        {
-            comment: "تجربة ممتازة جداً والأرباح تنزل في حسابي بكل سهولة ويسر، شكراً لكم 🌟",
-            replies: [
-                { user: "رانية الصلاج", text: "بكل سهولة فعلاً." }
-            ]
-        },
-        {
-            comment: "شكراً لكم على الالتزام بالمواعيد وتقديم خدمة استثمارية بهذه الكفاءة العالية ⏱️",
-            replies: [
-                { user: "مالك الشوبكي", text: "كفاءة عالية جداً." }
-            ]
-        },
-        {
-            comment: "منصة استثمارية آمنة وصادقة، أنصح الجميع بالانضمام وبدء الاستثمار 🌐",
-            replies: [
-                { user: "هيام العضايلة", text: "استثمار آمن 100%." }
-            ]
-        },
-        {
-            comment: "بارك الله فيكم وفي جهودكم المستمرة لخدمة المستثمرين بكل أمانة وإخلاص 🤝",
-            replies: [
-                { user: "قصي المناصير", text: "أمانة وإخلاص تام." }
-            ]
-        },
-        {
-            comment: "شكراً على الدعم المستمر والتعامل الراقي الذي يجعلنا نشعر بالأمان التام 💼",
-            replies: [
-                { user: "ديمة الحنيطي", text: "شعور بالراحة والأمان." }
-            ]
-        },
-        {
-            comment: "أفضل شركة استثمارية بالأردن وبجدارة، شكراً لكم على كل ما تقدمونه 👑",
-            replies: [
-                { user: "Bassam Omari", text: "الأفضل بلا منازع بالأردن." }
-            ]
-        },
-        {
-            comment: "أرباح حقيقية ومضمونة، شكراً لإدارة الشركة على المصداقية المطلقة 📈",
-            replies: [
-                { user: "سلطان الخوالدة", text: "مصداقية مطلقـة." }
-            ]
-        },
-        {
-            comment: "كل الاحترام لطاقم العمل على سرعة الرد والتعامل المحترف مع العملاء 🛠️",
-            replies: [
-                { user: "Ahmad Ali", text: "تعامل محترف جداً." }
-            ]
-        },
-        {
-            comment: "سعيد جداً بالنتائج المحققة حتى الآن، شكراً لكم على هذه الفرصة العظيمة ⭐",
-            replies: [
-                { user: "سعيد رمضان", text: "نتائج مفرحة للجميع." }
-            ]
-        },
-        {
-            comment: "شركة تثبت يوماً بعد يوماً التزامها التام بوعودها للمستثمرين، بوركتم 💯",
-            replies: [
-                { user: "فاطمة المجالي", text: "التزام تام بالوعود." }
-            ]
-        },
-        {
-            comment: "شكراً لكم على الشفافية العالية في إدارة الحسابات وصرف الأرباح بانتظام 🎯",
-            replies: [
-                { user: "Khaled Zoubi", text: "إدارة حسابات محترفة." }
-            ]
-        },
-        {
-            comment: "تجربة ناجحة بكل المقاييس ولن تكون الأخيرة بإذن الله، شكراً لكم ❤️",
-            replies: [
-                { user: "Noor Al-Tarawneh", text: "بالتوفيق الدائم." }
-            ]
-        },
-        {
-            comment: "بارك الله فيكم، العمل معكم يبعث على الاطمئنان والثقة الكبيرة 🚀",
-            replies: [
-                { user: "صقر الحنيطي", text: "اطمئنان وثقة كبيرة." }
-            ]
-        },
-        {
-            comment: "شكراً لصدقكم وأمانتكم العالية، الله يوفقكم لكل خير ويزيدكم نجاحاً 🤲",
-            replies: [
-                { user: "معاذ حجاجحة", text: "آمين يا رب العالمين." }
-            ]
-        },
-        {
-            comment: "منصة ممتازة وفرصة ذهبية لكل من يبحث عن استثمار حقيقي وآمن 💡",
-            replies: [
-                { user: "ابتسام شراعة", text: "فرصة ذهبية فعلاً." }
-            ]
-        },
-        {
-            comment: "شكراً لطاقم الإدارة على الدعم المتواصل وحل أي استفسار بكل رحابة صدر ⚡",
-            replies: [
-                { user: "Zaid Daajah", text: "رحابة صدر واضحة." }
-            ]
-        },
-        {
-            comment: "أرباح منتظمة وثقة متبادلة، شكراً لكم على كل ما تقدمونه لخدمة المستثمرين 💎",
-            replies: [
-                { user: "جميل العبادي", text: "خدمة ممتازة ومستمرة." }
-            ]
-        },
-        {
-            comment: "شركة محترفة وصادقة، سعدت جداً بالتواجد معكم والاستثمار عبر منصتكم الرائعة 📊",
-            replies: [
-                { user: "منى بني هاني", text: "منصة رائعة ومضمونة." }
-            ]
-        },
-        {
-            comment: "كل الشكر والاحترام لإدارة الشركة على اللتزام الدقيق بمواعيد الأرباح ⏱️",
-            replies: [
-                { user: "حمزة الزعبي", text: "التزام دقيق جداً." }
-            ]
-        },
-        {
-            comment: "تجربة رائعة وأرباح مرضية للغاية، شكراً لكم على الشفافية والوضوح 🌟",
-            replies: [
-                { user: "رانية الصلاج", text: "أرباح مرضية للغاية." }
-            ]
-        },
-        {
-            comment: "بارك الله في جهودكم، المنصة تقدم أفضل الخدمات الاستثمارية بكل أمانة 🏛️",
-            replies: [
-                { user: "مالك الشوبكي", text: "أفضل الخدمات الاستثمارية." }
-            ]
-        },
-        {
-            comment: "شكراً لكم على حسن التعامل وسرعة تلبية طلبات السحب دون أي تعقيد 🌐",
-            replies: [
-                { user: "هيام العضايلة", text: "بدون أي تعقيدات." }
-            ]
-        },
-        {
-            comment: "شركة تستحق التقدير على احترافيتها العالية وصدقها المطلق مع الجميع 🤝",
-            replies: [
-                { user: "قصي المناصير", text: "صدق مطلق مع الجميع." }
-            ]
-        },
-        {
-            comment: "أفضل استثمار قمت به في حياتي، شكراً لكم على هذه الثقة والأمان 💼",
-            replies: [
-                { user: "ديمة الحنيطي", text: "ثقة وأمان متبادل." }
-            ]
-        },
-        {
-            comment: "أرباح حقيقية ومضمونة، شكراً لكل فريق العمل على الجهود الجبارة المبذولة 👑",
-            replies: [
-                { user: "Bassam Omari", text: "جهود جبارة ومباركة." }
-            ]
-        },
-        {
-            comment: "كل التقدير والاحترام لهذه المنصة الرائعة التي أعادت لنا الأمل بالاستثمار الآمن 📈",
-            replies: [
-                { user: "سلطان الخوالدة", text: "منصة رائعة بكل معنا الكلمة." }
-            ]
-        },
-        {
-            comment: "شكراً لكم على الالتزام التام والتعامل الراقي الذي يعكس مدى احترافيتكم 🛠️",
-            replies: [
-                { user: "Ahmad Ali", text: "احترافية عالية جداً." }
-            ]
-        },
-        {
-            comment: "سعيد جداً بانضمامي لكم وتحقيق أرباح ممتازة خلال فترة قصيرة جداً ⭐",
-            replies: [
-                { user: "سعيد رمضان", text: "مبروك أخي وعقبال الأفضل." }
-            ]
-        },
-        {
-            comment: "شركة صادقة ومضمونة، شكراً لإدارة الشركة على المصداقية والشفافية المالية 💯",
-            replies: [
-                { user: "فاطمة المجالي", text: "مصداقية عالية جداً." }
-            ]
-        },
-        {
-            comment: "كل الشكر والاحترام لكم على الوفاء الدائم بالوعود وتقديم الأفضل دائماً 🎯",
-            replies: [
-                { user: "Khaled Zoubi", text: "دائماً عند حسن الظن." }
-            ]
-        },
-        {
-            comment: "تجربة استثمارية ممتازة بكل المقاييس، شكراً لكم على كل ما تقدمونه ❤️",
-            replies: [
-                { user: "Noor Al-Tarawneh", text: "شكراً لكم من القلب." }
-            ]
-        },
-        {
-            comment: "بارك الله فيكم، العمل معكم مكسب حقيقي وثقة مستمرة لا غبار عليها 🚀",
-            replies: [
-                { user: "صقر الحنيطي", text: "اطمئنان وثقة كبيرة." }
-            ]
-        },
-        {
-            comment: "شكراً لصدقكم وأمانتكم العالية في إدارة الاستثمارات وصرف الأرباح بانتظام 🤲",
-            replies: [
-                { user: "معاذ حجاجحة", text: "آمين يا رب العالمين." }
-            ]
-        },
-        {
-            comment: "منصة ممتازة وفرصة حقيقية لكل من يبحث عن الأرباح المضمونة والأمنة 💡",
-            replies: [
-                { user: "ابتسام شراعة", text: "أرباح مضمونة وآمنة." }
-            ]
-        },
-        {
-            comment: "شكراً لطاقم العمل على الدعم المستمر وتوفير كافة التسهيلات للمستثمرين ⚡",
-            replies: [
-                { user: "Zaid Daajah", text: "تسهيلات متكاملة." }
-            ]
-        },
-        {
-            comment: "أرباح منتظمة وثقة عالية، شكراً لكم على كل الجهود المبذولة لخدمتنا 💎",
-            replies: [
-                { user: "جميل العبادي", text: "جهود مباركة ومشكورة." }
-            ]
-        },
-        {
-            comment: "شركة محترفة وصادقة، سعدت جداً بالتواجد معكم والاستثمار عبر منصتكم الرائعة 📊",
-            replies: [
-                { user: "منى بني هاني", text: "منصة رائعة ومضمونة." }
-            ]
         }
     ];
 
@@ -1597,6 +1024,7 @@
     window.checkVisitorInput = function(inputEl) {
         if (!isAdminLoggedIn) {
             inputEl.blur();
+            alert("يجب تسجيل دخول الأدمن أولاً لكتابة وتعليق منشورات وهمية!");
         }
     };
 
@@ -1626,55 +1054,53 @@
         }
     }
 
+    // دالة مساعدة لقراءة الصورة المحفورة محلياً بصيغة Base64 لتجنب أي مشاكل CORS
+    function readFileAsBase64(file) {
+        return new Promise((resolve, reject) => {
+            let reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
+            reader.readAsDataURL(file);
+        });
+    }
+
     window.uploadQuickProfile = async function(input) {
         if (input.files && input.files[0]) {
-            let file = input.files[0];
-            let storageRef = ref(storage, 'profile/' + Date.now() + '_' + file.name);
-            let snapshot = await uploadBytes(storageRef, file);
-            let downloadUrl = await getDownloadURL(snapshot.ref);
-
-            await updateDoc(doc(db, "page_settings", "config"), { profileImg: downloadUrl });
-            applyProfileImageLocally(downloadUrl);
+            let base64Url = await readFileAsBase64(input.files[0]);
+            await updateDoc(doc(db, "page_settings", "config"), { profileImg: base64Url });
+            applyProfileImageLocally(base64Url);
             document.getElementById("profileMenuModal").style.display = "none";
-            alert("تم رفع وتحديث الصورة الشخصية سحابياً بنجاح!");
+            alert("تم تحديث الصورة الشخصية بنجاح!");
         }
     };
 
     window.updateProfilePic = async function() {
         let fileInput = document.getElementById("new-img-file");
         if (fileInput.files && fileInput.files[0]) {
-            let file = fileInput.files[0];
-            let storageRef = ref(storage, 'profile/' + Date.now() + '_' + file.name);
-            let snapshot = await uploadBytes(storageRef, file);
-            let downloadUrl = await getDownloadURL(snapshot.ref);
-
-            await updateDoc(doc(db, "page_settings", "config"), { profileImg: downloadUrl });
-            applyProfileImageLocally(downloadUrl);
-            alert("تم تحديث وتخزين الصورة الشخصية سحابياً بنجاح!");
+            let base64Url = await readFileAsBase64(fileInput.files[0]);
+            await updateDoc(doc(db, "page_settings", "config"), { profileImg: base64Url });
+            applyProfileImageLocally(base64Url);
+            alert("تم تحديث وتخزين الصورة الشخصية بنجاح!");
         }
     };
 
     window.removeProfilePic = async function() {
-        if (confirm("هل تريد إزالة الصورة الشخصية والعودة للافتراضية سحابياً؟")) {
+        if (confirm("هل تريد إزالة الصورة الشخصية والعودة للافتراضية؟")) {
             let defaultImg = "https://via.placeholder.com/100";
             await updateDoc(doc(db, "page_settings", "config"), { profileImg: defaultImg });
             applyProfileImageLocally(defaultImg);
             document.getElementById("profileMenuModal").style.display = "none";
-            alert("تمت إزالة الصورة الشخصية سحابياً!");
+            alert("تمت إزالة الصورة الشخصية!");
         }
     };
 
-    window.uploadQuickStory = function(input) {
+    window.uploadQuickStory = async function(input) {
         if (input.files && input.files[0]) {
-            let reader = new FileReader();
-            reader.onload = async function(e) {
-                let base64Story = e.target.result;
-                await updateDoc(doc(db, "page_settings", "config"), { storyImg: base64Story, hasStory: true });
-                applyStoryLocally(true);
-                document.getElementById("profileMenuModal").style.display = "none";
-                alert("تمت إضافة الستوري سحابياً!");
-            };
-            reader.readAsDataURL(input.files[0]);
+            let base64Story = await readFileAsBase64(input.files[0]);
+            await updateDoc(doc(db, "page_settings", "config"), { storyImg: base64Story, hasStory: true });
+            applyStoryLocally(true);
+            document.getElementById("profileMenuModal").style.display = "none";
+            alert("تمت إضافة الستوري بنجاح!");
         }
     };
 
@@ -1682,7 +1108,7 @@
         await updateDoc(doc(db, "page_settings", "config"), { storyImg: "", hasStory: false });
         applyStoryLocally(false);
         document.getElementById("profileMenuModal").style.display = "none";
-        alert("تمت إزالة الستوري سحابياً!");
+        alert("تمت إزالة الستوري!");
     };
 
     let clickCount = 0;
@@ -1756,7 +1182,7 @@
         if (newLink) {
             await updateDoc(doc(db, "page_settings", "config"), { msgLink: newLink });
             document.getElementById("new-msg-link").value = "";
-            alert("تم تحديث رابط الرسائل سحابياً!");
+            alert("تم تحديث رابط الرسائل بنجاح!");
         }
     };
 
@@ -1765,19 +1191,16 @@
         if (newBio) {
             await updateDoc(doc(db, "page_settings", "config"), { bio: newBio });
             document.getElementById("new-bio-text").value = "";
-            alert("تم تحديث البايو سحابياً!");
+            alert("تم تحديث البايو بنجاح!");
         }
     };
 
     window.updateCoverPic = async function() {
         let fileInput = document.getElementById("new-cover-file");
         if (fileInput.files && fileInput.files[0]) {
-            let file = fileInput.files[0];
-            let storageRef = ref(storage, 'covers/' + Date.now() + '_' + file.name);
-            let snapshot = await uploadBytes(storageRef, file);
-            let downloadUrl = await getDownloadURL(snapshot.ref);
-            await updateDoc(doc(db, "page_settings", "config"), { coverImg: downloadUrl });
-            alert("تم تحديث وتخزين الغلاف سحابياً!");
+            let base64Url = await readFileAsBase64(fileInput.files[0]);
+            await updateDoc(doc(db, "page_settings", "config"), { coverImg: base64Url });
+            alert("تم تحديث الغلاف بنجاح!");
         }
     };
 
@@ -1795,10 +1218,7 @@
 
         let imageUrl = "";
         if (fileInput.files && fileInput.files[0]) {
-            let file = fileInput.files[0];
-            let storageRef = ref(storage, 'posts/' + Date.now() + '_' + file.name);
-            let snapshot = await uploadBytes(storageRef, file);
-            imageUrl = await getDownloadURL(snapshot.ref);
+            imageUrl = await readFileAsBase64(fileInput.files[0]);
         }
 
         if (editPostId) {
@@ -1823,7 +1243,7 @@
             });
             document.getElementById("new-post-text").value = "";
             fileInput.value = "";
-            alert("تم نشر المنشور سحابياً بنجاح!");
+            alert("تم نشر المنشور بنجاح!");
         }
     };
 
@@ -1864,23 +1284,6 @@
         }
     };
 
-    function formatTimeAgo(timestamp) {
-        if (!timestamp) return "منذ لحظات";
-        let date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-        let seconds = Math.floor((new Date() - date) / 1000);
-        let interval = seconds / 31536000;
-        if (interval > 1) return Math.floor(interval) + " سنة";
-        interval = seconds / 2592000;
-        if (interval > 1) return Math.floor(interval) + " شهر";
-        interval = seconds / 86400;
-        if (interval > 1) return Math.floor(interval) + " يوم";
-        interval = seconds / 3600;
-        if (interval > 1) return Math.floor(interval) + " س";
-        interval = seconds / 60;
-        if (interval > 1) return Math.floor(interval) + " د";
-        return "منذ لحظات";
-    }
-
     function loadPosts() {
         const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
         onSnapshot(q, (snapshot) => {
@@ -1899,9 +1302,9 @@
                 let timeAgoText = formatTimeAgo(post.createdAt);
                 let adminActionsStyle = isAdminLoggedIn ? 'display: flex;' : 'display: none;';
 
-                let iconsHtml = `<span style="background:#1877f2; color:#fff; border-radius:50%; width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; font-size:10px;">${post.reaction || '👍'}</span>`;
-                if(post.reaction && post.reaction !== '👍') iconsHtml += `<span style="background:#1877f2; color:#fff; border-radius:50%; width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; font-size:10px; margin-right:-4px;">👍</span>`;
-                if(!post.reaction || post.reaction !== '❤️') iconsHtml += `<span style="background:#e41e3f; color:#fff; border-radius:50%; width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; font-size:10px; margin-right:-4px;">❤️</span>`;
+                let iconsHtml = `<span style="background:#1877f2; color:#fff; border-radius:50%; width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; font-size:10px;">${post.reaction}</span>`;
+                if(post.reaction !== '👍') iconsHtml += `<span style="background:#1877f2; color:#fff; border-radius:50%; width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; font-size:10px; margin-right:-4px;">👍</span>`;
+                if(post.reaction !== '❤️') iconsHtml += `<span style="background:#e41e3f; color:#fff; border-radius:50%; width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; font-size:10px; margin-right:-4px;">❤️</span>`;
 
                 let postHTML = `
                     <div class="post-card" data-post-id="${postId}">
@@ -1927,7 +1330,7 @@
                         <div class="fb-post-stats">
                             <div class="reactions-display">
                                 <div class="reaction-icons-group">${iconsHtml}</div>
-                                <span>${post.likes || '0'}</span>
+                                <span>${post.likes}</span>
                             </div>
                             <span class="post-comments-count-label" style="cursor: pointer;" onclick="openCommentsModal('${postId}')">0 تعليقات</span>
                         </div>
@@ -1942,8 +1345,6 @@
                 container.insertAdjacentHTML('beforeend', postHTML);
                 updatePostCommentsCount(postId);
             });
-        }, (error) => {
-            console.error("Error loading posts: ", error);
         });
     }
     loadPosts();
@@ -1964,7 +1365,10 @@
     };
 
     window.addEmoji = function(btn, emoji) {
-        if (!isAdminLoggedIn) return;
+        if (!isAdminLoggedIn) {
+            alert("يرجى تسجيل دخول الأدمن أولاً.");
+            return;
+        }
         let inputField = btn.closest('.admin-controls').querySelector('.admin-comment-input');
         inputField.value += emoji;
         inputField.focus();
@@ -2060,7 +1464,7 @@
                         let randomRepLikes = Math.floor(Math.random() * 6) + 1;
                         repliesItemsHTML += `
                             <div class="fb-reply-item">
-                                <img class="fb-reply-avatar" src="${repAcc.avatar}" alt="Reply User">
+                                <img class="fb-reply-avatar" alt="Reply User" src="${repAcc.avatar}">
                                 <div class="fb-reply-bubble-container" style="flex:1;">
                                     <div class="fb-reply-bubble">
                                         <span class="fb-reply-author">${rep.user}</span>
@@ -2132,43 +1536,56 @@
     }
 
     window.addFakeComment = async function() {
-        if (!isAdminLoggedIn) return;
-        if (!currentActivePostId) return;
-
-        let inputField = document.querySelector('.admin-comment-input');
-        let text = inputField ? inputField.value.trim() : "";
-        if (!text) return;
-
-        let customNameInput = document.getElementById('fake-account-name');
-        let fileInput = document.getElementById('fake-account-file');
-        
-        let author = (customNameInput && customNameInput.value.trim()) ? customNameInput.value.trim() : defaultFakeAccounts[Math.floor(Math.random() * defaultFakeAccounts.length)].name;
-        let avatar = defaultFakeAccounts[Math.floor(Math.random() * defaultFakeAccounts.length)].avatar;
-
-        if (fileInput && fileInput.files && fileInput.files[0]) {
-            let file = fileInput.files[0];
-            let storageRef = ref(storage, 'comments/' + Date.now() + '_' + file.name);
-            let snapshot = await uploadBytes(storageRef, file);
-            avatar = await getDownloadURL(snapshot.ref);
+        if (!isAdminLoggedIn) {
+            alert("يرجى تسجيل دخول الأدمن أولاً ليتم إرسال التعليق!");
+            return;
+        }
+        if (!currentActivePostId) {
+            alert("لا يوجد منشور نشط حالياً!");
+            return;
         }
 
-        await addDoc(collection(db, "posts", currentActivePostId, "comments"), {
-            author: author,
-            avatar: avatar,
-            text: text,
-            replies: [],
-            createdAt: serverTimestamp()
-        });
+        let controlsContainer = document.getElementById("modalAdminControls");
+        let inputField = controlsContainer.querySelector('.admin-comment-input');
+        let text = inputField.value.trim();
+        
+        if (!text) {
+            alert("الرجاء كتابة نص التعليق أولاً.");
+            return;
+        }
 
-        if (inputField) inputField.value = "";
-        if (fileInput) fileInput.value = "";
-        if (customNameInput) customNameInput.value = "";
+        let customName = controlsContainer.querySelector('#fake-account-name').value.trim();
+        let fileInput = controlsContainer.querySelector('#fake-account-file');
+        
+        let author = customName || defaultFakeAccounts[Math.floor(Math.random() * defaultFakeAccounts.length)].name;
+        let avatar = defaultFakeAccounts[Math.floor(Math.random() * defaultFakeAccounts.length)].avatar;
+
+        if (fileInput.files && fileInput.files[0]) {
+            avatar = await readFileAsBase64(fileInput.files[0]);
+        }
+
+        try {
+            await addDoc(collection(db, "posts", currentActivePostId, "comments"), {
+                author: author,
+                avatar: avatar,
+                text: text,
+                replies: [],
+                createdAt: serverTimestamp()
+            });
+
+            inputField.value = "";
+            fileInput.value = "";
+            controlsContainer.querySelector('#fake-account-name').value = "";
+        } catch (error) {
+            console.error("Error adding comment: ", error);
+            alert("حدث خطأ أثناء إرسال التعليق.");
+        }
     };
 
     window.generateJordanianComments = async function() {
         if (!isAdminLoggedIn) return;
         if (!currentActivePostId) return;
-        let countToAdd = prompt(`كم تعليق أردني (مع الردود التفاعلية) تريد توليده؟ (الحد الأقصى ${jordanianThreadsPool.length})`, "100");
+        let countToAdd = prompt(`كم تعليق أردني (مع الردود التفاعلية) تريد توليده؟ (الحد الأقصى ${jordanianThreadsPool.length})`, "10");
         if (!countToAdd || isNaN(countToAdd)) return;
 
         let count = parseInt(countToAdd);
@@ -2194,10 +1611,53 @@
 
     window.deleteComment = async function(postId, comId) {
         if (!isAdminLoggedIn) return;
-        if (confirm("هل أنت متأكد من حذف هذا التعليق سحابياً؟")) {
+        if (confirm("هل أنت متأكد من حذف هذا التعليق؟")) {
             await deleteDoc(doc(db, "posts", postId, "comments", comId));
         }
     };
+    
+    function formatTimeAgo(timestamp) {
+        if (!timestamp || !timestamp.toDate) return "منذ قليل";
+        let date = timestamp.toDate();
+        let seconds = Math.floor((new Date() - date) / 1000);
+
+        if (seconds < 60) {
+            return "منذ قليل";
+        }
+        let intervals = {
+            سنة: 31536000,
+            شهر: 2592000,
+            أسبوع: 604800,
+            يوم: 86400,
+            ساعة: 3600,
+            دقيقة: 60
+        };
+
+        for (let key in intervals) {
+            let interval = Math.floor(seconds / intervals[key]);
+            if (interval >= 1) {
+                if (key === 'دقيقة') {
+                    return interval === 1 ? "منذ دقيقة" : interval === 2 ? "منذ دقيقتين" : `منذ ${interval} دقائق`;
+                }
+                if (key === 'ساعة') {
+                    return interval === 1 ? "منذ ساعة" : interval === 2 ? "منذ ساعتين" : `منذ ${interval} ساعات`;
+                }
+                if (key === 'يوم') {
+                    return interval === 1 ? "منذ يوم" : interval === 2 ? "منذ يومين" : `منذ ${interval} أيام`;
+                }
+                if (key === 'أسبوع') {
+                    return interval === 1 ? "منذ أسبوع" : interval === 2 ? "منذ أسبوعين" : `منذ ${interval} أسابيع`;
+                }
+                if (key === 'شهر') {
+                    return interval === 1 ? "منذ شهر" : interval === 2 ? "منذ شهرين" : `منذ ${interval} أشهر`;
+                }
+                if (key === 'سنة') {
+                    return interval === 1 ? "منذ سنة" : interval === 2 ? "منذ سنتين" : `منذ ${interval} سنوات`;
+                }
+            }
+        }
+        return "منذ قليل";
+    }
 </script>
 
 </body>
