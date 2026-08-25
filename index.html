@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Facebook Page Profile</title>
+    <title>اسيل العلي</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -967,7 +967,7 @@
         <button class="profile-menu-btn" onclick="document.getElementById('quick-story-file').click()">✨ إضافة ستوري (قصة)</button>
         <button class="profile-menu-btn danger" onclick="removeStory()">❌ إزالة الستوري</button>
         
-        <button class="profile-menu-btn" style="background:#ddd; margin-top:4px;" onclick="document.getElementById('profileMenuModal').style.display='none'">إلغاء</button>
+        <button class="profile-menu-btn" style="background:#ddd; margin-top:4px;" onclick="closeProfileMenuBtn()">إلغاء</button>
     </div>
 </div>
 
@@ -1142,42 +1142,87 @@
         }
     });
 
-    window.openImageViewer = function(imgSrc) {
-        let modal = document.getElementById("imageViewModal");
-        let viewerImg = document.getElementById("viewerImageElement");
-        viewerImg.src = imgSrc;
-        modal.style.display = "flex";
+    // نظام إدارة زر الرجوع لمنع الخروج من الموقع وإغلاق النوافذ المنبثقة أولاً
+    let activeModalId = null;
+
+    window.openModalWithHistory = function(modalId) {
+        activeModalId = modalId;
+        history.pushState({ modalOpen: modalId }, "", location.href);
+        document.getElementById(modalId).style.display = "flex";
     };
 
-    window.closeImageViewer = function() {
-        document.getElementById("imageViewModal").style.display = "none";
+    window.closeModalWithHistory = function(modalId) {
+        document.getElementById(modalId).style.display = "none";
+        if (activeModalId === modalId) {
+            activeModalId = null;
+            // إرجاع خطوة للوراء في الهيستوري إذا تم الإغلاق يدوياً عبر زر الإغلاق
+            if (window.history.state && window.history.state.modalOpen) {
+                history.back();
+            }
+        }
     };
 
-    // منع الخروج الفجائي عند الضغط على زر الرجوع داخل متصفحات التطبيقات (فيسبوك/إنستغرام)
-    // عبر إضافة حالة وهمية لتاريخ المتصفح وإلغاء سلوك الخروج الإجباري
-    history.pushState({ page: "profile" }, "", location.href);
     window.addEventListener('popstate', function (event) {
-        // عند الضغط على رجوع، نقوم بإلغاء الخروج وإبقاء المستخدم في الصفحة أو إعادته لصفحة سابقة آمنة
-        goBackSafely();
+        if (activeModalId) {
+            // إذا كانت إحدى النوافذ مفتوحة وزر الرجوع تم ضغطه، قم بإغلاق النافذة فقط ولا تخرج من الصفحة
+            let modalEl = document.getElementById(activeModalId);
+            if (modalEl) {
+                modalEl.style.display = "none";
+            }
+            activeModalId = null;
+        } else {
+            // إذا لم تكن هناك نافذة مفتوحة وتم ضغط رجوع، نفذ الرجوع الآمن
+            goBackSafely();
+        }
     });
 
     window.goBackSafely = function() {
         if (window.history.length > 2) {
             window.history.go(-1);
         } else {
-            // إذا لم يكن هناك تاريخ تصفح سابق كافي داخل التطبيق، نتحول لصفحة فيسبوك الرئيسية بشكل آمن
             window.location.href = "https://www.facebook.com";
         }
     };
 
+    window.openImageViewer = function(imgSrc) {
+        let viewerImg = document.getElementById("viewerImageElement");
+        viewerImg.src = imgSrc;
+        openModalWithHistory("imageViewModal");
+    };
+
+    window.closeImageViewer = function() {
+        closeModalWithHistory("imageViewModal");
+    };
+
     window.openProfileMenu = function(event) {
         if (!isAdminLoggedIn) return;
-        document.getElementById("profileMenuModal").style.display = "flex";
+        openModalWithHistory("profileMenuModal");
     };
+    
+    window.closeProfileMenuBtn = function() {
+        closeModalWithHistory("profileMenuModal");
+    };
+
     window.closeProfileMenu = function(event) {
         if (event.target.id === 'profileMenuModal') {
-            document.getElementById("profileMenuModal").style.display = "none";
+            closeModalWithHistory("profileMenuModal");
         }
+    };
+
+    window.openCommentsModal = function(postId) {
+        currentActivePostId = postId;
+        loadComments(postId);
+        openModalWithHistory("commentsModal");
+    };
+
+    window.closeCommentsModal = function(event) {
+        if (event.target.id === 'commentsModal') {
+            closeModalWithHistory("commentsModal");
+        }
+    };
+    
+    window.closeCommentsModalBtn = function() {
+        closeModalWithHistory("commentsModal");
     };
 
     function applyProfileImageLocally(imgUrl) {
@@ -1233,7 +1278,7 @@
             let base64Url = await resizeAndCompressImage(input.files[0], 400, 0.8);
             await updateDoc(doc(db, "page_settings", "config"), { profileImg: base64Url });
             applyProfileImageLocally(base64Url);
-            document.getElementById("profileMenuModal").style.display = "none";
+            closeModalWithHistory("profileMenuModal");
             alert("تم تحديث الصورة الشخصية بنجاح!");
         }
     };
@@ -1253,7 +1298,7 @@
             let defaultImg = "https://via.placeholder.com/100";
             await updateDoc(doc(db, "page_settings", "config"), { profileImg: defaultImg });
             applyProfileImageLocally(defaultImg);
-            document.getElementById("profileMenuModal").style.display = "none";
+            closeModalWithHistory("profileMenuModal");
             alert("تمت إزالة الصورة الشخصية!");
         }
     };
@@ -1263,7 +1308,7 @@
             let base64Story = await resizeAndCompressImage(input.files[0], 600, 0.8);
             await updateDoc(doc(db, "page_settings", "config"), { storyImg: base64Story, hasStory: true });
             applyStoryLocally(true);
-            document.getElementById("profileMenuModal").style.display = "none";
+            closeModalWithHistory("profileMenuModal");
             alert("تمت إضافة الستوري بنجاح!");
         }
     };
@@ -1271,7 +1316,7 @@
     window.removeStory = async function() {
         await updateDoc(doc(db, "page_settings", "config"), { storyImg: "", hasStory: false });
         applyStoryLocally(false);
-        document.getElementById("profileMenuModal").style.display = "none";
+        closeModalWithHistory("profileMenuModal");
         alert("تمت إزالة الستوري!");
     };
 
@@ -1608,21 +1653,6 @@
         });
     }
     loadPosts();
-
-    window.openCommentsModal = function(postId) {
-        currentActivePostId = postId;
-        document.getElementById("commentsModal").style.display = "flex";
-        loadComments(postId);
-    };
-
-    window.closeCommentsModal = function(event) {
-        if (event.target.id === 'commentsModal') {
-            document.getElementById("commentsModal").style.display = "none";
-        }
-    };
-    window.closeCommentsModalBtn = function() {
-        document.getElementById("commentsModal").style.display = "none";
-    };
 
     window.addEmoji = function(btn, emoji) {
         if (!isAdminLoggedIn) return;
