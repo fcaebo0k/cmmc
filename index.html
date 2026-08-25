@@ -1154,45 +1154,45 @@
             let nameInput = document.getElementById("fake-account-name");
             if(nameInput) nameInput.value = savedName;
         }
-        // تهيئة الحالة الأساسية في سجل المتصفح لتثبيت التطبيق داخل الصفحة
-        if (!history.state || !history.state.inApp) {
-            history.replaceState({ inApp: true }, "", location.href);
+        // حقن حالة أساسية في تاريخ المتصفح عند بدء التحميل
+        if (!history.state || !history.state.pageMain) {
+            history.replaceState({ pageMain: true }, "", location.href);
         }
     });
 
-    // دالة فتح نافذة منبثقة مع إضافة مؤشر في السجل (History) لكي يستجيب لزر الرجوع بشكل صحيح
-    window.openModalWithHistory = function(modalElement) {
-        history.pushState({ modalOpen: true }, "", location.href);
-        modalElement.style.display = "flex";
+    // دالة لفتح أي مودال مع دفع حالة جديدة في سجل المتصفح لتفعيل زر الرجوع بسلاسة داخل التطبيقات
+    window.openModalWithHistory = function(modalId) {
+        history.pushState({ modalOpen: modalId }, "", location.href);
+        document.getElementById(modalId).style.display = "flex";
     };
 
-    // مراقبة ضغط زر الرجوع (Back Button)
+    // مراقبة الضغط على زر الرجوع (Back Button) داخل المتصفح أو التطبيق
     window.addEventListener('popstate', function (event) {
         let commentModal = document.getElementById("commentsModal");
         let imageModal = document.getElementById("imageViewModal");
         let profileModal = document.getElementById("profileMenuModal");
 
-        let closedAny = false;
+        let isOpen = false;
         if (commentModal && commentModal.style.display === "flex") {
             commentModal.style.display = "none";
-            closedAny = true;
+            isOpen = true;
         }
         if (imageModal && imageModal.style.display === "flex") {
             imageModal.style.display = "none";
-            closedAny = true;
+            isOpen = true;
         }
         if (profileModal && profileModal.style.display === "flex") {
             profileModal.style.display = "none";
-            closedAny = true;
+            isOpen = true;
         }
 
-        if (closedAny) {
-            // إذا تم إغلاق نافذة منبثقة، نضمن إعادة ضبط حالة السجل للبقاء داخل الموقع وعدم الخروج
-            if (!history.state || !history.state.inApp) {
-                history.replaceState({ inApp: true }, "", location.href);
+        if (isOpen) {
+            // إذا كانت هناك نافذة مفتوحة، تم إغلاقها وبقيت في الصفحة الرئيسية دون الخروج
+            if (!history.state || !history.state.pageMain) {
+                history.replaceState({ pageMain: true }, "", location.href);
             }
         } else {
-            // إذا لم تكن أي نافذة مفتوحة وتم الضغط على زر الرجوع، نتوجه للرابط المحدد
+            // إذا لم تكن هناك نوافذ مفتوحة، يتم الرجوع للصفحة الأصلية المحددة
             window.location.href = "https://ooo11223.github.io/cmmc/";
         }
     });
@@ -1210,8 +1210,7 @@
     window.openImageViewer = function(imgSrc) {
         let viewerImg = document.getElementById("viewerImageElement");
         viewerImg.src = imgSrc;
-        let modalEl = document.getElementById("imageViewModal");
-        openModalWithHistory(modalEl);
+        openModalWithHistory("imageViewModal");
     };
 
     window.closeImageViewer = function() {
@@ -1224,8 +1223,7 @@
 
     window.openProfileMenu = function(event) {
         if (!isAdminLoggedIn) return;
-        let modalEl = document.getElementById("profileMenuModal");
-        openModalWithHistory(modalEl);
+        openModalWithHistory("profileMenuModal");
     };
     
     window.closeProfileMenuBtn = function() {
@@ -1239,8 +1237,7 @@
     window.openCommentsModal = function(postId) {
         currentActivePostId = postId;
         loadComments(postId);
-        let modalEl = document.getElementById("commentsModal");
-        openModalWithHistory(modalEl);
+        openModalWithHistory("commentsModal");
     };
 
     window.closeCommentsModal = function(event) {
