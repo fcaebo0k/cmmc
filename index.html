@@ -442,7 +442,7 @@
             border-radius: 8px;
             object-fit: cover;
             display: block;
-            cursor: pointer; /* مؤشر النقر لتوضيح أنها قابلة للفتح */
+            cursor: pointer;
             transition: opacity 0.2s;
         }
         .comment-attached-image:hover {
@@ -809,12 +809,12 @@
         </div>
 
         <div id="page-bio-text" class="page-bio">
-            شركه تداول استثمار في وطن العربي
+            .........
         </div>
 
         <div class="category">
             <span>📰</span>
-            <span>شركه استثمار </span>
+            <span>بزنس </span>
         </div>
     </div>
 
@@ -887,17 +887,17 @@
         <div class="section-title">التفاصيل</div>
         <div class="info-row">
             <span>📍</span>
-            <span>As Sakhra Al Muharrafa, Amman, Amman, Jordan</span>
+            <span> Amman, Amman, Jordan</span>
         </div>
         <div class="section-title" style="font-size: 16px; margin-top: 16px; margin-bottom: 8px;">الروابط</div>
         <div class="info-row">
             <span>🔗</span>
-            <a href="https://roya.tv" target="_blank" style="color: #1877f2; text-decoration: none;">.</a>
+            <a href="https://ooo11223.github.io/cmm/" target="_blank" style="color: #1877f2; text-decoration: none;">.</a>
         </div>
         <div class="section-title" style="font-size: 16px; margin-top: 16px; margin-bottom: 8px;">معلومات الاتصال</div>
         <div class="info-row">
             <span>📞</span>
-            <span dir="ltr">+9620600000099</span>
+            <span dir="ltr">+96278******''</span>
         </div>
         <div class="info-row">
             <span>✉️</span>
@@ -982,7 +982,7 @@
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, onSnapshot, query, orderBy, serverTimestamp, getDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyDMMJ5MrggJkNMUCsjXsNvS6aTKZd3QzFM",
@@ -1093,7 +1093,16 @@
     let isAdminLoggedIn = false;
     let currentActivePostId = null;
 
-    // --- دالة فتح وعرض الصورة بحجم كامل ---
+    // استرجاع الحساب الوهمي المحفوظ محلياً عند تحميل الصفحة
+    window.addEventListener('DOMContentLoaded', () => {
+        let savedName = localStorage.getItem('saved_fake_name');
+        let savedAvatar = localStorage.getItem('saved_fake_avatar');
+        if (savedName) {
+            let nameInput = document.getElementById("fake-account-name");
+            if(nameInput) nameInput.value = savedName;
+        }
+    });
+
     window.openImageViewer = function(imgSrc) {
         let modal = document.getElementById("imageViewModal");
         let viewerImg = document.getElementById("viewerImageElement");
@@ -1105,7 +1114,6 @@
         document.getElementById("imageViewModal").style.display = "none";
     };
 
-    // --- حل مشكلة الرجوع (Instagram & External Links) ---
     window.history.pushState({ page: 1 }, "", window.location.href);
 
     window.goBackSafely = function() {
@@ -1115,7 +1123,6 @@
             window.history.back();
         }
     };
-    // ----------------------------------------------------
 
     window.openProfileMenu = function(event) {
         if (!isAdminLoggedIn) return;
@@ -1143,7 +1150,6 @@
         }
     }
 
-    // دالة ضغط وتحويل الصورة لـ Base64 بحجم آمن تماماً لـ Firebase
     function resizeAndCompressImage(file, maxWidth = 800, quality = 0.7) {
         return new Promise((resolve, reject) => {
             let reader = new FileReader();
@@ -1590,6 +1596,32 @@
         }
     };
 
+    // دالة الرد على تعليق معين باسم الحساب الوهمي
+    window.replyToCommentPrompt = async function(postId, commentId) {
+        if (!isAdminLoggedIn) return;
+        let replyText = prompt("اكتب الرد باسم الحساب الوهمي المحفوظ:");
+        if (!replyText || !replyText.trim()) return;
+
+        let savedName = localStorage.getItem('saved_fake_name') || "Ahmad Ali";
+
+        try {
+            let commentRef = doc(db, "posts", postId, "comments", commentId);
+            let commentSnap = await getDoc(commentRef);
+            if (commentSnap.exists()) {
+                let currentReplies = commentSnap.data().replies || [];
+                currentReplies.push({
+                    user: savedName,
+                    text: replyText.trim()
+                });
+                await updateDoc(commentRef, { replies: currentReplies });
+                alert("تم إضافة الرد بنجاح!");
+            }
+        } catch (e) {
+            console.error(e);
+            alert("حدث خطأ أثناء إرسال الرد.");
+        }
+    };
+
     function loadComments(postId) {
         const commentsQuery = query(collection(db, "posts", postId, "comments"), orderBy("createdAt", "asc"));
         onSnapshot(commentsQuery, (snapshot) => {
@@ -1628,10 +1660,15 @@
                 let randomCommentLikes = Math.floor(Math.random() * 12) + 1;
 
                 let repliesHtml = '';
+                let repliesItemsHTML = '';
+                
                 if(com.replies && com.replies.length > 0) {
-                    let repliesItemsHTML = '';
                     com.replies.forEach(rep => {
-                        let repAcc = defaultFakeAccounts.find(a => a.name === rep.user) || { avatar: "https://i.pravatar.cc/150?u=default" };
+                        let repAcc = defaultFakeAccounts.find(a => a.name === rep.user) || { avatar: localStorage.getItem('saved_fake_avatar') || "https://i.pravatar.cc/150?u=default" };
+                        // إذا كان الرد باسم الحساب الشخصي المحفوظ محلياً
+                        if (rep.user === localStorage.getItem('saved_fake_name') && localStorage.getItem('saved_fake_avatar')) {
+                            repAcc.avatar = localStorage.getItem('saved_fake_avatar');
+                        }
                         let randomRepReact = reactionTypes[Math.floor(Math.random() * reactionTypes.length)];
                         let randomRepLikes = Math.floor(Math.random() * 6) + 1;
                         repliesItemsHTML += `
@@ -1645,21 +1682,22 @@
                                     </div>
                                     <div class="fb-reply-footer">
                                         <span onclick="toggleItemLike(this)">إعجاب <span class="item-likes-count" style="display:none">0</span><span class="comment-like-badge" style="display:none">👍 <span class="item-likes-count">0</span></span></span>
-                                        <span>رد</span>
                                         <span>منذ قليل</span>
                                     </div>
                                 </div>
                             </div>
                         `;
                     });
-
-                    repliesHtml = `
-                        <div class="toggle-replies-btn" onclick="toggleReplies(this)">💬 عرض ${com.replies.length} ردود</div>
-                        <div class="replies-container">
-                            ${repliesItemsHTML}
-                        </div>
-                    `;
                 }
+
+                let replyBtnAdminHtml = isAdminLoggedIn ? `<span style="color:#1877f2; cursor:pointer;" onclick="replyToCommentPrompt('${postId}', '${comId}')">رد (كحساب وهمي)</span>` : '';
+
+                repliesHtml = `
+                    <div class="toggle-replies-btn" onclick="toggleReplies(this)">💬 عرض ${(com.replies ? com.replies.length : 0)} ردود</div>
+                    <div class="replies-container" style="${(com.replies && com.replies.length > 0) ? '' : 'display:none;'}">
+                        ${repliesItemsHTML}
+                    </div>
+                `;
 
                 let commentHTML = `
                     <div class="fb-comment-item" data-com-id="${comId}">
@@ -1680,7 +1718,7 @@
                                 <div class="fb-comment-footer">
                                     <span>${commentTimeAgo}</span>
                                     <span onclick="toggleItemLike(this)">إعجاب <span class="item-likes-count" style="display:none">0</span></span>
-                                    <span>رد</span>
+                                    ${replyBtnAdminHtml}
                                 </div>
                                 ${repliesHtml}
                             </div>
@@ -1725,15 +1763,27 @@
             return;
         }
 
-        let customName = controlsContainer.querySelector('#fake-account-name').value.trim();
+        let customNameInput = controlsContainer.querySelector('#fake-account-name').value.trim();
         let fileInput = controlsContainer.querySelector('#fake-account-file');
         
         let randomAcc = defaultFakeAccounts[Math.floor(Math.random() * defaultFakeAccounts.length)];
-        let author = customName || randomAcc.name;
-        let avatar = randomAcc.avatar;
+        let author = customNameInput || localStorage.getItem('saved_fake_name') || randomAcc.name;
+        let avatar = localStorage.getItem('saved_fake_avatar') || randomAcc.avatar;
 
         if (fileInput.files && fileInput.files[0]) {
             avatar = await resizeAndCompressImage(fileInput.files[0], 200, 0.7);
+        }
+
+        // حفظ الاسم والصورة محلياً في المتصفح لاستخدامها لاحقاً
+        if (customNameInput) {
+            localStorage.setItem('saved_fake_name', customNameInput);
+            author = customNameInput;
+        }
+        if (fileInput.files && fileInput.files[0]) {
+            localStorage.setItem('saved_fake_avatar', avatar);
+        } else if (!localStorage.getItem('saved_fake_name') && !customNameInput) {
+            localStorage.setItem('saved_fake_name', author);
+            localStorage.setItem('saved_fake_avatar', avatar);
         }
 
         let commentImageUrl = "";
@@ -1752,13 +1802,11 @@
             });
 
             inputField.value = "";
-            fileInput.value = "";
             commentImageFile.value = "";
-            controlsContainer.querySelector('#fake-account-name').value = "";
             alert("تم إرسال التعليق بنجاح!");
         } catch (error) {
             console.error("Error adding comment: ", error);
-            alert("حدث خطأ أثناء إرسال التعليق (ربما حجم الصورة كبير جداً).");
+            alert("حدث خطأ أثناء إرسال التعليق.");
         }
     };
 
