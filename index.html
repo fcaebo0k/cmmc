@@ -277,7 +277,7 @@
             line-height: 1.4;
             padding: 0 12px;
         }
-        .post-image-container {
+        .post-image-container, .post-video-container {
             margin: 0;
             max-height: 450px;
             overflow: hidden;
@@ -290,6 +290,12 @@
             max-height: 450px;
             object-fit: cover;
             display: block;
+        }
+        .post-video-container video {
+            width: 100%;
+            max-height: 450px;
+            display: block;
+            object-fit: contain;
         }
         
         .fb-post-stats {
@@ -337,7 +343,7 @@
             background-color: #f0f2f5;
         }
 
-        /* --- Comments Bottom Sheet Modal --- */
+        /* --- Comments Full Screen Modal --- */
         .comments-modal-overlay {
             display: none;
             position: fixed;
@@ -348,24 +354,19 @@
             background: rgba(0, 0, 0, 0.5);
             z-index: 10000;
             justify-content: center;
-            align-items: flex-end;
+            align-items: center;
         }
         .comments-bottom-sheet {
             background: #ffffff;
             width: 100%;
             max-width: 500px;
-            height: 75vh;
-            border-top-left-radius: 16px;
-            border-top-right-radius: 16px;
+            height: 100vh;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
             display: flex;
             flex-direction: column;
             box-shadow: 0 -4px 10px rgba(0,0,0,0.15);
-            animation: slideUp 0.3s ease-out;
             position: relative;
-        }
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
         }
         .sheet-handle-bar {
             width: 40px;
@@ -379,7 +380,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 4px 16px 8px 16px;
+            padding: 8px 16px;
             border-bottom: 1px solid #e4e6eb;
             font-size: 14px;
             font-weight: bold;
@@ -433,6 +434,16 @@
             display: block;
         }
         
+        /* Comment Image Style */
+        .comment-attached-image {
+            margin-top: 6px;
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            object-fit: cover;
+            display: block;
+        }
+
         /* Reactions Badge inside Bubble */
         .comment-like-badge {
             position: absolute;
@@ -716,6 +727,53 @@
         .profile-menu-btn.danger:hover {
             background: #ffcdd2;
         }
+
+        /* Login Required Modal Style */
+        .login-prompt-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 20000;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-prompt-box {
+            background: #ffffff;
+            width: 90%;
+            max-width: 360px;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .login-prompt-icon {
+            font-size: 40px;
+            margin-bottom: -4px;
+        }
+        .login-prompt-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #050505;
+            margin: 0;
+        }
+        .login-prompt-desc {
+            font-size: 14px;
+            color: #65676b;
+            line-height: 1.4;
+            margin: 0;
+        }
+        .login-prompt-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
     </style>
 </head>
 <body onclick="handleSecretTripleClick()">
@@ -724,8 +782,8 @@
     <!-- Top Nav Bar -->
     <div class="top-nav-bar">
         <div class="top-nav-right">
-            <span class="top-nav-back" onclick="history.back()" title="الرجوع للصفحة السابقة">‹</span>
-            <span> شركه الاستثمار العربيه </span>
+            <span class="top-nav-back" onclick="goBackSafely()" title="الرجوع للصفحة السابقة">‹</span>
+            <span class="page-name-header">شركه الاستثمار العربيه</span>
             <span class="verified-icon" style="width: 14px; height: 14px;"></span>
         </div>
         <div class="top-nav-left">
@@ -744,7 +802,7 @@
         </div>
 
         <div class="page-title-row">
-            <h1 class="page-name">شركه الاستثمار العربيه</h1>
+            <h1 class="page-name page-name-main">شركه الاستثمار العربيه</h1>
             <span class="verified-icon"></span>
         </div>
 
@@ -781,6 +839,10 @@
     <div id="admin-panel" class="admin-panel">
         <h3 style="margin-top: 0; font-size: 16px;">لوحة تحكم الأدمن (سحابي)</h3>
         
+        <label class="file-upload-label">تعديل اسم الصفحة الرئيسية:</label>
+        <input type="text" id="new-page-name" placeholder="أدخل اسم الصفحة الجديد..." style="margin-bottom: 8px;">
+        <button class="btn btn-primary" onclick="updatePageName()" style="margin-bottom: 12px; width: 100%;">تحديث اسم الصفحة</button>
+
         <label class="file-upload-label">تعديل رابط زر إرسال رسالة:</label>
         <input type="text" id="new-msg-link" placeholder="أدخل الرابط هنا..." style="margin-bottom: 8px;">
         <button class="btn btn-primary" onclick="updateMsgLink()" style="margin-bottom: 12px; width: 100%;">تحديث رابط الرسائل</button>
@@ -806,6 +868,9 @@
         
         <label class="file-upload-label">صورة المنشور من الهاتف (اختياري):</label>
         <input type="file" id="new-post-file" accept="image/*" style="margin-bottom: 8px;">
+
+        <label class="file-upload-label">📹 أو فيديو المنشور من الهاتف (اختياري):</label>
+        <input type="file" id="new-post-video-file" accept="video/*" style="margin-bottom: 8px;">
 
         <label style="font-size: 13px;">اختر التفاعل الرئيسي للمنشور:</label>
         <select id="new-post-reaction" style="margin-bottom: 8px;">
@@ -867,7 +932,20 @@
     </div>
 </div>
 
-<!-- نافذة التعليقات المنبثقة (BottomSheet) -->
+<!-- نافذة طلب تسجيل الدخول للزوار -->
+<div id="loginPromptModal" class="login-prompt-modal" onclick="closeLoginPrompt(event)">
+    <div class="login-prompt-box" onclick="event.stopPropagation()">
+        <div class="login-prompt-icon">🔒</div>
+        <h3 class="login-prompt-title">تسجيل الدخول مطلوب</h3>
+        <p class="login-prompt-desc">يجب تسجيل الدخول من حسابك لكتابة تعليق والتفاعل مع المنشورات.</p>
+        <div class="login-prompt-actions">
+            <button class="btn btn-secondary" onclick="document.getElementById('loginPromptModal').style.display='none'">إلغاء</button>
+            <button class="btn btn-primary" onclick="promptAdminLoginFromModal()">تسجيل الدخول</button>
+        </div>
+    </div>
+</div>
+
+<!-- نافذة التعليقات المنبثقة الكاملة (Full Screen Modal) -->
 <div id="commentsModal" class="comments-modal-overlay" onclick="closeCommentsModal(event)">
     <div class="comments-bottom-sheet" onclick="event.stopPropagation()">
         <div class="sheet-handle-bar" onclick="closeCommentsModalBtn()"></div>
@@ -884,7 +962,10 @@
                     <label style="font-size: 11px; color: #65676b; display: block; margin-bottom: 2px;">إعدادات الحساب الوهمي:</label>
                     <input type="text" id="fake-account-name" placeholder="اسم الحساب (مثال: Ahmad Ali أو سعيد رمضان)" style="margin-bottom: 6px;">
                     <label class="file-upload-label" style="font-size: 11px;">صورة الحساب الوهمي من الهاتف:</label>
-                    <input type="file" id="fake-account-file" accept="image/*" style="margin-bottom: 0; font-size: 11px;">
+                    <input type="file" id="fake-account-file" accept="image/*" style="margin-bottom: 6px; font-size: 11px;">
+                    
+                    <label class="file-upload-label" style="font-size: 11px;">📷 إرفاق صورة مع التعليق (اختياري):</label>
+                    <input type="file" id="fake-comment-image-file" accept="image/*" style="margin-bottom: 0; font-size: 11px;">
                 </div>
                 <div class="admin-input-row">
                     <input type="text" class="admin-comment-input" placeholder="اكتب تعليقاً..." onfocus="checkVisitorInput(this)">
@@ -954,7 +1035,7 @@
             comment: "يخوان أنا بلشت بـ 2000 دولار وزي ما وعدتونا الأرباح نزلت بالحساب أول بأول، الله يوفقكم عهيك مصداقية 🇯🇴🔥",
             replies: [
                 { user: "Khaled Zoubi", text: "صحيح كلامك يا غالي، أنا كمان جربت وطلعت الأمور ممتازة." },
-                { user: "Omar Abdullah", text: "@Khaled Zoubi یعنی سحبت الأرباح بدون مشاكل يا خالد؟" },
+                { user: "Omar Abdullah", text: "@Khaled Zoubi يعني سحبت الأرباح بدون مشاكل يا خالد؟" },
                 { user: "Khaled Zoubi", text: "@Omar Abdullah اه والله يا صاحبي تحولت عالبنك خلال ساعات." }
             ]
         },
@@ -1021,11 +1102,30 @@
     let isAdminLoggedIn = false;
     let currentActivePostId = null;
 
+    window.goBackSafely = function() {
+        if (window.history.length > 1) {
+            window.history.back();
+        } else {
+            alert("أنت في الصفحة الرئيسية بالفعل ولا يوجد صفحات سابقة.");
+        }
+    };
+
     window.checkVisitorInput = function(inputEl) {
         if (!isAdminLoggedIn) {
             inputEl.blur();
-            alert("يجب تسجيل دخول الأدمن أولاً لكتابة وتعليق منشورات وهمية!");
+            document.getElementById("loginPromptModal").style.display = "flex";
         }
+    };
+
+    window.closeLoginPrompt = function(event) {
+        if (event.target.id === 'loginPromptModal') {
+            document.getElementById("loginPromptModal").style.display = "none";
+        }
+    };
+
+    window.promptAdminLoginFromModal = function() {
+        document.getElementById("loginPromptModal").style.display = "none";
+        window.loginAdmin();
     };
 
     window.openProfileMenu = function(event) {
@@ -1054,7 +1154,6 @@
         }
     }
 
-    // دالة مساعدة لقراءة الصورة المحفورة محلياً بصيغة Base64 لتجنب أي مشاكل CORS
     function readFileAsBase64(file) {
         return new Promise((resolve, reject) => {
             let reader = new FileReader();
@@ -1154,6 +1253,10 @@
             onSnapshot(docRef, (docSnap) => {
                 if (docSnap.exists()) {
                     let data = docSnap.data();
+                    if(data.pageName) {
+                        document.querySelectorAll('.page-name-header').forEach(el => el.innerText = data.pageName);
+                        document.querySelectorAll('.page-name-main').forEach(el => el.innerText = data.pageName);
+                    }
                     if(data.bio) {
                         document.getElementById("page-bio-text").innerText = data.bio;
                     }
@@ -1176,6 +1279,22 @@
         } catch(e) { console.error(e); }
     }
     loadPageSettings();
+
+    window.updatePageName = async function() {
+        let newName = document.getElementById("new-page-name").value.trim();
+        if (newName) {
+            try {
+                await updateDoc(doc(db, "page_settings", "config"), { pageName: newName });
+                document.getElementById("new-page-name").value = "";
+                alert("تم تحديث اسم الصفحة بنجاح!");
+            } catch (err) {
+                console.error(err);
+                alert("حدث خطأ أثناء تحديث اسم الصفحة.");
+            }
+        } else {
+            alert("الرجاء إدخال اسم صحيح.");
+        }
+    };
 
     window.updateMsgLink = async function() {
         let newLink = document.getElementById("new-msg-link").value.trim();
@@ -1210,15 +1329,21 @@
         let likesCount = document.getElementById("new-post-likes").value.trim() || "86";
         let reaction = document.getElementById("new-post-reaction").value;
         let fileInput = document.getElementById("new-post-file");
+        let videoInput = document.getElementById("new-post-video-file");
 
-        if (!text && (!fileInput.files || !fileInput.files[0]) && !editPostId) {
-            alert("الرجاء كتابة نص المنشور أو اختيار صورة.");
+        if (!text && (!fileInput.files || !fileInput.files[0]) && (!videoInput.files || !videoInput.files[0]) && !editPostId) {
+            alert("الرجاء كتابة نص المنشور أو اختيار صورة أو فيديو.");
             return;
         }
 
         let imageUrl = "";
         if (fileInput.files && fileInput.files[0]) {
             imageUrl = await readFileAsBase64(fileInput.files[0]);
+        }
+
+        let videoUrl = "";
+        if (videoInput.files && videoInput.files[0]) {
+            videoUrl = await readFileAsBase64(videoInput.files[0]);
         }
 
         if (editPostId) {
@@ -1229,6 +1354,11 @@
             };
             if (imageUrl) {
                 updateData.imageUrl = imageUrl;
+                updateData.videoUrl = ""; 
+            }
+            if (videoUrl) {
+                updateData.videoUrl = videoUrl;
+                updateData.imageUrl = ""; 
             }
             await updateDoc(doc(db, "posts", editPostId), updateData);
             alert("تم تعديل المنشور بنجاح!");
@@ -1237,12 +1367,14 @@
             await addDoc(collection(db, "posts"), {
                 text: text,
                 imageUrl: imageUrl,
+                videoUrl: videoUrl,
                 likes: likesCount,
                 reaction: reaction,
                 createdAt: serverTimestamp()
             });
             document.getElementById("new-post-text").value = "";
             fileInput.value = "";
+            videoInput.value = "";
             alert("تم نشر المنشور بنجاح!");
         }
     };
@@ -1271,6 +1403,7 @@
         document.getElementById("new-post-likes").value = "86";
         document.getElementById("new-post-reaction").value = "👍";
         document.getElementById("new-post-file").value = "";
+        document.getElementById("new-post-video-file").value = "";
         
         document.getElementById("post-form-title").innerText = "إنشاء منشور جديد:";
         document.getElementById("save-post-btn").innerText = "نشر المنشور";
@@ -1286,7 +1419,7 @@
 
     function loadPosts() {
         const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-        onSnapshot(q, (snapshot) => {
+        onSnapshot(q, async (snapshot) => {
             let container = document.getElementById("posts-container");
             container.innerHTML = "";
             if(snapshot.empty) {
@@ -1295,6 +1428,13 @@
             }
 
             let currentAvatar = document.getElementById("profile-img").src;
+            
+            const docRefConfig = doc(db, "page_settings", "config");
+            let configSnap = await getDoc(docRefConfig);
+            let currentDynamicPageName = "شركه الاستثمار العربيه";
+            if(configSnap.exists() && configSnap.data().pageName) {
+                currentDynamicPageName = configSnap.data().pageName;
+            }
 
             snapshot.forEach((docSnap) => {
                 let post = docSnap.data();
@@ -1306,6 +1446,24 @@
                 if(post.reaction !== '👍') iconsHtml += `<span style="background:#1877f2; color:#fff; border-radius:50%; width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; font-size:10px; margin-right:-4px;">👍</span>`;
                 if(post.reaction !== '❤️') iconsHtml += `<span style="background:#e41e3f; color:#fff; border-radius:50%; width:16px; height:16px; display:inline-flex; align-items:center; justify-content:center; font-size:10px; margin-right:-4px;">❤️</span>`;
 
+                let mediaHtml = '';
+                if (post.videoUrl) {
+                    mediaHtml = `
+                        <div class="post-video-container">
+                            <video controls preload="metadata">
+                                <source src="${post.videoUrl}" type="video/mp4">
+                                متصفحك لا يدعم عرض الفيديو.
+                            </video>
+                        </div>
+                    `;
+                } else if (post.imageUrl) {
+                    mediaHtml = `
+                        <div class="post-image-container">
+                            <img src="${post.imageUrl}" alt="Post Image">
+                        </div>
+                    `;
+                }
+
                 let postHTML = `
                     <div class="post-card" data-post-id="${postId}">
                         <div class="fb-post-header">
@@ -1313,7 +1471,7 @@
                                 <img class="fb-post-avatar" src="${currentAvatar}" alt="Avatar">
                                 <div class="fb-post-meta">
                                     <div class="fb-post-author-row">
-                                        <span>شركه الاستثمار العربيه</span>
+                                        <span class="page-name-header">${currentDynamicPageName}</span>
                                         <span class="verified-icon" style="width: 14px; height: 14px;"></span>
                                     </div>
                                     <div class="fb-post-time"><span>${timeAgoText}</span> · <span>🌐</span></div>
@@ -1325,7 +1483,7 @@
                             </div>
                         </div>
                         ${post.text ? `<div class="post-content">${post.text}</div>` : ''}
-                        ${post.imageUrl ? `<div class="post-image-container"><img src="${post.imageUrl}" alt="Post Image"></div>` : ''}
+                        ${mediaHtml}
                         
                         <div class="fb-post-stats">
                             <div class="reactions-display">
@@ -1366,7 +1524,7 @@
 
     window.addEmoji = function(btn, emoji) {
         if (!isAdminLoggedIn) {
-            alert("يرجى تسجيل دخول الأدمن أولاً.");
+            document.getElementById("loginPromptModal").style.display = "flex";
             return;
         }
         let inputField = btn.closest('.admin-controls').querySelector('.admin-comment-input');
@@ -1497,7 +1655,8 @@
                                 <div class="bubble-and-menu">
                                     <div class="fb-comment-bubble">
                                         <span class="fb-comment-author">${com.author}</span>
-                                        ${com.text}
+                                        ${com.text ? `<div>${com.text}</div>` : ''}
+                                        ${com.imageUrl ? `<img src="${com.imageUrl}" class="comment-attached-image" alt="Comment Image">` : ''}
                                         <div class="comment-like-badge">${randomReact} <span class="item-likes-count">${randomCommentLikes}</span></div>
                                     </div>
                                     <div class="admin-item-actions" style="${adminStyleDisplay}">
@@ -1537,7 +1696,7 @@
 
     window.addFakeComment = async function() {
         if (!isAdminLoggedIn) {
-            alert("يرجى تسجيل دخول الأدمن أولاً ليتم إرسال التعليق!");
+            document.getElementById("loginPromptModal").style.display = "flex";
             return;
         }
         if (!currentActivePostId) {
@@ -1548,9 +1707,10 @@
         let controlsContainer = document.getElementById("modalAdminControls");
         let inputField = controlsContainer.querySelector('.admin-comment-input');
         let text = inputField.value.trim();
+        let commentImageFile = controlsContainer.querySelector('#fake-comment-image-file');
         
-        if (!text) {
-            alert("الرجاء كتابة نص التعليق أولاً.");
+        if (!text && (!commentImageFile.files || !commentImageFile.files[0])) {
+            alert("الرجاء كتابة نص التعليق أو اختيار صورة.");
             return;
         }
 
@@ -1564,17 +1724,24 @@
             avatar = await readFileAsBase64(fileInput.files[0]);
         }
 
+        let commentImageUrl = "";
+        if (commentImageFile.files && commentImageFile.files[0]) {
+            commentImageUrl = await readFileAsBase64(commentImageFile.files[0]);
+        }
+
         try {
             await addDoc(collection(db, "posts", currentActivePostId, "comments"), {
                 author: author,
                 avatar: avatar,
                 text: text,
+                imageUrl: commentImageUrl,
                 replies: [],
                 createdAt: serverTimestamp()
             });
 
             inputField.value = "";
             fileInput.value = "";
+            commentImageFile.value = "";
             controlsContainer.querySelector('#fake-account-name').value = "";
         } catch (error) {
             console.error("Error adding comment: ", error);
@@ -1602,6 +1769,7 @@
                 author: acc.name,
                 avatar: acc.avatar,
                 text: thread.comment,
+                imageUrl: "",
                 replies: thread.replies,
                 createdAt: serverTimestamp()
             });
